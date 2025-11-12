@@ -1,3 +1,6 @@
 # Ignore these files within the included directories
 *.bak
 *.pdf
+
+.build/
+build/

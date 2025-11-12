@@ -3,7 +3,7 @@ title: "ShAI - AI wrapper for shell"
 author: "Ostap Pelekh"
 geometry: margin=2.5cm
 pandoc_:
- - output: .pdf
+ - output: build/user-notes.pdf
  - template: codedoc.tex
  - pdf-engine: xelatex
 output:
@@ -11,6 +11,7 @@ output:
     latex_engine: xelatex
     fig_caption: true
 ---
+<!-- nvim-pandoc header -->
 
 \newpage
 
