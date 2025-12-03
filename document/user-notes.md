@@ -19,11 +19,19 @@ output:
 
 **Expected readership**: developers, DevOps engineers, system administrators, linux enthusiasts.  
 
-**Version history**:
+**Slovak version of the project proposal:**
+```
+Zadanie:
 
-| Version | Date       | Author        | Description               |
-|---------|------------|---------------|---------------------------|
-| 0.1     | 2025-11-02 | Ostap Pelekh  | Initial draft             |
+Cieľom práce je otestovať využitie lokálnych LLM v kontexte terminálového asistenta. V rámci tejto práce je potrebné navrhnúť a implementovať CLI/TUI asistenta na základe lokálneho LLM, ktorý bude schopný kontextovo-citlivého generovať a dopĺňať príkazy v Linux termináli. Používatelia budú schopní využiť asistenta na zefektívnenie svojej práce v termináli prostredníctvom inteligentných návrhov príkazov a získať odpovede na otázky týkajúce sa najmä terminálu.
+
+Úlohy:
+
+1. Preskúmať a analyzovať existujúce riešenia terminálových asistentov využívajúcich LLM, identifikovať ich silné a slabé stránky, najmä v oblasti kontextovo-citlivého generovania príkazov. Preskúmať možnosti lokálnych LLM.
+2. Navrhnúť architektúru terminálového asistenta, vrátane integrácie s vybraným lokálnym LLM, a definovať spôsob získavania kontextu z terminálu (napr. aktuálny adresár, história príkazov, typy súborov).
+3. Implementovať CLI/TUI terminálového asistenta podľa navrhnutej architektúry.
+4. Vyhodnotiť použiteľnosť navrhnutého riešenia.
+```
 
 \newpage
 
@@ -138,6 +146,7 @@ Few more possible approaches to consider are:
 Read on:
 
 - [SHELLGPT](https://ieeexplore.ieee.org/abstract/document/10301251) - paper on specialized LLM for shell commands based on GPT-2
+    also: use this article to find more related works, especially to define base info.
 - experimenting on proto-1
 - put theory to bachelor's
 - [Agents](https://medium.com/@Shamimw/using-ai-agents-to-execute-shell-scripts-with-langgraph-using-ollama-a-smarter-approach-to-679fd3454b09)
