@@ -1,46 +1,482 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                            %%
-%% Štruktúra záverečnej práce %%
-%%                            %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+TODO:\\
+- refactor refs (read refs guidelines)\\
+- fill chapters\\
+- read formal writing in thesis template\\
 
-\subsunsection{Štruktúra záverečnej práce}\label{sec:StrukturaPrace}
-Za záverečnú prácu považujeme bakalársku, diplomovú
-a~dizertačnú prácu \cite{zakon1312002}.
-Práca napísaná v~slovenskom jazyku má tieto časti \cite{vyhlaska2332011, usmernenie562011}:
+
+% \newpage %%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Theoretical Background}
+
+This section provides the necessary theoretical background for understanding the design,
+implementation of the tools we will be using. Its main goal is to provide the reader with sufficient
+information to understand the rest of the thesis, as well as to provide a right guidelines for usage
+of the tools in the implementation phase.
+
+\subsection{Terminal Interfaces and Applications. CLI, TUI}
+
+This section describes the interfaces and programs that are relevant to our solution. It defines two
+interfaces: Command Line Interfaces (CLIs) and Text-based User Interfaces (TUIs). It also describes
+the programs that leverage these interfaces: shells, CLI utilities, and TUI applications.
+
+For the beginning, we need to understand what Command Line Interfaces (CLIs) are, as well as the
+utilities that are used within them.\\
+
+The definition of the interface is adopted from Branden Hookway's book \textit{Interface}, where he
+defines it as follows:
+\begin{quote}
+    \textit{\uv{In computing, an interface is a shared boundary across which two or more separate
+    components of a computer system exchange information. The exchange can be between software,
+    computer hardware, peripheral devices, humans, and combinations of these.}}
+\end{quote}\\
+
+Citation: Hookway, B. (2014). Chapter 1: The Subject of the Interface. \textit{Interface}. MIT
+Press. pp. 1–58. ISBN 9780262525503
+
+\subsubsection{Terminal, Terminal emulator. Terminal Application}
+
+The article focuses on text-based \textbf{terminal} interfaces, which are a specific type of
+interface used in computing environments. Here is how we define terminals, terminal emulators and
+terminal applications.\\
+
+\textbf{Terminal} is a \uv{\textit{an electronic or electromechanical hardware device that can be used for
+entering data into, and transcribing data from, a computer or a computing system}}. This definition
+defines main functionality of terminals and terminal emulators, which is to provide an elementary,
+which is CLI, interface for user to interact with the computer system.\\
+
+\textbf{Terminal emulator / Terminal application} is a software application that replicates the functionality of a
+traditional hardware terminal as a software program. Here are some examples of terminal emulators:
+\begin{itemize}
+    \item iTerm2 (macOS)
+    \item Windows Terminal (Windows)
+    \item Alacritty (Cross-platform)
+    \item tty (Linux)
+\end{itemize}
+
+\textbf{Terminal applications} are software programs that run within terminal emulators and utilize
+their capabilities to provide text-based user interfaces --- either CLIs or TUIs. We will discuss it
+further in the following sections.\\
+
+In most cases, always, when the application is POSIX-compatible, we can define text streams, used by
+terminal application for communication.
+
 \begin{enumerate}
-    \item Úvodná časť
-    \begin{enumerate}
-        \item obal
-        \item titulný list
-        \item zadanie
-        \item poďakovanie (nepovinné)
-        \item abstrakt v slovenskom jazyku
-        \item abstrakt v anglickom jazyku
-        \item obsah
-        \item zoznam ilustrácií, obrázkov (nepovinné)
-        \item zoznam tabuliek (nepovinné)
-        \item zoznam skratiek a značiek (odporúčané)
-    \end{enumerate}
-    \item Hlavná textová časť
-    \begin{enumerate}
-        \item úvod
-        \item jadro
-        \begin{itemize}
-            \item súčasný stav riešenej problematiky doma a v zahraničí
-            \item cieľ práce
-            \item metodika práce a metódy skúmania
-            \item výsledky práce
-            \item diskusia
-        \end{itemize}
-        \item záver
-        \item zoznam použitej literatúry
-    \end{enumerate}
-    \item Záverečná časť
-    \begin{enumerate}
-        \item dodatky (podľa potreby)
-        \item prílohy (podľa potreby)
-    \end{enumerate}
+    \item STDIN --- used for input fron user; initially as file descriptor 0.
+    \item STDOUT --- used for application output; initially as file descriptor 1.
+    \item STDIN --- used for error output; initially as file descriptor 2.
 \end{enumerate}
 
-% TODO
+POSIX on default communication streams for application: (hidden)\\
+% \textit{\uv{
+%     3.353 Standard Error
+%
+%     In the context of file descriptors (see 3.141 File Descriptor), file descriptor number 2.
+%
+%     In the context of standard I/O streams (see XSH 2.5 Standard I/O Streams), an output stream
+%     usually intended to be used for diagnostic messages, and accessed using the global variable
+%     stderr.
+%
+%     Note:
+%     The file descriptor underlying stderr is initially 2, but it can be changed by freopen() to 0
+%     or 1 (and implementations may have extensions that allow it to be changed to other numbers).
+%     Therefore, writing to the standard error stream does not always produce output on the standard error
+%     file descriptor. 
+%
+%     3.354 Standard Input
+%
+%     In the context of file descriptors (see 3.141 File Descriptor), file descriptor number 0.
+%
+%     In the context of standard I/O streams (see XSH 2.5 Standard I/O Streams), an input stream usually
+%     intended to be used for primary data input, and accessed using the global variable stdin.
+%
+%     Note:
+%     The file descriptor underlying stdin is initially 0; this cannot change through the use of
+%     interfaces defined in this standard, but implementations may have extensions that allow it to be
+%     changed. Therefore, in conforming applications using extensions, reading from the standard input
+%     stream does not always obtain input from the standard input file descriptor.
+%
+%     3.355 Standard Output
+%
+%     In the context of file descriptors (see 3.141 File Descriptor), file descriptor number 1.
+%
+%     In the context of standard I/O streams (see XSH 2.5 Standard I/O Streams), an output stream
+%     usually intended to be used for primary data output, and accessed using the global variable
+%     stdout.
+%
+%     Note: The file descriptor underlying stdout is initially 1, but it can be changed by freopen() to 0
+%     (and implementations may have extensions that allow it to be changed to other numbers). Therefore,
+%     writing to the standard output stream does not always produce output on the standard output file
+%     descriptor. 
+% }}
+
+\ldots
+Citation: \url{https://en.wikipedia.org/wiki/Computer_terminal}\\
+Citation: \url{https://en.wikipedia.org/wiki/Terminal_emulator}\\
+Citation: \url{https://pubs.opengroup.org/onlinepubs/9799919799/} - System Interfaces, 2.5 Standard
+IO stream\\
+
+\subsubsection{CLI. Shells and CLI Utilities}
+
+The definition of CLI extends previous definition to the specific case of command line interfaces,
+which are text-based interfaces between the user and the computer system, where user inputs commands
+in the form of text, to manipulate the system or perform specific tasks, and gets responses in the
+same form.\\
+
+\textbf{Shells} are special programs that provide relatively wide and direct access on system on
+which it runs. Most shells are CLI programs. They interpret user commands, execute them, and return
+the results.
+
+\textbf{CLI utilities} are programs that are executed from within the CLI environments.\\
+
+Here are some popular examples of shells and CLI utilities:
+
+\begin{table}[H]
+\begin{tabular}{p{3cm}|p{4cm}|p{8cm}}
+    Name & System & Description \\
+    \hline
+    Bash, Zsh & Linux, macOS & Popular Unix-like shells, compliant with POSIX standard.\footnote{
+        POSIX will be also explained later in this chapter.} \\
+    Cisco IOS Shell & Cisco devices & Shell used in Cisco network devices. \\
+    bluetoothctl & Linux, macOS & CLI \textbf{utility} for managing Bluetooth devices.\footnote{ Note
+        that this program provides interface similar to shell, but it is a utility, not a shell 
+        itself.}\\
+    git & Cross-platform & CLI \textbf{utility} for version control using Git system. \\
+    nmcli (NetworkManager) & Linux & Application for controlling network settings. \\
+\end{tabular}\\
+\caption{Examples of shells and CLI utilities}
+\end{table}
+
+\subsubsection{TUI. TUI Applications}
+
+Text-based User Interfaces (TUIs) are a type of user interface that is a further extension of CLIs.
+They provide a more visually structured and intuitive way for users to interact with applications by
+using libraries such as ncurses, which use the \textbf{terminal capabilities} emulators to create
+rich text-based interfaces.\\
+
+\textbf{Terminal capabilities} is a special functionality of the terminal, which gives the
+application more control over it's output (i.e. move cursor in all directions, change the color of
+the output, rewrite/clean characters and so on).\\
+
+Here are some examples of applications using TUI:\\
+\begin{table}[H]
+\begin{tabular}{p{3cm}|p{4cm}|p{8cm}}
+    Name & System & Description \\
+    \hline
+    vi/vim/nvim & Linux, macOS, Windows & Best ever TUI visual text editor. \\
+    mc (Midnight commander) & Linux, macOS, Windows & TUI file explorer.\\
+    htop & Linux & Task manager.
+    nmtui (NetworkManager) & Linux & Application for controlling network settings. \\
+\end{tabular}\\
+\caption{Examples of shells and CLI utilities}
+\end{table}
+
+\newpage %%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Large Language Models (LLMs)}
+
+This section provides a brief overview of the concept, architecture, functionality and applications
+of Large Language Models (LLMs). It also describes the main protocols for the interaction with LLMs,
+as well as the advanced concepts of Agents and Prompt Engineering.
+
+\subsubsection{Architecture Overview. Functionality}
+
+% TODO: define/expand
+Large Language Models (LLMs) are such ML models, which are suited for natural language processing
+and generation tasks. They are trained on large amounts of data using self-supervised learning. % TODO: citation here
+\\
+LLMs are able to generate textual (human readable and code) output based on textual input.\\
+
+Briefly, the architecture of LLMs is based on Transformer architecture, %TODO: introduction of transformers
+which consists of such types of layers:
+\begin{itemize}
+    \item Embedding layers
+    \item Attention layers
+    \item Feedforward (Fully-connected neuron) layers
+\end{itemize}\\
+
+LLMs use \textbf{Embedding layers} to represent information. It is a large vector database, where each
+element of information receives it's vector.\ldots %TODO: expand
+These elements are called \textbf{tokens}. They are either words or parts of words, based on chosen
+LLM architecture.\\
+
+The input text is split (\textsl{tokenized}) into the tokens, which are then converted into the
+array of vectors using embedding layers. This array is further processed by the next layers.
+The length of this array is called \textbf{context length} or \textbf{window size} and it defines
+how much information the model can process and refer to at once.\\
+
+\textbf{Attention layers} are special layers introduced by \ldots, which allow the model to find the
+relationships between different tokens in the input sequence (i.e. vectors array). \ldots %TODO: expand
+
+\textbf{Feedforward layers} are standard fully-connected neural network layers, which process the
+information further. It applies non-linear transformations to the data, enabling the model to learn
+complex patterns. THis is where the intelligence of the model comes from.\\
+
+Last two layers are usually repeated multiple times to create a deep neural network and enchance the
+capabilities of the model.\\
+
+The output of the last layer is converted back to tokens using \textbf{decoding layers}, which map
+the output vectors back to tokens. These tokens are then combined to form the final output text.\\
+% TODO: refactor, add decoder/encoder explanation
+
+Such architecture allows LLMs to generate human-like text probabilistically, based on the input.
+
+\subsubsection{Fine-tuning and Custom Models}
+
+\subsubsection{Communication protocols. MCP Server, OpenAI API}
+
+\subsubsection{Agents}
+
+\subsubsection{Prompt Engineering}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Review and Analysis of Existing Solutions}
+
+This section provides a comprehensive review of existing solutions, tools and applications. The
+information from this section will be used in further design and implementation of our solution.
+
+\subsection{General Solutions Overview}
+
+This section contains an overview of already existing tools. This will help us to concentrate on
+essential points and may serve as good consideration points when we will be working on the design of
+our solution.
+
+\subsubsection{Warp Terminal}
+
+This is a developement-oriented and general-purpose AI-enabled terminal emulator, which uses remote
+Agent LLM System to enchance the experience of users. This solution is popular and comercially
+successful, but the AI architecture, as well as most of its code remains closed-source.\\
+This application is able to read user's display withing the terminal and suggest commands.\\
+
+\begin{itemize}
+    \item WarpAI --- (agent system, etc) \ldots % TODO
+    \item Standalone Graphical application, not TUI/CLI
+    \item Closed-source
+\end{itemize}
+
+(temporary) References:
+
+\begin{itemize}
+    \item \href{https://www.warp.dev/}{Warp Website}
+    \item \href{https://docs.warp.dev/}{Warp Documentation}
+\end{itemize}
+
+
+\subsubsection{gptme}
+
+This application is a CLI utility, which uses OpenAI API to communicate with remote and local
+LLMs.\\
+
+The author defines it as:
+\textit{\uv{Personal AI assistant/agent in your terminal, with tools so it can: Use the terminal, run code,
+edit files, browse the web, use vision, and much more}}\\
+
+Below the short interaction example with gptme is shown: % TODO inline code
+\begin{lstlisting}[language=bash]
+\$ gptme "Who decorates FEI STU for Christmas?"
+[11:05:30] WARNING  Skipping all confirmation prompts.                                                                                                                                cli.py:186
+[11:05:30] Using browser tool with lynx 
+Found openai API key, using openai provider 
+Using model: openai/gpt-5 
+Using logdir: ~/.local/share/gptme/logs/2025-12-10-hopping-funny-cat 
+Using workspace: ~/Workspace/bachelor/project/document 
+Skipped 2 hidden system messages, show with --show-hidden
+--- ^^^ past messages ^^^ ---
+User: Who decorates FEI STU for Christmas?
+Assistant: I don’t have that information locally. I’ll look it up.
+
+\end{lstlisting}
+
+And here is another example:
+
+\begin{lstlisting}[language=bash]
+\$ gptme --tools=browser "How many calories are there in one spoon of sugar?"
+[11:07:21] WARNING Skipping all confirmation prompts. cli.py:186
+[11:07:21] Using browser tool with lynx 
+Found openai API key, using openai provider 
+Using model: openai/gpt-5 
+[11:07:22] Using logdir: ~/.local/share/gptme/logs/2025-12-10-running-sleepy-robot 
+Using workspace: ~/Workspace/bachelor/project/document 
+Skipped 2 hidden system messages, show with --show-hidden
+--- ^^^ past messages ^^^ ---
+User: How many calories are there in one spoon of sugar?
+Assistant: Short answer: about 16 calories per level teaspoon. 
+
+Details:
+- Level teaspoon (≈4 g sugar): ~15–16 kcal
+- Heaped/rounded teaspoon (≈5–7 g): ~20–28 kcal
+- Tablespoon (≈12–15 g): ~48–60 kcal
+
+Sugar has ~4 kcal per gram (sucrose ~3.87 kcal/g), so you can estimate by weight if needed.
+\end{lstlisting}
+
+The application has comprehensive documentation on its Agentic architecture, which we will go
+through in details in chapter X. \\ % TODO
+
+\begin{itemize}
+    \item Uses OpenAI API for accessing remote/local LLMs
+    \item Uses Agent architecture
+    \item Is context-aware and is able to use tools (terminal, browser, code execution, etc)
+    \item Not a shell replacement, but a CLI utility
+\end{itemize}
+
+(temporary) References:
+
+\begin{itemize}
+    \item \url{https://gptme.org/}
+    \item \url{https://gptme.org/docs/}
+\end{itemize}
+
+\subsubsection{gemini-cli}
+
+The definition \ldots.\\ % TODO
+
+\begin{itemize}
+        % \item ...
+\end{itemize}
+
+(temporary) References:
+
+\begin{itemize}
+        % \item \href{uri}{label}
+\end{itemize}
+
+
+\subsubsection{AiTerm}
+
+The application that utilizes \begin{listing}[language=bash]tmux\end{listing} % TODO: better inline code
+and remote LLMs to provide AI capabilities in terminal. \\
+It should be useful, if we want to capture the terminal output for TUI applications - we can use
+it's code for this.\\ % TODO: try using it + expand
+
+\begin{itemize}
+        % \item ...
+\end{itemize}
+
+(temporary) References:
+
+\begin{itemize}
+    \item \url{https://github.com/aki-colt/AiTerm}
+\end{itemize}
+
+
+\subsubsection{Yai (Your Terminal Assistent)}
+
+This application is an interactive terminal assistant, which processes user input using LLMs, and
+then suggests commands or answers questions. It executes suggested commands in the background, and
+returns the output to the user.\\
+
+\begin{itemize}
+    \item AI chat
+    \item Has no filesystem/context awareness
+    \item Not a direct shell replacement
+\end{itemize}
+
+(temporary) References:
+
+\begin{itemize}
+        % \item \href{uri}{label}
+\end{itemize}
+
+
+\subsubsection{Aider}
+
+The definition \ldots.\\ % TODO
+
+\begin{itemize}
+        % \item ...
+\end{itemize}
+
+(temporary) References:
+
+\begin{itemize}
+        % \item \href{uri}{label}
+\end{itemize}
+
+
+\subsubsection{ai-terminal-assistent (github)}
+
+The definition \ldots.\\ % TODO
+
+\begin{itemize}
+        % \item ...
+\end{itemize}
+
+(temporary) References:
+
+\begin{itemize}
+        % \item \href{uri}{label}
+\end{itemize}
+
+
+\subsubsection{cmd-ai (github)}
+
+The definition \ldots.\\ % TODO
+
+\begin{itemize}
+        % \item ...
+\end{itemize}
+
+(temporary) References:
+
+\begin{itemize}
+        % \item \href{uri}{label}
+\end{itemize}
+
+
+\subsubsection{termai}
+
+The definition \ldots.\\ % TODO
+
+\begin{itemize}
+        % \item ...
+\end{itemize}
+
+(temporary) References:
+
+\begin{itemize}
+        % \item \href{uri}{label}
+\end{itemize}
+
+
+\subsection{Detailed Analysis of Selected Solutions}
+
+\subsubsection{gptme. AI architecture}
+
+\subsection{Other Related Applications}
+
+\subsubsection{Zsh. Fish, Bash}
+
+\subsubsection{HSTR}
+
+\subsubsection{GNU Readline}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Design and Implementation}
+
+\subsection{Design Considerations}
+
+\subsection{System Architecture}
+
+\subsection{Development Process and Prototyping}
+
+\subsubsection{Prototype 1. Natural Language vs. Shell Command Classifier}
+
+The first prototype is a simple proof-of-concept implementation of the shAI idea. It uses a local
+LLM (Ollama) to distinguish between shell commands and natural language input. If the input is a
+shell command, it would execute it directly; if it's natural language, it would respond with an
+answer or suggestion.\\
+
+While using such architecture is feasible, the problem that arises is how should the wrapper
+interact with the shell. It cannot attach to an existing bash process, as it is not possible to
+determine when the shell is waiting for user input (e.g.~after running a TUI program) and when it is
+executing commands (whis will be visible when using TUI applications inside the wrapper).\\ Another
+approach is to create new shell process for each command, but this will lead to loss of context
+(e.g.~current working directory, environment variables, etc.) and will make the wrapper less useful.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Evaluation}
+
