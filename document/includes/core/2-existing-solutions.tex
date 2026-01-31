@@ -1,0 +1,224 @@
+
+This section provides a comprehensive review of existing solutions, tools and
+applications. The information from this section will be used in further design
+and implementation of our solution.
+
+\subsection{General Solutions Overview}
+
+This section contains an overview of already existing tools. This will help us
+to concentrate on essential points and may serve as good consideration points
+when we will be working on the design of our solution. There will also be provided
+a comparison table at the end of this section, which will summarize the main
+properties of each solution.
+% Properties to compare:
+% - Open Source / Closed closed-source
+% - Local LLM support / Remote LLM only
+% - Context Awareness / No Context Awareness
+% - Agentic Architecture / No Agentic Architecture
+% - Shell Replacement / CLI Utility / Terminal Emulator
+
+\subsubsection{Warp Terminal}
+
+This is a developement-oriented and general-purpose AI-enabled terminal
+emulator, which uses remote Agent LLM System to enchance the experience of
+users. The most of its code remains closed-source. It is not adapted for
+executing on small LLM's and it provides no support for local LLM's.
+Additionally, it is not a CLI/TUI application, but a full graphical terminal
+emulator.
+\\
+This solution is popular and comercially successful, but it does not
+completely fit into the scope of our work, as it is not designed to work with
+local LLM's. However, it is worth mentioning, as it provides good AI-based
+services for terminal users \cite{warp-web} \cite{warp-docs}.\\
+
+\subsubsection{gptme}
+
+This is general-purpose CLI utility with breadth AI functionality. It is
+compatible with OpenAI API, which allows it to use both remote and local LLMs.
+It uses Agentic architecture and implements MCP protocol. This enables it to
+use various tools (terminal, browser, code execution, etc). It is also
+context-aware, which means it can read and understand the files in the current
+working directory and acknowledge host OS \cite{gptme-web} \cite{gptme-docs}.\\
+
+Below the short interaction example with gptme is shown: % TODO inline code
+
+\begin{lstlisting}[language=bash]
+\$ gptme --tools=browser "How many calories are there in one spoon of sugar?"
+[11:07:21] WARNING Skipping all confirmation prompts. cli.py:186
+[11:07:21] Using browser tool with lynx
+Found openai API key, using openai provider
+Using model: openai/gpt-5
+[11:07:22] Using logdir: ~/.local/share/gptme/logs/2025-12-10-running-sleepy-robot
+Using workspace: ~/Workspace/bachelor/project/document
+Skipped 2 hidden system messages, show with --show-hidden
+--- ^^^ past messages ^^^ ---
+User: How many calories are there in one spoon of sugar?
+Assistant: Short answer: about 16 calories per level teaspoon.
+
+Details:
+- Level teaspoon (≈4 g sugar): ~15–16 kcal
+- Heaped/rounded teaspoon (≈5–7 g): ~20–28 kcal
+- Tablespoon (≈12–15 g): ~48–60 kcal
+
+Sugar has ~4 kcal per gram (sucrose ~3.87 kcal/g), so you can estimate by weight if needed.
+\end{lstlisting}
+
+\begin{itemize}
+  \item Uses OpenAI API for accessing remote/local LLMs
+  \item Uses Agent architecture and MCP tools
+  \item Is context-aware and is able to use tools (terminal, browser,
+    code execution, etc)
+  \item Implements MCP protocol
+\end{itemize}
+\\
+
+When tested manually with local LLMs (Gemma3 4b, Qwen2.5 1.5b), it did not
+perform well, as the models were not able to handle the complexity of the
+tasks. It usually due to too long prompts which made LLMs halucinate on too
+many details. This shows, that the solution is not fully adapted for local
+LLMs, which is one of the main goals of our work. THis should be considered
+when designing our solution to use more fine-grained prompts for local LLMs and
+optimize the architecture for local LLMs.\\
+
+\subsubsection{gemini-cli}
+
+This is general-purpose CLI chat-like application by Google. It uses Gemini
+LLMs to provide AI capabilities in terminal. It is useful for various tasks,
+including code generation, data analysis, and general Q\&A. It also supports
+MCP protocol and custom tool integration. Though, it is dependable on remote
+LLM and cannot be used with local LLMs \cite{gemini-web} \cite{gemini-docs}.\\
+
+\subsubsection{Yai (Your AI Assistent)}
+
+This application is an interactive TUI chat application, which uses OpenAI to
+provide user with AI capabilities in terminal. It supports tools interaction
+and basic agentic architecture. In current form, it is not able to use local
+LLMs. Though, it is possible to adapt it for local LLMs with some modifications
+in its source code. \cite{yai-web} \cite{yai-docs}.\\
+
+% TODO Worth testing later?
+
+\subsubsection{Aider}
+
+This is an AI-powered code agent with focus on software development tasks and terminal
+integration. It supports various tools and is context- and project-aware. It is
+able to use both remote and local LLMs. It is also open-source. 
+\cite{aider-web} \cite{aider-docs}.\\
+
+
+\subsubsection{ai-terminal-assistent (github)}
+
+The definition \ldots.\\ % TODO
+
+\begin{itemize}
+    % \item ...
+\end{itemize}
+
+(temporary) References:
+
+\begin{itemize}
+    % \item \href{uri}{label}
+\end{itemize}
+
+\subsubsection{cmd-ai (github)}
+
+The definition \ldots.\\ % TODO
+
+\begin{itemize}
+    % \item ...
+\end{itemize}
+
+(temporary) References:
+
+\begin{itemize}
+    % \item \href{uri}{label}
+\end{itemize}
+
+\subsubsection{termai}
+
+The definition \ldots.\\ % TODO
+
+\begin{itemize}
+    % \item ...
+\end{itemize}
+
+(temporary) References:
+
+\begin{itemize}
+    % \item \href{uri}{label}
+\end{itemize}
+
+\subsubsection{AiTerm}
+
+The application that utilizes
+\begin{listing}[language=bash]tmux
+\end{listing}
+
+% % TODO: better inline code
+% and remote LLMs to provide AI capabilities in terminal. \\
+% It should be useful, if we want to capture the terminal output for
+% TUI applications - we can use
+% it's code for this.\\ % TODO: try using it + expand
+
+\begin{itemize}
+    % \item ...
+\end{itemize}
+
+(temporary) References:
+
+\begin{itemize}
+  \item \url{https://github.com/aki-colt/AiTerm}
+\end{itemize}
+
+% comparison table
+% Split into two tables
+
+\begin{table}[ht]
+  \small
+  \begin{tabular}{|l|c|c|c|c|c|}
+    \toprule
+    \textbf{Property} & \textbf{Warp Terminal} & \textbf{gptme} &
+    \textbf{gemini-cli} & \textbf{AiTerm} & \textbf{Yai} \\
+    \midrule
+    \textbf{Open Source} & No & No & TBD & Yes & No \\
+    \textbf{Context Awareness} & Partial (Display Reading) & Yes &
+    TBD & Partial & No \\
+    \textbf{Agentic Architecture} & Yes & Yes & TBD & Yes & No \\
+    \midrule
+  \end{tabular}
+  \\
+  \small
+  \begin{tabular}{|l|c|c|c|c|}
+    \toprule
+    \textbf{Property} & \textbf{aider} &
+    \textbf{ai-terminal-assistant} & \textbf{cmd-ai} & \textbf{termai} \\
+    \midrule
+    \textbf{Open Source} & TBD & TBD & TBD & TBD \\
+    \textbf{Context Awareness} & TBD & TBD & TBD & TBD \\
+    \textbf{Agentic Architecture} & TBD & TBD & TBD & TBD \\
+    \midrule
+  \end{tabular}
+  \caption{Second half of comparison table for Local LLM Assistant Development}
+\end{table}
+
+\begin{itemize}
+    % \item ...
+\end{itemize}
+
+(temporary) References:
+
+\begin{itemize}
+  \item \url{https://github.com/aki-colt/AiTerm}
+\end{itemize}
+
+\subsection{Detailed Analysis of Selected Solutions}
+
+\subsubsection{gptme. AI architecture}
+
+\subsection{Other Related Applications}
+
+\subsubsection{Zsh. Fish, Bash}
+
+\subsubsection{HSTR}
+
+\subsubsection{GNU Readline}

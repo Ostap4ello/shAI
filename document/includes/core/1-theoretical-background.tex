@@ -1,0 +1,386 @@
+
+\subsection{Terminal Interfaces and Applications. CLI, TUI}
+
+This section describes the interfaces and programs that are relevant
+to our solution. It defines two
+interfaces: Command Line Interfaces (CLIs) and Text-based User
+Interfaces (TUIs). It also describes
+the programs that leverage these interfaces: shells, CLI utilities,
+and TUI applications.
+
+For the beginning, we need to understand what Command Line Interfaces
+(CLIs) are, as well as the
+utilities that are used within them.\\
+
+The definition of the interface is adopted from Branden Hookway's
+book \textit{Interface}, where he
+defines it as follows:
+\begin{quote}
+  \textit{\uv{In computing, an interface is a shared boundary across
+      which two or more separate
+      components of a computer system exchange information. The
+      exchange can be between software,
+  computer hardware, peripheral devices, humans, and combinations of these.}}
+\end{quote} \cite{hookway2014}\\
+
+\subsubsection{Terminal, Terminal emulator. Terminal Application}
+
+The article focuses on text-based \textbf{terminal} interfaces, which
+are a specific type of
+interface used in computing environments. Here is how we define
+terminals, terminal emulators and
+terminal applications.\\
+
+\textbf{Terminal} is a \uv{\textit{an electronic or electromechanical
+    hardware device that can be used for
+    entering data into, and transcribing data from, a computer or a
+computing system}}. This definition
+defines main functionality of terminals and terminal emulators, which
+is to provide an elementary,
+which is CLI, interface for user to interact with the computer system.\\
+
+\textbf{Terminal emulator / Terminal application} is a software
+application that replicates the functionality of a
+traditional hardware terminal as a software program. Here are some
+examples of terminal emulators:
+\begin{itemize}
+  \item iTerm2 (macOS)
+  \item Windows Terminal (Windows)
+  \item Alacritty (Cross-platform)
+  \item tty (Linux)
+\end{itemize}
+
+\textbf{Terminal applications} are software programs that run within
+terminal emulators and utilize
+their capabilities to provide text-based user interfaces --- either
+CLIs or TUIs. We will discuss it
+further in the following sections.\\
+
+In most cases, always, when the application is POSIX-compatible, we
+can define text streams, used by
+terminal application for communication.
+\cite{wiki_terminal} \cite{wiki_terminal_emulator} \\
+
+\begin{enumerate}
+  \item STDIN --- used for input fron user; initially as file descriptor 0.
+  \item STDOUT --- used for application output; initially as file descriptor 1.
+  \item STDIN --- used for error output; initially as file descriptor 2.
+\end{enumerate}
+\cite{open_group} \\
+
+POSIX on default communication streams for application: (hidden)\\
+% \textit{\uv{
+%     3.353 Standard Error
+%
+%     In the context of file descriptors (see 3.141 File Descriptor),
+% file descriptor number 2.
+%
+%     In the context of standard I/O streams (see XSH 2.5 Standard
+% I/O Streams), an output stream
+%     usually intended to be used for diagnostic messages, and
+% accessed using the global variable
+%     stderr.
+%
+%     Note:
+%     The file descriptor underlying stderr is initially 2, but it
+% can be changed by freopen() to 0
+%     or 1 (and implementations may have extensions that allow it to
+% be changed to other numbers).
+%     Therefore, writing to the standard error stream does not always
+% produce output on the standard error
+%     file descriptor.
+%
+%     3.354 Standard Input
+%
+%     In the context of file descriptors (see 3.141 File Descriptor),
+% file descriptor number 0.
+%
+%     In the context of standard I/O streams (see XSH 2.5 Standard
+% I/O Streams), an input stream usually
+%     intended to be used for primary data input, and accessed using
+% the global variable stdin.
+%
+%     Note:
+%     The file descriptor underlying stdin is initially 0; this
+% cannot change through the use of
+%     interfaces defined in this standard, but implementations may
+% have extensions that allow it to be
+%     changed. Therefore, in conforming applications using
+% extensions, reading from the standard input
+%     stream does not always obtain input from the standard input
+% file descriptor.
+%
+%     3.355 Standard Output
+%
+%     In the context of file descriptors (see 3.141 File Descriptor),
+% file descriptor number 1.
+%
+%     In the context of standard I/O streams (see XSH 2.5 Standard
+% I/O Streams), an output stream
+%     usually intended to be used for primary data output, and
+% accessed using the global variable
+%     stdout.
+%
+%     Note: The file descriptor underlying stdout is initially 1, but
+% it can be changed by freopen() to 0
+%     (and implementations may have extensions that allow it to be
+% changed to other numbers). Therefore,
+%     writing to the standard output stream does not always produce
+% output on the standard output file
+%     descriptor.
+% }}
+
+\ldots
+
+\subsubsection{CLI. Shells and CLI Utilities}
+
+The definition of CLI extends previous definition to the specific
+case of command line interfaces,
+which are text-based interfaces between the user and the computer
+system, where user inputs commands
+in the form of text, to manipulate the system or perform specific
+tasks, and gets responses in the
+same form.\\
+
+\textbf{Shells} are special programs that provide relatively wide and
+direct access on system on
+which it runs. Most shells are CLI programs. They interpret user
+commands, execute them, and return
+the results.
+
+\textbf{CLI utilities} are programs that are executed from within the
+CLI environments.\\
+
+Here are some popular examples of shells and CLI utilities:
+
+\begin{table}[H]
+  \begin{tabular}{p{3cm}|p{4cm}|p{8cm}}
+    Name & System & Description \\
+    \hline
+    Bash, Zsh & Linux, macOS & Popular Unix-like shells, compliant
+    with POSIX standard.\footnote{
+    POSIX will be also explained later in this chapter.} \\
+    Cisco IOS Shell & Cisco devices & Shell used in Cisco network devices. \\
+    bluetoothctl & Linux, macOS & CLI \textbf{utility} for managing
+    Bluetooth devices.\footnote{ Note
+      that this program provides interface similar to shell, but it
+      is a utility, not a shell
+    itself.}\\
+    git & Cross-platform & CLI \textbf{utility} for version control
+    using Git system. \\
+    nmcli (NetworkManager) & Linux & Application for controlling
+    network settings. \\
+  \end{tabular}\\
+  \caption{Examples of shells and CLI utilities}
+\end{table}
+
+\subsubsection{TUI. TUI Applications}
+
+Text-based User Interfaces (TUIs) are a type of user interface that
+is a further extension of CLIs.
+They provide a more visually structured and intuitive way for users
+to interact with applications by
+using libraries such as ncurses, which use the \textbf{terminal
+capabilities} emulators to create
+rich text-based interfaces.\\
+
+\textbf{Terminal capabilities} is a special functionality of the
+terminal, which gives the
+application more control over it's output (i.e. move cursor in all
+  directions, change the color of
+the output, rewrite/clean characters and so on).\\
+
+Here are some examples of applications using TUI:\\
+\begin{table}[H]
+  \begin{tabular}{p{3cm}|p{4cm}|p{8cm}}
+    Name & System & Description \\
+    \hline
+    vi/vim/nvim & Linux, macOS, Windows & Best ever TUI visual text editor. \\
+    mc (Midnight commander) & Linux, macOS, Windows & TUI file explorer.\\
+    htop & Linux & Task manager.
+    nmtui (NetworkManager) & Linux & Application for controlling
+    network settings. \\
+  \end{tabular}\\
+  \caption{Examples of shells and CLI utilities}
+\end{table}
+
+\newpage %%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Large Language Models (LLMs)}
+
+This section provides a brief overview of the aspects of Large
+Language Models (LLMs), relevant for
+this article. It describes the architecture, types, limitations of
+LLM, the main protocols for the interaction,
+as well as the advanced concepts, like extension and fine-tuning.
+
+\subsubsection{Architecture Overview. Functionality}
+
+Large language models (LLMs) refer to Transformer language models
+that contain hundreds of billions (or more) of parameters, which are
+trained on massive text data, such as GPT-3, PaLM, Galactica, and
+LLaMA. LLMs exhibit strong capacities to understand natural language
+and solve complex tasks (via text generation).
+
+Currently, LLMs are mainly built upon the Transformer architecture
+\cite{attention}, where multi-head attention layers are stacked in a very deep
+neural network. They are based on the Transformer architecture.\\
+
+The model tokenizes the input text into smaller units, to be able to
+represent and process it effectively. The set of possible tokens is
+called the vocabulary, and can include words, subwords, or even
+individual characters. It is important to note that the vocabulary is
+fixed after training, which means that any new or rare words or
+combinations of characters (for example, ciphertexts) may not be
+processed accurately or at all.
+
+The transformer architecture is based on finding relationships
+between elements in a sequence using self-attention mechanisms
+\cite{naveed2023}. This enables the model to recognize patterns and
+dependencies in the input, which may be helpful for decrypting
+ciphers that rely on patterns in the text.
+
+\subsubsection{Transformer Architecture. Encoder and Decoder}
+
+In original article, previously mentioned Transformers consist of two main
+parts --- \textbf{Encoder} and \textbf{Decoder}. For the purpose of this
+article, it is enough to know that nowadays LLMs are mainly based on
+Decoder-only architecture (also called Causal Decoder), which means they only
+use the Decoder part of the original Transformer architecture. And most of the
+time, they don't use the Encoder part at all.
+
+The usage of Decoder-only architecture implies that the model generates the
+output text sequentially, one token at a time, while attending to all
+previously generated tokens. This can be a limitation for long prompts, as the
+model can only attend to a limited number of previous tokens (this limit is
+called context length or window size). Furthermore, the longer the prompt, the
+more computationally expensive it becomes to generate the output, as the model
+has to process all previous tokens for each new token.
+
+Additionally, Decoder-only models are typically easier to train and fine-tune,
+as they require less complex training data and objectives compared to
+Encoder-Decoder models.
+
+\subsubsection{Mixture of Experts (MoE) Extension}
+
+While the architectures above define how information flows through the layers,
+the \textbf{Mixture of Experts (MoE)} is an important extension that changes
+*how* the feedforward layers operate, with the goal to increase scalability and
+efficiency.
+
+In a traditional dense Transformer, which can be reffered to as \textbf{Dense},
+the whole decoder is a monolith, meaning that while processing, every neuron is
+used. The Mixture of Experts (MoE) architecture splits the massive, singular
+feedforward network into multiple smaller, quasi-specialized (as everything is
+learned) \textsl{expert} subnetworks and introduces a \textsl{router} (or
+gating network) to orchestrate them. The router acts as a traffic controller,
+dynamically selecting only a tiny subset of experts—typically one or two—to
+process it.
+
+When it comes to comparing MoE and dense models in scope of smaller devices
+with certain limitations, MoE architectures introduce the changes in two main
+aspects compared to dense models: computational efficiency and memory usage.
+\begin{itemize}
+  \item \textbf{Computational Efficiency:} MoE models are more computationally
+    lighter as the selective activation leads to significant reductions in
+    computation time and energy consumption. However, such step makes the
+    model less intelligent, especially on smaller scales.In contrary, a
+    dense model involves every parameter in the computation for each token,
+    leading to higher computational costs, but also more consistent
+    performance.
+  \item \textbf{Memory Usage:} The major drawback of MoE models is their high
+    memory requirements. Since all experts must be loaded into memory to
+    allow the router to select them dynamically, the total memory footprint
+    is much larger than that of a dense model. Additionally, such
+    architecture allows for knowledge duplication, thus less efficient
+    memory usage.
+\end{itemize}
+Overall, MoE models tend to be more efficient in terms of computation, but have
+worse performance over dense models with same number of parameters. However, if
+VRAM is not a constraint, MoE models can achieve better performance than dense
+models within the same computational budget.
+
+\subsubsection{AI Agents and Multi-Agent Systems}
+
+The evolution of LLMs has progressed beyond simple text generation to the
+concept of \textbf{AI Agents}, which utilize LLMs with the capacity to plan,
+act, and interact with external environments. AI agents are autonomous
+entities, capable of planning, decision-making, and performing actions to
+achieve complex goals. \cite{naveed2023} \cite{zhao2023} \\
+
+Two major changes that AI Agents bring compared to traditional LLMs are:
+\begin{itemize}
+  \item \textbf{Tool Use:} AI Agents can leverage external tools, RAG pipelines
+    or APIs to retrieve information or perform actions beyond text generation.
+  \item \textbf{Iterative Generation:} AI Agents can generate multiple steps of
+    reasoning or actions iteratively, allowing them to break down complex
+    tasks into manageable sub-tasks.
+\end{itemize}
+
+The secound point is especially important for the purpose of this research, as
+it allows the agent to decompose complex tasks into steps small enough to be
+handled by local LLMs with limited capabilities.
+
+We can define the workflow of AI Agents as follows \cite{nvidia-llm-agent}:
+
+\begin{lstlisting}[language=pseudocode]
+
+function AI_Agent(task, context):
+    subtasks = LLM.decompose_task(task)  # Break down the main task into smaller sub-tasks
+    for subtask in subtasks:
+        switch subtask.type:
+            case "tool":
+                result = use_tool(subtask.tool, subtask.tool_input)
+            case "further_decomposition":
+                result = AI_Agent(subtask.task, context)  # Recursive call for further decomposition
+            case "generate":
+                result = LLM.generate_response(subtask.task)
+        results.append(result)
+    final_output = LLM.summarize_results(results)
+    return final_output
+
+\end{lstlisting}
+
+In essence, AI Agents perform tasks, dividing complex objectives into
+manageable steps, and iteratively prompting themselves to execute
+these steps using various tools.
+
+\subsubsection{Retrieval-Augmented Generation (RAG)}
+
+\textbf{Retrieval-Augmented Generation (RAG)} is a technique that allows LLMs
+to utilize external knowledge bases, significantly reducing hallucinations and
+increasing accuracy. It uses vector databases to store data in a way that
+allows for efficient search and retrieval of relevant information.
+
+When a user submits a query, the system retrieves relevant documents from the
+vector database based on semantic similarity to the query. These documents are
+then added to the prompt sent to the LLM, providing it with additional context
+to generate a more accurate response.
+
+% todo: read more on rag + refs
+
+\subsubsection{Communication protocols. OpenAI API. MCP}
+
+% TODO: openai api + mcp refs
+
+Agents require robust communication protocols to allow agents to interact with
+each other and with external services. This is usually achieved through APIs or
+Model Context Protocol (MCP), which defines how to request these services.
+
+The OpenAI protocol refers to the set of APIs and communication standards
+developed by OpenAI for interacting with their AI models. It typically uses
+RESTful HTTP endpoints with JSON payloads for requests and responses.
+Authentication is handled via API keys, and communication is secured over
+HTTPS. The protocol supports various endpoints for tasks such as completions,
+chat, embeddings, and file uploads, enabling integration with a wide range of
+applications.
+
+MCP is a protocol designed for structured message exchange between clients and
+servers, often used in MUDs (Multi-User Dungeons) and similar networked
+applications. It defines a standardized way to encapsulate commands and data
+within messages, supporting extensibility through modules. MCP messages are
+typically text-based, with clear delimiters and key-value pairs, allowing for
+flexible and efficient communication of commands, events, and data between
+connected systems.
+
+% ? \subsubsection{Fine-tuning and Custom Models}

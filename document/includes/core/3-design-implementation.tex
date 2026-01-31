@@ -1,0 +1,65 @@
+
+\subsection{Design Considerations}
+
+\subsection{System Architecture}
+
+Based on previously reviewed solutions, as well as small local LLM limitations,
+the best approach to system architecture is to divide the whole system into
+smaller components, each one responsible for one simple task. These defined
+small tasks will (1) reduce the possibility of LLM halucination and (2)
+simplify the testing by alloing us to test and evaluate each component in
+separate. The modular design also makes future maintenance and expansion more
+manageable.
+
+% repetitive prompting >> onebigprompt due to context + halucinations
+
+\begin{enumerate}
+  \item \textbf{Natural Language vs. Shell Command Classifier}
+    --- will allow the system to distinguish between user commands and
+    questions, thus simplifying the interaction for the user.  This is
+    critical for seamless operation; the system should intelligently
+    decide whether to execute a command directly or to engage the LLM
+    for a more conversational response.
+  \item \textbf{Task splitter} ---
+    this component will split complex tasks into smaller ones, thus
+    dividing the work for other nodes. This is inspired by multi-agent
+    architecture and will follow similar principles.  It will be
+    responsible for taking a user's request (after classification) and
+    breaking it down into sequential or parallel sub-tasks that can be
+    handled by the Information Retriever or other subsequent
+    components.
+  \item \textbf{Information Retriever} --- for specific tasks
+    related to information retrieval, the RAG-enabled component will be
+    designed. It should be able to retrieve information from manuals or
+    the web to provide accurate answers. This component will leverage
+    a knowledge base (local documents, indexed websites, etc.) and
+    utilize retrieval techniques to provide contextually relevant
+    information to address user inquiries.
+\end{enumerate}
+
+The interface will remain as close as possible to CLI with certain
+TUI elements where needed.  We will prioritize a minimal,
+predictable user experience.
+
+\subsection{Development Process}
+
+\subsubsection{Component 1. Natural Language vs. Shell Command Classifier}
+
+The first prototype is a simple proof-of-concept implementation of the idea. It
+uses a local LLM (Ollama) to distinguish between shell commands and natural
+language input. If the input is a shell command, it would execute it directly;
+if it's natural language, it would respond with an answer or suggestion.\\
+
+While using such architecture is feasible, the problem that arises is how
+should the wrapper interact with the shell. It cannot attach to an existing
+bash process, as it is not possible to determine when the shell is waiting for
+user input (e.g.~after running a TUI program) and when it is executing commands
+(whis will be visible when using TUI applications inside the wrapper).\\
+
+Another approach is to create new shell process for each command, but this will
+lead to loss of context (e.g.~current working directory, environment variables,
+etc.) and will make the wrapper less useful.
+
+\subsubsection{Component 2. Task splitter}
+
+\subsubsection{Component 3. Information retriever}

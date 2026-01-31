@@ -31,7 +31,6 @@ pdf.tex:
 		exit 1; \
 	fi
 	cd ./build/$(BUILDER_FOLDER_NAME); \
-		rm -rf $(DOCUMENTS); \
 	
 	cp -r $(DOCUMENTS) ./build/$(BUILDER_FOLDER_NAME)/.
 	
@@ -42,6 +41,7 @@ pdf.tex:
 		$(LOG_INFO) "Build finished."
 	
 	$(LOG_INFO) "Copying built PDF to build folder..."
+	cp ./build/$(BUILDER_FOLDER_NAME)/.build/thesis.log build/thesis.log
 	cp ./build/$(BUILDER_FOLDER_NAME)/.build/thesis.pdf build/thesis.pdf
 
 clean:

@@ -1,13 +1,48 @@
 % The introduction goes here. TODO.
 
-Fast development of technology in recent years, especially in computing power and data storage, has enabled the machine learning field to evolve rapidly. This led us to the development of versatile ML models, which are used in wide range of applications. LLMs are one of the most popular types of ML models nowadays, which has shown great advancements and now has a lot of practical applications.\newline
+Fast development of technology in recent years, especially in computing power
+and data storage, has enabled the machine learning field to evolve rapidly.
+This led us to the development of versatile ML models, which are used in wide
+range of applications. LLMs are one of the most popular types of ML models
+nowadays, which has shown great advancements and now has a lot of practical
+applications.\newline
 
-The nature of the interaction with LLM's makes us consider them as helpful assistants in various tasks. The most appreciated feature of LLM's is their ability to transfer from natural language instructions to executable commands.
+The nature of the interaction with LLM's makes us consider them as helpful
+assistants in various tasks. The most appreciated feature of LLM's is their
+ability to transfer from natural language instructions to executable commands.
 \newline
 
-One of common fields, where such feature can be utilized and increase the QoL of users (from developers to regular OS users, as now Linux distributions are becoming more user-friendly and popular), is the command line interface. It is to remain an essential part of modern development (and related stuff) processes as it enables us to perform tasks quickly and efficiently.\newline
+One of common fields, where such feature can be utilized and increase the QoL
+of users (from developers to regular OS users, as now Linux distributions are
+becoming more user-friendly and popular), is the command line interface. It is
+to remain an essential part of modern development (and related stuff) processes
+as it enables us to perform tasks quickly and efficiently.\newline
 
-This is what motivates us to create and evaluate a command line assistant, which would break the barrier between NL instructions and computer commands, yielding the need to learn specific syntax for each command from the user.
+This is what motivates us to create and evaluate a command line assistant,
+which leverages LLM to break the barrier between NL instructions and computer
+commands, yielding the need to learn specific syntax for each command from the
+user.
 \newline
 
-The main goal of this thesis is to describe the process of design, development, and to evaluate a Linux CLI assistant powered by different local LLM models (differing in architecture, size, and capabilities) to see how well they perform in various usage scenarios.
+The limitations of remote LLMs often present significant challenges in
+real-world scenarios. Relying on a network connection introduces latency,
+potential downtime, and dependency on external services.  Furthermore, data
+privacy and security concerns frequently restrict the use of external LLMs,
+especially when dealing with sensitive information or proprietary tools.
+Consider the scenario of a developer needing to quickly execute a complex
+series of commands for debugging, or a system administrator requiring immediate
+assistance in resolving a system issue – a network outage could be
+devastating.\newline
+
+Therefore, this thesis aims to evaluate local LLMs as a viable solution for
+command-line assistance. By running these models directly on the user's
+machine, we eliminate the dependency on external services, reduce latency, and
+address concerns regarding data privacy.  This approach allows for a focused
+investigation into the performance and usability of LLMs in a low-latency,
+secure environment.\newline
+
+The main goal of this thesis is to describe the process of design, development,
+and to evaluate a Linux CLI assistant powered by different local LLM models
+(differing in architecture, size, and capabilities and under different
+constraints) to see how well they perform in various usage scenarios.\newline
+
