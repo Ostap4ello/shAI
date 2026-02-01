@@ -300,7 +300,7 @@ worse performance over dense models with same number of parameters. However, if
 VRAM is not a constraint, MoE models can achieve better performance than dense
 models within the same computational budget.
 
-\subsubsection{AI Agents and Multi-Agent Systems}
+\subsubsection{AI Agent Systems}  \label{agent}
 
 The evolution of LLMs has progressed beyond simple text generation to the
 concept of \textbf{AI Agents}, which utilize LLMs with the capacity to plan,
@@ -361,8 +361,6 @@ to generate a more accurate response.
 
 \subsubsection{Communication protocols. OpenAI API. MCP}
 
-% TODO: openai api + mcp refs
-
 Agents require robust communication protocols to allow agents to interact with
 each other and with external services. This is usually achieved through APIs or
 Model Context Protocol (MCP), which defines how to request these services.
@@ -382,5 +380,9 @@ within messages, supporting extensibility through modules. MCP messages are
 typically text-based, with clear delimiters and key-value pairs, allowing for
 flexible and efficient communication of commands, events, and data between
 connected systems.
+
+% TODO: openai api + mcp refs
+% describe apis for openai which will be used?
+% mcp?
 
 % ? \subsubsection{Fine-tuning and Custom Models}

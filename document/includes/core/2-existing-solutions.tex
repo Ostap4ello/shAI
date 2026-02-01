@@ -100,125 +100,65 @@ in its source code. \cite{yai-web} \cite{yai-docs}.\\
 
 \subsubsection{Aider}
 
-This is an AI-powered code agent with focus on software development tasks and terminal
-integration. It supports various tools and is context- and project-aware. It is
-able to use both remote and local LLMs. It is also open-source. 
-\cite{aider-web} \cite{aider-docs}.\\
-
-
-\subsubsection{ai-terminal-assistent (github)}
-
-The definition \ldots.\\ % TODO
-
-\begin{itemize}
-    % \item ...
-\end{itemize}
-
-(temporary) References:
-
-\begin{itemize}
-    % \item \href{uri}{label}
-\end{itemize}
-
-\subsubsection{cmd-ai (github)}
-
-The definition \ldots.\\ % TODO
-
-\begin{itemize}
-    % \item ...
-\end{itemize}
-
-(temporary) References:
-
-\begin{itemize}
-    % \item \href{uri}{label}
-\end{itemize}
+This is an AI-powered code agent with focus on software development tasks and
+terminal integration. It supports various tools and is context- and
+project-aware. It is able to use both remote and local LLMs. It is also
+open-source. \cite{aider-web} \cite{aider-docs}.\\
 
 \subsubsection{termai}
 
-The definition \ldots.\\ % TODO
-
-\begin{itemize}
-    % \item ...
-\end{itemize}
-
-(temporary) References:
-
-\begin{itemize}
-    % \item \href{uri}{label}
-\end{itemize}
+This is a terminal-based AI assistant similar to gptme, written in Rust. It
+supports various LLM providers, but it is not able to use local LLMs in its
+current form. It is open-source and has basic agentic architecture. \cite{termai-web} \\
 
 \subsubsection{AiTerm}
 
-The application that utilizes
-\begin{listing}[language=bash]tmux
-\end{listing}
+The application that utilizes tmux terminal multiplexer to access the terminal
+I/O. It sends the terminal output as context to chosen LLM and gets the
+response back. It has execution agent capabilities, which allows it to run
+commands in terminal based on LLM response. It is open-source and is adapted to
+use with OpenAI API, thus and it can be used with local LLMs as well.\\
 
-% % TODO: better inline code
-% and remote LLMs to provide AI capabilities in terminal. \\
-% It should be useful, if we want to capture the terminal output for
-% TUI applications - we can use
-% it's code for this.\\ % TODO: try using it + expand
+We can inspire from its approach to bash integration using tmux sessions to
+provide seamless interaction between LLM and terminal. Though, this approach
+turned out to be somewhat clunky in practice, as it couldn't handle well the
+TUI applications, but only get bash's responses. \cite{aiterm-web} \\
 
-\begin{itemize}
-    % \item ...
-\end{itemize}
 
-(temporary) References:
+\subsubsection{Other solutions}
 
-\begin{itemize}
-  \item \url{https://github.com/aki-colt/AiTerm}
-\end{itemize}
+There are also such solutions, like \textsl{ai-terminal-assistent (github)}{}
+or \textsl{cmd-ai (github)}, which are just wrappers for Rest API calls to
+remote LLMs. They provide basic AI capabilities in terminal, but have no significant
+features.
 
-% comparison table
-% Split into two tables
-
-\begin{table}[ht]
-  \small
-  \begin{tabular}{|l|c|c|c|c|c|}
-    \toprule
-    \textbf{Property} & \textbf{Warp Terminal} & \textbf{gptme} &
-    \textbf{gemini-cli} & \textbf{AiTerm} & \textbf{Yai} \\
-    \midrule
-    \textbf{Open Source} & No & No & TBD & Yes & No \\
-    \textbf{Context Awareness} & Partial (Display Reading) & Yes &
-    TBD & Partial & No \\
-    \textbf{Agentic Architecture} & Yes & Yes & TBD & Yes & No \\
-    \midrule
-  \end{tabular}
-  \\
-  \small
-  \begin{tabular}{|l|c|c|c|c|}
-    \toprule
-    \textbf{Property} & \textbf{aider} &
-    \textbf{ai-terminal-assistant} & \textbf{cmd-ai} & \textbf{termai} \\
-    \midrule
-    \textbf{Open Source} & TBD & TBD & TBD & TBD \\
-    \textbf{Context Awareness} & TBD & TBD & TBD & TBD \\
-    \textbf{Agentic Architecture} & TBD & TBD & TBD & TBD \\
-    \midrule
-  \end{tabular}
-  \caption{Second half of comparison table for Local LLM Assistant Development}
-\end{table}
-
-\begin{itemize}
-    % \item ...
-\end{itemize}
-
-(temporary) References:
-
-\begin{itemize}
-  \item \url{https://github.com/aki-colt/AiTerm}
-\end{itemize}
-
-\subsection{Detailed Analysis of Selected Solutions}
-
-\subsubsection{gptme. AI architecture}
-
-\subsection{Other Related Applications}
-
-\subsubsection{Zsh. Fish, Bash}
-
-\subsubsection{HSTR}
-
-\subsubsection{GNU Readline}
+% % comparison table
+% % Split into two tables
+%
+% \begin{table}[ht]
+%   \small
+%   \begin{tabular}{|l|c|c|c|c|c|}
+%     \toprule
+%     \textbf{Property} & \textbf{Warp Terminal} & \textbf{gptme} &
+%     \textbf{gemini-cli} & \textbf{AiTerm} & \textbf{Yai} \\
+%     \midrule
+%     \textbf{Open Source} & No & No & TBD & Yes & No \\
+%     \textbf{Context Awareness} & Partial (Display Reading) & Yes &
+%     TBD & Partial & No \\
+%     \textbf{Agentic Architecture} & Yes & Yes & TBD & Yes & No \\
+%     \midrule
+%   \end{tabular}
+%   \\
+%   \small
+%   \begin{tabular}{|l|c|c|c|c|}
+%     \toprule
+%     \textbf{Property} & \textbf{aider} &
+%     \textbf{ai-terminal-assistant} & \textbf{cmd-ai} & \textbf{termai} \\
+%     \midrule
+%     \textbf{Open Source} & TBD & TBD & TBD & TBD \\
+%     \textbf{Context Awareness} & TBD & TBD & TBD & TBD \\
+%     \textbf{Agentic Architecture} & TBD & TBD & TBD & TBD \\
+%     \midrule
+%   \end{tabular}
+%   \caption{Second half of comparison table for Local LLM Assistant Development}
+% \end{table}

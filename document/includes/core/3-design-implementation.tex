@@ -20,6 +20,13 @@ manageable.
     critical for seamless operation; the system should intelligently
     decide whether to execute a command directly or to engage the LLM
     for a more conversational response.
+  \item \textbf{Information Retriever} --- for specific tasks
+    related to information retrieval, the RAG-enabled component will be
+    designed. It should be able to retrieve information from manuals or
+    the web to provide accurate answers. This component will leverage
+    a knowledge base (local documents, indexed websites, etc.) and
+    utilize retrieval techniques to provide contextually relevant
+    information to address user inquiries.
   \item \textbf{Task splitter} ---
     this component will split complex tasks into smaller ones, thus
     dividing the work for other nodes. This is inspired by multi-agent
@@ -28,13 +35,6 @@ manageable.
     breaking it down into sequential or parallel sub-tasks that can be
     handled by the Information Retriever or other subsequent
     components.
-  \item \textbf{Information Retriever} --- for specific tasks
-    related to information retrieval, the RAG-enabled component will be
-    designed. It should be able to retrieve information from manuals or
-    the web to provide accurate answers. This component will leverage
-    a knowledge base (local documents, indexed websites, etc.) and
-    utilize retrieval techniques to provide contextually relevant
-    information to address user inquiries.
 \end{enumerate}
 
 The interface will remain as close as possible to CLI with certain
@@ -45,21 +45,47 @@ predictable user experience.
 
 \subsubsection{Component 1. Natural Language vs. Shell Command Classifier}
 
-The first prototype is a simple proof-of-concept implementation of the idea. It
-uses a local LLM (Ollama) to distinguish between shell commands and natural
-language input. If the input is a shell command, it would execute it directly;
-if it's natural language, it would respond with an answer or suggestion.\\
+\textbf{Idea.}{}
+The first component is a simple proof-of-concept implementation of the proposed
+idea. It uses a local LLM hosted by Ollama to distinguish between shell
+commands and natural language input. If the input is a shell command, it would
+execute it directly; if it's natural language, it would respond with an answer
+or suggestion.\\
 
 While using such architecture is feasible, the problem that arises is how
 should the wrapper interact with the shell. It cannot attach to an existing
 bash process, as it is not possible to determine when the shell is waiting for
 user input (e.g.~after running a TUI program) and when it is executing commands
-(whis will be visible when using TUI applications inside the wrapper).\\
+(this will be visible when using TUI applications inside the wrapper).\\
 
 Another approach is to create new shell process for each command, but this will
 lead to loss of context (e.g.~current working directory, environment variables,
 etc.) and will make the wrapper less useful.
 
-\subsubsection{Component 2. Task splitter}
+\textbf{Testing. }{}
 
-\subsubsection{Component 3. Information retriever}
+
+\subsubsection{Component 2. Information retriever}
+
+\textbf{Idea.}{}
+This component is responsible for retrieving information from various sources
+to answer user queries. It's built around a Retrieval-Augmented Generation
+(RAG) architecture, meaning it combines information retrieval from a local
+knowledge base with LLM generation to produce informative and accurate
+responses. The task of this module is to summarize the relevant context and
+pass it to user or requesting node, which then generates a response based on
+the retrieved information and its own knowledge.
+
+\textbf{Testing. }{}
+
+
+\subsubsection{Component 3. Task splitter}
+
+\textbf{Idea.}{}
+This component serves as the central coordinator for more complex requests. It
+receives the user input and decomposes it into a series of manageable sub-tasks.
+It will use the strategy discussed in \ref{agent}.
+
+\textbf{Testing. }{}
+
+
