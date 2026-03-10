@@ -29,7 +29,7 @@ emulator.
 This solution is popular and comercially successful, but it does not
 completely fit into the scope of our work, as it is not designed to work with
 local LLM's. However, it is worth mentioning, as it provides good AI-based
-services for terminal users \cite{warp-web} \cite{warp-docs}.\\
+services for terminal users\cite{warp-web}\cite{warp-docs}.\\
 
 \subsubsection{gptme}
 
@@ -38,11 +38,16 @@ compatible with OpenAI API, which allows it to use both remote and local LLMs.
 It uses Agentic architecture and implements MCP protocol. This enables it to
 use various tools (terminal, browser, code execution, etc). It is also
 context-aware, which means it can read and understand the files in the current
-working directory and acknowledge host OS \cite{gptme-web} \cite{gptme-docs}.\\
+working directory and acknowledge host OS\cite{gptme-web}\cite{gptme-docs}.\\
 
 Below the short interaction example with gptme is shown: % TODO inline code
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[,
+  caption={Example of gptme interaction with browser tool},
+  label={lst:gptme},
+  language=bash,
+  style=code-listing
+]
 \$ gptme --tools=browser "How many calories are there in one spoon of sugar?"
 [11:07:21] WARNING Skipping all confirmation prompts. cli.py:186
 [11:07:21] Using browser tool with lynx
@@ -86,7 +91,7 @@ This is general-purpose CLI chat-like application by Google. It uses Gemini
 LLMs to provide AI capabilities in terminal. It is useful for various tasks,
 including code generation, data analysis, and general Q\&A. It also supports
 MCP protocol and custom tool integration. Though, it is dependable on remote
-LLM and cannot be used with local LLMs \cite{gemini-web} \cite{gemini-docs}.\\
+LLM and cannot be used with local LLMs\cite{gemini-web}\cite{gemini-docs}.\\
 
 \subsubsection{Yai (Your AI Assistent)}
 
@@ -94,7 +99,7 @@ This application is an interactive TUI chat application, which uses OpenAI to
 provide user with AI capabilities in terminal. It supports tools interaction
 and basic agentic architecture. In current form, it is not able to use local
 LLMs. Though, it is possible to adapt it for local LLMs with some modifications
-in its source code. \cite{yai-web} \cite{yai-docs}.\\
+in its source code.\cite{yai-web}\cite{yai-docs}.\\
 
 % TODO Worth testing later?
 
@@ -103,13 +108,13 @@ in its source code. \cite{yai-web} \cite{yai-docs}.\\
 This is an AI-powered code agent with focus on software development tasks and
 terminal integration. It supports various tools and is context- and
 project-aware. It is able to use both remote and local LLMs. It is also
-open-source. \cite{aider-web} \cite{aider-docs}.\\
+open-source.\cite{aider-web}\cite{aider-docs}.\\
 
 \subsubsection{termai}
 
 This is a terminal-based AI assistant similar to gptme, written in Rust. It
 supports various LLM providers, but it is not able to use local LLMs in its
-current form. It is open-source and has basic agentic architecture. \cite{termai-web} \\
+current form. It is open-source and has basic agentic architecture.\cite{termai-web} \\
 
 \subsubsection{AiTerm}
 
@@ -122,7 +127,7 @@ use with OpenAI API, thus and it can be used with local LLMs as well.\\
 We can inspire from its approach to bash integration using tmux sessions to
 provide seamless interaction between LLM and terminal. Though, this approach
 turned out to be somewhat clunky in practice, as it couldn't handle well the
-TUI applications, but only get bash's responses. \cite{aiterm-web} \\
+TUI applications, but only get bash's responses.\cite{aiterm-web} \\
 
 
 \subsubsection{Other solutions}
