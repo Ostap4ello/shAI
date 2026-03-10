@@ -208,31 +208,43 @@ Here are some examples of applications using TUI:\\
 
 \subsection{Large Language Models (LLMs)}
 
-This section provides a brief overview of the aspects of Large
-Language Models (LLMs), relevant for
-this article. It describes the architecture, types, limitations of
-LLM, the main protocols for the interaction,
-as well as the advanced concepts, like extension and fine-tuning.
+This section provides a brief overview of the aspects of Large Language Models
+(LLMs), relevant for this article. It describes the architecture, types,
+limitations of LLM, the main protocols for the interaction, as well as the
+advanced concepts, like extension and fine-tuning.
 
 \subsubsection{Architecture Overview. Functionality}
 
-Large language models (LLMs) refer to Transformer language models
-that contain hundreds of billions (or more) of parameters, which are
-trained on massive text data, such as GPT-3, PaLM, Galactica, and
-LLaMA. LLMs exhibit strong capacities to understand natural language
-and solve complex tasks (via text generation).
+Large language models (LLMs) refer to Transformer language models that contain
+hundreds of billions (or more) of parameters, which are trained on massive text
+data, such as GPT, BERT or LLaMA. LLMs exhibit strong capacities to understand
+natural language and solve complex tasks (via text generation).
+
+The architecture of LLMs can be devided into several main components:
+\begin{itemize}
+    \item \textbf{Tokenizer}: This component is responsible for providing the
+        representation of the input text in a format that can be processed by
+        the model. It breaks the input text into smaller units, to be able to
+        represent it as vectors and then process it. The set of possible tokens
+        is called the \textbf{vocabulary}, and can include words, subwords, or
+        even individual characters. It is important to note that the vocabulary
+        is fixed after training, which means that any new or rare words or
+        combinations of characters (for example, ciphertexts) may not be
+        processed accurately or at all.
+    \item \textbf{Embedding Layer}: This layer converts the tokenized input
+        into dense vector representations, which capture the semantic meaning
+        of each token. There are two main types of embeddings: \textbf{static}
+        and \textbf{contextual}. Static embeddings, such as Word2Vec or GloVe,
+        assign a fixed vector to each token, regardless of the context in which
+        it appears. Contextual embeddings, on the other hand, generate
+        different vectors for the same token based on its context in the input
+        text, allowing for a more nuanced understanding of language.
+    \item \textbf{Transformer Layers}: These layers are the core of the LLM architecture,
+        responsible for processing
 
 Currently, LLMs are mainly built upon the Transformer architecture
-\cite{attention}, where multi-head attention layers are stacked in a very deep
-neural network. They are based on the Transformer architecture.\\
-
-The model tokenizes the input text into smaller units, to be able to
-represent and process it effectively. The set of possible tokens is
-called the vocabulary, and can include words, subwords, or even
-individual characters. It is important to note that the vocabulary is
-fixed after training, which means that any new or rare words or
-combinations of characters (for example, ciphertexts) may not be
-processed accurately or at all.
+\cite{attention}, where \textbf{multi-head attention layers} are stacked in a
+very deep neural network. They are based on the Transformer architecture.\\
 
 The transformer architecture is based on finding relationships
 between elements in a sequence using self-attention mechanisms
@@ -240,22 +252,19 @@ between elements in a sequence using self-attention mechanisms
 dependencies in the input, which may be helpful for decrypting
 ciphers that rely on patterns in the text.
 
-\subsubsection{Transformer Architecture. Encoder and Decoder}
-
 In original article, previously mentioned Transformers consist of two main
 parts --- \textbf{Encoder} and \textbf{Decoder}. For the purpose of this
 article, it is enough to know that nowadays LLMs are mainly based on
 Decoder-only architecture (also called Causal Decoder), which means they only
-use the Decoder part of the original Transformer architecture. And most of the
-time, they don't use the Encoder part at all.
+use the Decoder part of the original Transformer architecture.
 
 The usage of Decoder-only architecture implies that the model generates the
 output text sequentially, one token at a time, while attending to all
 previously generated tokens. This can be a limitation for long prompts, as the
 model can only attend to a limited number of previous tokens (this limit is
-called context length or window size). Furthermore, the longer the prompt, the
-more computationally expensive it becomes to generate the output, as the model
-has to process all previous tokens for each new token.
+called \textbf{context length} or \textbf{window size}). Furthermore, the
+longer the prompt, the more computationally expensive it becomes to generate
+the output, as the model has to process all previous tokens for each new token.
 
 Additionally, Decoder-only models are typically easier to train and fine-tune,
 as they require less complex training data and objectives compared to
@@ -349,15 +358,91 @@ these steps using various tools.
 
 \textbf{Retrieval-Augmented Generation (RAG)} is a technique that allows LLMs
 to utilize external knowledge bases, significantly reducing hallucinations and
-increasing accuracy. It uses vector databases to store data in a way that
-allows for efficient search and retrieval of relevant information.
+increasing accuracy.
 
-When a user submits a query, the system retrieves relevant documents from the
-vector database based on semantic similarity to the query. These documents are
-then added to the prompt sent to the LLM, providing it with additional context
-to generate a more accurate response.
+When user submits a query, the system retrieves relevant documents from
+document database. These documents are then injected to the prompt sent to the
+LLM, providing it with additional context to generate a more accurate response.
 
-% todo: read more on rag + refs
+This case involves document retrieval, for which it is the best to use the
+\textbf{semantic document search and retrieval}. By this, we mean the
+techniques of indexing and searching documents based on their semantic
+representations. Therefore, there are two main components for the retrieval
+system: document representation generator and storage / index with searching
+techinques best suited for the task.\\
+
+\textbf{Semantic representation} of documents, with introduction of LLMs, have
+divided into two major groups:
+\begin{itemize}
+    \item \textbf{Sparse vector representations (Sparse retrieval):} This
+        method mostly relies on traditional keyword-based approaches, such as
+        BoW, one-hot encoding, LSI or TF-IDF to retrieve documents based on the
+        presence or quantity of specific terms. It is computationally efficient
+        and works well for simple queries, but it may struggle with complex
+        queries or those that require understanding of context and semantics.\\
+        \textsl{The common example of sparse retrieval is Bag-of-Words (BoW)
+        model, which represents documents as vectors of word counts. It needs
+        the dictionary of all possible words (or subset of them) to be defined.
+        Then, the size of the vector is equal to the size of the dictionary,
+        and each element position corresponds to the word in the dictionary.}
+    \item \textbf{Dense vector representations (Dense retrieval):} This method
+        uses dense vector representations (embeddings) of documents and queries
+        to calculate similarity. It typically involves training a neural
+        network to generate embeddings that capture the semantic meaning of the
+        text. The similarity between the query and documents is then calculated
+        using cosine similarity or other distance metrics. Dense retrieval can
+        be more effective for complex queries and can capture nuances in
+        language, but it may require more computational resources compared to
+        traditional sparse retrieval.
+\end{itemize}
+
+\textbf{Document representation/summarization vector generator techniques}
+is also an important aspect of the representation of documents. As
+embedding layer of either dense or sparse retrieval represents the document
+as a collection of vectors, one for each token, it is important to have the
+techniques to generate the single vector that represents this whole
+collection.
+\begin{itemize}
+    \item \textbf{Classical Approaches:} Theese techniques include
+        methods like averaging, max pooling and other simple
+        aggregation methods to combine the token embeddings into a
+        single vector. These methods are computationally efficient
+        and easy to implement, but they may not capture the full
+        semantic meaning of the document, but rather features like
+        frequency of words or presence and relationships between
+        based on it, but not the context.
+    \item \textbf{Neural Network-based Approaches:} These
+        techniques involve training a neural network, such as a
+        transformer or recurrent neural network, to generate a single
+        vector representation for the entire document. The possible
+        approaches are:
+        \begin{itemize}
+            \item \textbf{Multi-head attention-based summarization:} This method
+                uses a transformer architecture retrieve weights for each token
+                based on its position, relationships with other tokens and
+                context, normalizes them, and then combines the token
+                embeddings into a single vector using these weights. This
+                approach can capture complex relationships between tokens and
+                provide a more accurate representation of the document's
+                meaning.
+            \item \textbf{[CLS] token-based summarization:} This method uses a
+                special token (e.g., [CLS] in BERT) that is added to the
+                beginning of the document. The transformer is trained to update
+                the values of this token based on the context of the entire
+                document, and the final value of this token is used as the
+                summary vector for the document.
+        \end{itemize}
+        \textsl{It is important to note that to increase the accuracy of the
+        summarization, it is often necessary to have single-topic documents}
+\end{itemize}
+
+\textbf{Vector databases} are specialized databases designed to store and
+manage high-dimensional vector data (in this case, document embeddings) and
+perform efficient similarity search based on different metrics (e.g., cosine
+similarity, L2 or Euclidean distance). Examples of vector databases include
+Faiss, Annoy, and Milvus.
+
+\newpage %%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsubsection{Communication protocols. OpenAI API. MCP}
 

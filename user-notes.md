@@ -20,7 +20,7 @@ output:
 **Expected readership**: developers, DevOps engineers, system administrators, linux enthusiasts.  
 
 **Slovak version of the project proposal:**
-```
+```txt
 Zadanie:
 
 Cieľom práce je otestovať využitie lokálnych LLM v kontexte terminálového asistenta. V rámci tejto práce je potrebné navrhnúť a implementovať CLI/TUI asistenta na základe lokálneho LLM, ktorý bude schopný kontextovo-citlivého generovať a dopĺňať príkazy v Linux termináli. Používatelia budú schopní využiť asistenta na zefektívnenie svojej práce v termináli prostredníctvom inteligentných návrhov príkazov a získať odpovede na otázky týkajúce sa najmä terminálu.
@@ -164,3 +164,18 @@ Other ideas:
 - Use OpenAI one shot training / few shot training / chain of thought to fine-tune a model to meet the specific needs of the application.
 - Use a local LLM (e.g. llama) to provide offline functionality and reduce the need for internet access.
 - Combine online and offline models.
+
+# TODO
+
+- Man pages
+    1. Look in repositories
+    2. Debian man page database - smaller - coreutilsgT
+
+- STEP-ZERO - minimal comp 2
+
+- Describe the whole 'how looks' and composition of the system
+
+- Expected behavior / look
+
+- UML, functional requirements, -- sw def
+

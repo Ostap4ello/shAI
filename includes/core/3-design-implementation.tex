@@ -74,10 +74,53 @@ to answer user queries. It's built around a Retrieval-Augmented Generation
 knowledge base with LLM generation to produce informative and accurate
 responses. The task of this module is to summarize the relevant context and
 pass it to user or requesting node, which then generates a response based on
-the retrieved information and its own knowledge.
+the retrieved information and its own knowledge.\\
 
 \textbf{Testing. }{}
 
+\textbf{Retrieval Module.}{}
+The task of this module is, provided with a path to a folder with resources
+(man pages, in our case), assuming that each document in it can be assigned one
+topic, to (1) search the data and return top-k document identifiers (file
+paths). It will use a locally run embedding model to (2) index these documents
+and enable contextual search.\\
+
+The interface it should provide will consist of mainly three functions:
+
+\begin{enumerate}
+\item \texttt{build(db\_path, index\_path\_within\_db, OpenAIAPI-Client, model)} --- will build
+an index at the specified \texttt{db\_path}, and save it, along with the model used for
+embedding creation (as \texttt{config.json}) into \texttt{db\_path/index\_path\_within\_db}.
+\texttt{index\_path\_within\_db} is a non-mandatory parameter, and its default value is
+\texttt{.index}. For creating embeddings, it will use \texttt{OpenAIAPI-Client} with the specified model.
+
+\item \texttt{check(db\_path, index\_path\_within\_db)} --- will check the availability of the index
+within \texttt{db\_path}.
+
+\item \texttt{search(db\_path, index\_path\_within\_db, OpenAIAPI-Client)} --- will conduct a search
+on \texttt{db\_path}, using the index from \texttt{db\_path/index\_path\_within\_db}, with
+\texttt{OpenAIAPI-Client} and the model from \texttt{db\_path/index\_path\_within\_db}. Calls
+\texttt{check(db\_path, index\_path\_within\_db)} --- will check the availability of the index
+within \texttt{db\_path} and \texttt{index\_path\_within\_db}.\\
+\end{enumerate}
+
+It should also implement its own CLI interface with \texttt{build} and
+\texttt{search} commands for testing purposes.
+
+This implementation will be using following technologies:
+\begin{itemize}
+    \item \textbf{Embedding model}: We will be choosing a local embedding model from:
+        \begin{itemize}
+            \item \texttt{qwen3-embedding:0.6b}
+            \item \texttt{ibm/granite-embedding:125m}
+        \end{itemize}
+    \item \textbf{Vector database}: We will be using \texttt{FAISS} for
+        indexing and searching the embeddings. We will test different
+        similarity metrics (e.g.~cosine similarity, inner product) to find the
+        best one for our use case.
+    \item \textbf{Connection to LLM}: We will be using \texttt{OpenAIAPI-Client} to connect to the local
+        LLM for generating responses based on the retrieved information.
+\end{itemize}
 
 \subsubsection{Component 3. Task splitter}
 
