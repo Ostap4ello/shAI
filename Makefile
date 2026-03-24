@@ -19,6 +19,13 @@ clean-pdf: pdf.thesis-clean pdf.thesis pdf.usernotes
 pdf.usernotes:
 	pandoc ./user-notes.md -o .build/user-notes.pdf --pdf-engine=xelatex
 
+# TODO: push fixes to builder repository
+#
+# BUILD_DIR change is related to \makeglossaries and \makeindex(?) commands not
+# printing their tables in the document, if .acr ... files are not in the same
+# directory as the .tex file.
+#
+# The ret variable change supresses error prints
 pdf.thesis:
 	if [ ! -d ".build" ]; then mkdir .build; fi
 	if [ ! -d ".build/$(BUILDER_FOLDER_NAME)" ]; then \
@@ -26,6 +33,7 @@ pdf.thesis:
 		git clone $(BUILDER_GITHUB_REPO) ./.build/$(BUILDER_FOLDER_NAME); \
 		cd ./.build/$(BUILDER_FOLDER_NAME); \
 		sed -i 's/  return ret;/  return $$ret;/' latexmkrc; \
+		sed -i 's/^BUILD_DIR = .build/BUILD_DIR = ./' Makefile; \
 	fi
 	
 	if [ ! -f "thesis.tex" ]; then \
@@ -43,8 +51,8 @@ pdf.thesis:
 		$(LOG_INFO) "Build finished."
 	
 	$(LOG_INFO) "Copying built PDF to build folder..."
-	cp ./.build/$(BUILDER_FOLDER_NAME)/.build/thesis.log .build/thesis.log
-	cp ./.build/$(BUILDER_FOLDER_NAME)/.build/thesis.pdf .build/thesis.pdf
+	cp ./.build/$(BUILDER_FOLDER_NAME)/thesis.log .build/thesis.log
+	cp ./.build/$(BUILDER_FOLDER_NAME)/thesis.pdf .build/thesis.pdf
 
 pdf.thesis-clean:
 	$(LOG_INFO) "Cleaning local build files..."
