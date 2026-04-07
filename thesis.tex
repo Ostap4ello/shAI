@@ -1,43 +1,34 @@
 \documentclass[bp,en]{FEIstyle}
 
-% Author of the thesis
+\usepackage{multicol}
+
 \FEIauthor{Ostap Pelekh}
+\FEIregNr{FEI-16605-128102}
 
-% Evidence number
-\FEIregNr{FEI\-16605\-128102}
+\FEIdate{00}{00}{0000} % NOTE: automatically updated by make
 
-% Title
 \FEItitle{ShAI --- Lokálny terminálový asistent založený na LLM}
 \FEItitleEn{ShAI --- Local LLM-based Terminal Assistant}
 
-% Date
-\FEIdate{00}{00}{0000} % NOTE: automatically updated by make
+\FEIkeywords{LLM, lokálne veľké jazykové modely, asistenti príkazového riadka, integrácia do shellu}
+\FEIkeywordsEn{LLM, local large language models, command line assistants, shell integration}
 
-% Keywords
-\FEIkeywords{záverečná práca, LLM, lokálne veľké jazykové modely, asistenti príkazového riadku, integrácia do shellu, hodnotenie}
-\FEIkeywordsEn{Final thesis, LLM, local large language models, command line assistants, shell integration, evaluation}
-
-% Further details
 \FEIstudyProgramme{Aplikovaná informatika}
 \FEIstudyProgrammeEn{Applied Informatics}
 \FEIstudyField{Informatika}
-\FEIstudyFieldEn{Informatics, Computer Science}
+\FEIstudyFieldEn{Computer Science}
 \FEItrainingWorkplace{Ústav informatiky a matematiky}
 \FEItrainingWorkplaceEn{Institute of Computer Science and Mathematics}
 
-% Supervisor
 \FEIsupervisor{Ing. Roderik Ploszek, PhD.}
 
-% Consultant
-% -- if there is none, comment out the next line
-% \FEIconsultant{tituly Meno Priezvisko, tituly}
+% \FEIconsultant{tituly Meno Priezvisko, tituly} % -- if there is none, comment out the next line
 
 % Glossaries -- terms and abbreviations.
 % If you use automatic glossaries,
 % uncomment the next line.
 \FEIglossaries{includes/glossary}
 
-% Bibliography database file
 \bibliography{includes/bibliography.bib}
 
 \begin{document}
@@ -88,6 +79,11 @@
 %%             %%
 %%%%%%%%%%%%%%%%%
 \mainmatter{}
+
+% TODO: workaround to not count all previous tables 
+% (like \printglossary{})
+% fix FEIStyle
+\setcounter{table}{0}
 
 \FEIintroduction{includes/introduction}             % TODO: (main) introduction - fill in
 \FEIcore{includes/core}                             % (later)

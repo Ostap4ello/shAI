@@ -151,7 +151,16 @@ Read on:
 - put theory to bachelor's
 - [Agents](https://medium.com/@Shamimw/using-ai-agents-to-execute-shell-scripts-with-langgraph-using-ollama-a-smarter-approach-to-679fd3454b09)
 - This work can be used or compared with as detecting dangerous commands is one of the features:
-    - [CLI Risc classification using transformers](https://arxiv.org/html/2412.01655v1)
+    - [CLI Risc classification usi- User stories / Use cases / Examples (what it does in particular)
+- Describe technology
+- RAG (Module 2)
+    - search system
+    - module imp
+- Module 3
+    - Agent
+- Test Pipeline Using cloud LLM
+
+- ? XAI - ecplainable AIng transformers](https://arxiv.org/html/2412.01655v1)
 
 
 # 4. Ideas
@@ -179,3 +188,13 @@ Other ideas:
 
 - UML, functional requirements, -- sw def
 
+- qualitative testing
+- trying different models
+
+- openclaw
+
+users query types
+1. fact
+2. info from multiple points in database
+3. action
+4. action with hidden context (need to retrieve info)

@@ -1,52 +1,47 @@
-
-This section provides a comprehensive review of existing solutions, tools and
-applications. The information from this section will be used in further design
-and implementation of our solution.
-
-\subsection{General Solutions Overview}
-
 This section contains an overview of already existing tools. This will help us
 to concentrate on essential points and may serve as good consideration points
-when we will be working on the design of our solution. There will also be provided
-a comparison table at the end of this section, which will summarize the main
-properties of each solution.
+when we will be working on the design of our solution. 
+%TODO:
+There will also be provided a comparison table at the end of this section, which
+will summarize the main properties of each solution.
+% TODO:
 % Properties to compare:
 % - Open Source / Closed closed-source
-% - Local LLM support / Remote LLM only
+% - Local \gls{llm} support / Remote LLM only
 % - Context Awareness / No Context Awareness
 % - Agentic Architecture / No Agentic Architecture
 % - Shell Replacement / CLI Utility / Terminal Emulator
 
-\subsubsection{Warp Terminal}
+\subsection{Warp Terminal}
 
-This is a developement-oriented and general-purpose AI-enabled terminal
-emulator, which uses remote Agent LLM System to enchance the experience of
+This is a developement-oriented and general-purpose \gls{ai}-enabled terminal
+emulator, which uses remote Agent \gls{llm} System to enchance the experience of
 users. The most of its code remains closed-source. It is not adapted for
-executing on small LLM's and it provides no support for local LLM's.
-Additionally, it is not a CLI/TUI application, but a full graphical terminal
+executing on small \glspl{llm} and it provides no support for local \glspl{llm}.
+Additionally, it is not a \gls{cli}/\gls{tui} application, but a full graphical terminal
 emulator.
 \\
 This solution is popular and comercially successful, but it does not
 completely fit into the scope of our work, as it is not designed to work with
-local LLM's. However, it is worth mentioning, as it provides good AI-based
-services for terminal users\cite{warp-web}\cite{warp-docs}.\\
+local \glspl{llm}. However, it is worth mentioning, as it provides good AI-based
+services for terminal users\cite{warp-web,warp-docs}.\\
 
-\subsubsection{gptme}
+\subsection{gptme}
 
-This is general-purpose CLI utility with breadth AI functionality. It is
-compatible with OpenAI API, which allows it to use both remote and local LLMs.
-It uses Agentic architecture and implements MCP protocol. This enables it to
-use various tools (terminal, browser, code execution, etc). It is also
+This is general-purpose \gls{cli} utility with breadth \gls{ai} functionality. It is
+compatible with OpenAI \gls{api}, which allows it to use both remote and local \glspl{llm}.
+It uses Agentic architecture and implements \gls{mcp} protocol. This enables it to
+use various tools (terminal, browser, code execution, etc.). It is also
 context-aware, which means it can read and understand the files in the current
-working directory and acknowledge host OS\cite{gptme-web}\cite{gptme-docs}.\\
+working directory and acknowledge host \gls{os}\cite{gptme-web,gptme-docs}.\\
 
 Below the short interaction example with gptme is shown: % TODO inline code
-
 \begin{lstlisting}[,
   caption={Example of gptme interaction with browser tool},
   label={lst:gptme},
   language=bash,
-  style=code-listing
+  style=code-listing,
+  float
 ]
 \$ gptme --tools=browser "How many calories are there in one spoon of sugar?"
 [11:07:21] WARNING Skipping all confirmation prompts. cli.py:186
@@ -69,73 +64,77 @@ Sugar has ~4 kcal per gram (sucrose ~3.87 kcal/g), so you can estimate by weight
 \end{lstlisting}
 
 \begin{itemize}
-  \item Uses OpenAI API for accessing remote/local LLMs
+  \item Uses OpenAI API for accessing remote/local \glspl{llm}
   \item Uses Agent architecture and MCP tools
   \item Is context-aware and is able to use tools (terminal, browser,
-    code execution, etc)
+    code execution, etc.)
   \item Implements MCP protocol
 \end{itemize}
 \\
 
-When tested manually with local LLMs (Gemma3 4b, Qwen2.5 1.5b), it did not
+
+% TODO: citations for models
+
+When tested manually with local \glspl{llm} (Gemma3 4b, Qwen2.5 1.5b), it did not
 perform well, as the models were not able to handle the complexity of the
-tasks. It usually due to too long prompts which made LLMs halucinate on too
+tasks. It usually due to too long prompts which made \glspl{llm} halucinate on too
 many details. This shows, that the solution is not fully adapted for local
-LLMs, which is one of the main goals of our work. THis should be considered
-when designing our solution to use more fine-grained prompts for local LLMs and
-optimize the architecture for local LLMs.\\
+\glspl{llm}, which is one of the main goals of our work. This should be considered
+when designing our solution to use more fine-grained prompts for local \glspl{llm} and
+optimize the architecture for local \glspl{llm}.\\
 
-\subsubsection{gemini-cli}
+\subsection{gemini-cli}
 
-This is general-purpose CLI chat-like application by Google. It uses Gemini
-LLMs to provide AI capabilities in terminal. It is useful for various tasks,
+% chat-like vs chat?
+This a is general-purpose \gls{cli} chat-like application by Google. It uses Gemini
+\glspl{llm} to provide \gls{ai} capabilities in terminal. It is useful for various tasks,
 including code generation, data analysis, and general Q\&A. It also supports
-MCP protocol and custom tool integration. Though, it is dependable on remote
-LLM and cannot be used with local LLMs\cite{gemini-web}\cite{gemini-docs}.\\
+\gls{mcp} protocol and custom tool integration. Hovewer, it is dependable on remote
+\glspl{llm} and cannot be used with local \glspl{llm}\cite{gemini-web,gemini-docs}.\\
 
-\subsubsection{Yai (Your AI Assistent)}
+\subsection{Yai (Your \gls{ai} Assistent)}
 
-This application is an interactive TUI chat application, which uses OpenAI to
-provide user with AI capabilities in terminal. It supports tools interaction
+This application is an interactive \gls{tui} chat application, which uses OpenAI to
+provide user with \gls{ai} capabilities in terminal. It supports tools interaction
 and basic agentic architecture. In current form, it is not able to use local
-LLMs. Though, it is possible to adapt it for local LLMs with some modifications
-in its source code.\cite{yai-web}\cite{yai-docs}.\\
+\glspl{llm}. Hovewer, it is possible to adapt it for local \gls{llm}s with some modifications
+in its source code.\cite{yai-web,yai-docs}.\\
 
 % TODO Worth testing later?
 
-\subsubsection{Aider}
+\subsection{Aider}
 
-This is an AI-powered code agent with focus on software development tasks and
+This is an \gls{llm}-powered code agent with focus on software development tasks and
 terminal integration. It supports various tools and is context- and
-project-aware. It is able to use both remote and local LLMs. It is also
-open-source.\cite{aider-web}\cite{aider-docs}.\\
+project-aware. It is able to use both remote and local \glspl{llm}. It is also
+open-source.\cite{aider-web,aider-docs}.\\
 
-\subsubsection{termai}
+\subsection{termai}
 
-This is a terminal-based AI assistant similar to gptme, written in Rust. It
-supports various LLM providers, but it is not able to use local LLMs in its
-current form. It is open-source and has basic agentic architecture.\cite{termai-web} \\
+This is a terminal-based \gls{llm} assistant similar to gptme, written in Rust. It
+supports various \gls{llm} providers, but it is not able to use local \glspl{llm} in its
+current form. It is open-source and has basic agentic architecture\cite{termai-web}. \\
 
-\subsubsection{AiTerm}
+\subsection{AiTerm}
 
 The application that utilizes tmux terminal multiplexer to access the terminal
-I/O. It sends the terminal output as context to chosen LLM and gets the
+\gls{io}. It sends the terminal output as context to chosen \gls{llm} and gets the
 response back. It has execution agent capabilities, which allows it to run
-commands in terminal based on LLM response. It is open-source and is adapted to
-use with OpenAI API, thus and it can be used with local LLMs as well.\\
+commands in terminal based on \gls{llm} response. It is open-source and is adapted to
+use with OpenAI \gls{api}, thus and it can be used with local \glspl{llm} as well.\\
 
-We can inspire from its approach to bash integration using tmux sessions to
-provide seamless interaction between LLM and terminal. Though, this approach
+We can draw inspiration from its approach to Bash integration using tmux sessions to
+provide seamless interaction between \gls{llm} and terminal. Hovewer, this approach
 turned out to be somewhat clunky in practice, as it couldn't handle well the
-TUI applications, but only get bash's responses.\cite{aiterm-web} \\
+~\gls{tui} applications, but only get bash's responses\cite{aiterm-web}. \\
 
 
-\subsubsection{Other solutions}
+\subsection{Other solutions}
 
 There are also such solutions, like \textsl{ai-terminal-assistent (github)}{}
-or \textsl{cmd-ai (github)}, which are just wrappers for Rest API calls to
-remote LLMs. They provide basic AI capabilities in terminal, but have no significant
-features.
+or \textsl{cmd-ai (github)}, which are just wrappers for Rest \gls{api} calls to
+remote \glspl{llm}. They provide basic \gls{ai} capabilities in terminal, but
+have no significant features.
 
 % % comparison table
 % % Split into two tables
@@ -165,5 +164,5 @@ features.
 %     \textbf{Agentic Architecture} & TBD & TBD & TBD & TBD \\
 %     \midrule
 %   \end{tabular}
-%   \caption{Second half of comparison table for Local LLM Assistant Development}
+%   \caption{Second half of comparison table for Local \gls{llm} Assistant Development}
 % \end{table}

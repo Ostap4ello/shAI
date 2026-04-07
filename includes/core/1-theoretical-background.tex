@@ -1,13 +1,13 @@
 
-\subsection{Terminal Interfaces and Applications. CLI, TUI}
+\subsection{Terminal and Command Line Interfaces and Applications}
 
 This section describes the interfaces and programs that are relevant to our
-solution. It defines two interfaces: Command Line Interfaces (CLIs) and
-Text-based User Interfaces (TUIs). It also describes the programs that leverage
-these interfaces: shells, CLI utilities, and TUI applications.
+solution. It defines two interfaces: \glspl{cli} and
+\glspl{tui}. It also describes the programs that leverage
+these interfaces: shells, \gls{cli} utilities, and \gls{tui} applications.
 
-For the beginning, we need to understand what Command Line Interfaces (CLIs)
-are, as well as the utilities that are used within them.\\
+For the beginning, we need to understand what \glspl{cli} are, as well as the
+utilities that are used within them.\\
 
 The definition of the interface is adopted from Branden Hookway's book
 \textit{Interface}, where he defines it as follows:
@@ -15,35 +15,34 @@ The definition of the interface is adopted from Branden Hookway's book
   \textit{\uv{In computing, an interface is a shared boundary across which
       two or more separate components of a computer system exchange information.
       The exchange can be between software, computer hardware, peripheral
-  devices, humans, and combinations of these.}}
-\end{quote}\cite{hookway2014}\\
+  devices, humans, and combinations of these}}\cite{hookway2014}.
+\end{quote}\\
 
-\subsubsection{Terminal, Terminal emulator. Terminal Application}
+\subsubsection{Terminal emulator, Terminal Application}
 
-The article focuses on text-based \textbf{terminal} interfaces, which are a
-specific type of interface used in computing environments. Here is how we
-define terminals, terminal emulators and terminal applications.\\
+The thesis focuses on \glspl{tui}, which are a specific type of interface used
+in computing environments. Here is how we define terminals, terminal emulators
+and terminal applications.\\
 
 \textbf{Terminal} is a \uv{\textit{an electronic or electromechanical hardware
     device that can be used for entering data into, and transcribing
-data from, a computer or a computing system}}. This definition
-defines main functionality of terminals and terminal emulators, which
-is to provide an elementary, which is
-CLI, interface for user to interact with the computer system.\\
+data from, a computer or a computing system}}. In essence, the main
+functionality of terminals and terminal emulators, which is to provide an
+elementary interface for user to interact with the computer system.\\
 
-\textbf{Terminal emulator / Terminal application} is a software application
+\textbf{Terminal emulator/Terminal application} is a software application
 that replicates the functionality of a traditional hardware terminal as a
 software program. Here are some examples of terminal emulators:
 \begin{itemize}
   \item iTerm2 (macOS)
   \item Windows Terminal (Windows)
   \item Alacritty (Cross-platform)
-  \item tty (Linux)
 \end{itemize}
 
 \textbf{Terminal applications} are software programs that run within terminal
 emulators and utilize their capabilities to provide text-based user interfaces
---- either CLIs or TUIs. We will discuss it further in the following
+--- either \glspl{cli} or \glspl{tui}. We will discuss it further in
+the following
 sections.\\
 
 % NOTE: this knowledge is not relevant for the solution. Delete later?
@@ -121,48 +120,55 @@ sections.\\
 %     descriptor.
 % }}
 
-\subsubsection{CLI.\ Shells and CLI Utilities}
+\subsubsection{Shells and \gls{cli} Utilities}
 
-The definition of CLI extends previous definition to the specific case of
+The definition of \gls{cli} extends previous definition to the specific case of
 command line interfaces, which are text-based interfaces between the user and
 the computer system, where user inputs commands in the form of text, to
 manipulate the system or perform specific tasks, and gets responses in the same
 form.\\
 
-\textbf{Shells} are special programs that provide relatively wide and direct
-access on system on which it runs. Most shells are CLI programs. They interpret
-user commands, execute them, and return the results.
+\textbf{Shells} are special programs (with \gls{cli}, \gls{tui}, as well as
+\gls{gui} interfaces) that provide relatively wide and direct access on system
+on which it runs.\ \gls{cli} shells are \gls{cli} programs that allow users to
+execute commands and other \gls{cli} utilities.
 
-\textbf{CLI utilities} are programs that are executed from within the CLI
-environments.\\
+\textbf{\gls{cli} utilities} are programs that are executed from
+within the \gls{cli} environments. Some popular examples of shells and \gls{cli}
+utilities are mentioned in Table\ \ref{t:utils}.
 
-Here are some popular examples of shells and CLI utilities:
-
-\begin{table}[H]
+% TODO: caption goes before the table (on top of)
+\begin{table}
+  \caption{Examples of shells and \gls{cli} utilities}\label{t:utils}
   \begin{tabular}{p{3cm}|p{4cm}|p{8cm}}
     Name & System & Description \\
     \hline
-    Bash, Zsh & Linux, macOS & Popular Unix-like shells, compliant
-    with POSIX standard.\footnote{
-    POSIX will be also explained later in this chapter.} \\
-    Cisco IOS Shell & Cisco devices & Shell used in Cisco network devices. \\
-    bluetoothctl & Linux, macOS & CLI \textbf{utility} for managing
-    Bluetooth devices.\footnote{ Note
-      that this program provides interface similar to shell, but it
-      is a utility, not a shell
-    itself.}\\
-    git & Cross-platform & CLI \textbf{utility} for version control
-    using Git system. \\
-    nmcli (NetworkManager) & Linux & Application for controlling
-    network settings. \\
+    Bash, Zsh
+    & Linux, macOS
+    & Popular Unix-like shells, compliant with POSIX standard.\\
+    % TODO \footnotemark{}
+    Cisco IOS Shell
+    & Cisco devices
+    & Shell used in Cisco network devices. \\
+    bluetoothctl
+    & Linux, macOS
+    & \gls{cli} utility for managing Bluetooth devices.\\
+    git
+    & Cross-platform
+    & \gls{cli} utility for version control using Git system. \\
+    nmcli (NetworkManager)
+    & Linux
+    & Application for controlling network settings. \\
   \end{tabular}\\
-  \caption{Examples of shells and CLI utilities}
 \end{table}
 
-\subsubsection{TUI.\ TUI Applications}
+% TODO:
+% \footnotetext{POSIX will be also explained later in this chapter.}
 
-Text-based User Interfaces (TUIs) are a type of user interface that is a
-further extension of CLIs. They provide a more visually structured and
+\subsubsection{\gls{tui} Applications}
+
+\glspl{tui} are a type of user interface that is a
+further extension of \glspl{cli}. They provide a more visually structured and
 intuitive way for users to interact with applications by using libraries such
 as ncurses, which use the \textbf{terminal capabilities} emulators to create
 rich text-based interfaces.\\
@@ -173,37 +179,184 @@ which gives the application more control over it's output (i.e.\ move cursor in
   characters and so
 on).\\
 
-Here are some examples of applications using TUI:\\
-\begin{table}[H]
-  \begin{tabular}{p{3cm}|p{4cm}|p{8cm}}
+Some examples of applications using \gls{tui} are mentioned in
+Table\ \ref{t:utils2}.
+\begin{table}
+  \caption{Examples of \gls{tui} utilities and programs}\label{t:utils2}
+  \begin{tabular}{p{3cm}|p{5cm}|p{8cm}}
     Name & System & Description \\
     \hline
-    vi/vim/nvim & Linux, macOS, Windows & Best ever TUI visual text editor. \\
-    mc (Midnight commander) & Linux, macOS, Windows & TUI file explorer.\\
-    htop & Linux & Task manager.
-    nmtui (NetworkManager) & Linux & Application for controlling
-    network settings. \\
+    vi/vim/nvim
+    & Linux, macOS, Windows
+    & \gls{tui} visual
+    text editors. \\
+    mc (Midnight commander)
+    & Linux, macOS, Windows
+    & \gls{tui} file explorer.\\
+    htop
+    & Linux
+    & Task manager.\\
+    nmtui (NetworkManager)
+    & Linux
+    & Application for controlling network settings. \\
   \end{tabular}\\
-  \caption{Examples of shells and CLI utilities}
 \end{table}
 
 \newpage %%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Large Language Models (LLMs)}
+\subsection{Document Representation}
 
-This section provides a brief overview of the aspects of Large Language Models
-(LLMs), relevant for this article. It describes the architecture, types,
-limitations of LLM, the main protocols for the interaction, as well as the
-advanced concepts, like extension and fine-tuning.
+This section provides the background on the techniques for representing
+documents in a way that allows for accurate retrieval. It also describes the
+techniques for generating the semantic vector representations of documents,as
+well as the storage and retrieval of these representations using vector
+databases.
 
-\subsubsection{Architecture Overview. Functionality}
+\subsubsection{Text Summarization}
 
-Large language models (LLMs) refer to Transformer language models that contain
-hundreds of billions (or more) of parameters, which are trained on massive text
-data, such as GPT, BERT or LLaMA.\@ LLMs exhibit strong capacities to understand
-natural language and solve complex tasks (via text generation).
+\textbf{Text summarization} is defined as the process of a short, accurate, and
+fluent summary of a longer text document. This technique is extensively used in
+various applications, such as intent-classification, question-answering, and
+information retrieval\cite{zhang2024systematicsurveytextsummarization}.
 
-The architecture of LLMs can be devided into several main components:
+For the purpose of this thesis, we will focus on the single-document
+summarization, with generation of semantic vector representation of
+the document as the main goal.\\
+
+\subsubsection{Semantic Document Search and Retrieval}\label{emb:semvec}
+
+Currently, the semantic representation of
+documents is generally categorized into two primary
+groups\cite{khan2026retrieval}:
+
+\begin{itemize}
+  \item \textbf{Sparse vector representations (sparse retrieval):} This
+    method mostly relies on traditional keyword-based approaches,
+    such as \gls{bow}, one-hot encoding, \gls{lsindexing} or
+    \gls{tf-idf} to retrieve documents based on the presence or
+    quantity of specific terms. It is computationally efficient and
+    works well for simple queries, but it may struggle with complex
+    queries or those that require understanding of context and
+    semantics.\\ \textsl{The common example of sparse retrieval is
+      \gls{bow} model, which represents documents as vectors of word
+      counts. It needs the dictionary of all possible words (or subset
+      of them) to be defined. Then, the size of the vector is equal to
+      the size of the dictionary, and each element position corresponds
+    to the word in the dictionary.}
+
+  \item \textbf{Dense vector representations (dense retrieval):} This method
+    uses dense vector representations of documents and queries
+    to calculate similarity. It typically involves training a neural
+    network to generate embeddings that capture the semantic meaning of the
+    text. The similarity between the query and documents is then calculated
+    using cosine similarity or other distance metrics. Dense retrieval can
+    be more effective for complex queries and can capture nuances in
+    language, but it may require more computational resources compared to
+    traditional sparse retrieval.
+\end{itemize}
+
+The original article also mentions \textbf{hybrid retrieval techniques},
+that aim to combine the computational efficiency of sparse methods
+with the ability of dense representations to alleviate the vocabulary
+mismatch problem described in the article. These techniques typically
+utilize \textbf{document expansion} to bridge the gap between exact
+lexical matches and semantic meaning.
+\textsl{For example, the
+  SPLADE model expands the sparse representation of a document or query
+  with semantically related terms, allowing for better retrieval
+performance even when exact keywords are missing..}
+The thesis is not going to focus on the hybrid retrieval techniques,
+but it is important to acknowledge the existence of such techniques,
+as they can be used in the future research to further improve the
+retrieval performance of the system.\\
+
+\subsubsection{Dense Representation Vector Generation}
+
+\textbf{Dense representation vector generation} is also an important
+aspect of the representation of documents. As the embedding
+layer\ref{sec:emb-layer} of either dense or sparse retrieval
+represents the document as a collection of vectors, one for each
+token, it is important to have the techniques to generate the single
+vector that represents this whole collection.
+
+\begin{itemize}
+  \item \textbf{Classical Approaches:} Theese techniques include
+    methods like averaging, max pooling and other simple
+    aggregation methods to combine the token embeddings into a
+    single vector. These methods are computationally efficient
+    and easy to implement, but they may not capture the full
+    semantic meaning of the document, but rather features like
+    frequency of words or presence and relationships based on it,
+    but not the context.
+  \item \textbf{Neural Network-based Approaches:} These techniques involve
+    training a neural network, such as a transformer (embedding
+    model, mentioned in\ \ref{sec:embedding-models}) or recurrent
+    neural network, to generate a single vector representation for
+    the entire document. The possible approaches are:
+    \begin{itemize}
+      \item \textbf{Multi-head attention-based summarization:} This method
+        uses a transformer architecture retrieve weights for each token
+        based on its position, relationships with other tokens and
+        context, normalizes them, and then combines the token
+        embeddings into a single vector using these weights. This
+        approach can capture complex relationships between tokens and
+        provide a more accurate representation of the document's
+        meaning\cite{sharma2024unmacapsumtunifiedmultiheadattentiondriven}.
+      \item \textbf{[CLS] token-based summarization:} This method uses a
+        special token (e.g., [CLS] in \gls{bert}) that is added to the
+        beginning of the document. The transformer is trained to update
+        the values of this token based on the context of the entire
+        document, and the final value of this token is used as the
+        summary vector for the
+        document\cite{behrendt2025maxpoolbertenhancingbertclassification,devlin2018bert}.
+    \end{itemize}
+    \textsl{It is important to note that to increase the accuracy of the
+    summarization, it is often necessary to have single-topic documents}
+\end{itemize}
+
+\subsubsection{Vector Databases}\label{sec:vector-db}
+
+\textbf{Vector databases} are specialized databases designed to store and
+manage high-dimensional vector data and perform efficient similarity search
+based on different metrics (e.g., cosine similarity, L2 or Euclidean distance).
+Examples of vector databases include FAISS\cite{faiss2026},
+Annoy\cite{annoy2026}, and Milvus\cite{milvus2026}.
+
+% TODO: explain usage/choice of vector databases + citations
+
+For the purpose of this research, we will be using dense retrieval, as it is
+more suitable for complex queries and can capture the semantic meaning of the
+documents, which is more relevant for the task of choosing the right document
+based on the user query.
+
+\newpage %%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Large Language Models}
+
+% TODO: sources for each subsection
+
+This section provides a brief overview of the aspects of \glspl{llm}, relevant
+for this thesis. It describes the architecture, types, limitations of
+\gls{llm}, the main protocols for the interaction, as well as the advanced
+concepts.
+
+\subsubsection{Language Models}
+
+Language models are mathematical models designed to predict and generate
+sequences of text. They are crucial in artificial intelligence for performing
+various tasks like language translation, summarization, and content creation.
+Over time, they have evolved significantly, powered by advances in neural
+networks\cite{naveed2023}.
+
+\subsubsection{\gls{llm} Overview}
+
+\glspl{llm} refer to transformer language models that contain hundreds of
+billions (or more) of parameters, which are trained on massive text data, such
+as \gls{gpt}, \gls{bert}, \gls{lstm} or Mamba.\@ \glspl{llm} exhibit strong
+capacities to understand natural language and solve complex tasks (via text
+generation)\cite{radford2018improving,devlin2018bert,touvron2023llama}.
+
+The architecture of \glspl{llm} can be devided into several main components:
 \begin{itemize}
   \item \textbf{Tokenizer}: This component is responsible for providing the
     representation of the input text in a format that can be processed by
@@ -212,19 +365,21 @@ The architecture of LLMs can be devided into several main components:
     is called the \textbf{vocabulary}, and can include words, subwords, or
     even individual characters. It is important to note that the vocabulary
     is fixed after training, which means that any new or rare words or
-    combinations of characters (for example, ciphertexts) may not be
-    processed accurately or at all.
-  \item \textbf{Embedding Layer}: This layer converts the tokenized input
+    combinations of characters (for example, command flags or arguments) may
+    not be processed accurately or at all.
+  \item \textbf{Embedding Layer}\label{sec:emb-layer}: This layer
+    converts the tokenized input
     into dense vector representations, which capture the semantic meaning
     of each token. There are two main types of embeddings: \textbf{static}
-    and \textbf{contextual}. Static embeddings, such as Word2Vec or GloVe,
+    and \textbf{positional}. Static embeddings, such as Word2Vec or GloVe,
     assign a fixed vector to each token, regardless of the context in which
-    it appears. Contextual embeddings, on the other hand, generate
-    different vectors for the same token based on its context in the input
-    text, allowing for a more nuanced understanding of language.
-  \item \textbf{Transformer Layers}: These layers are the core of the LLM
+    it appears. Positional embeddings, on the other hand, generate
+    different vectors for the same token based on its context in the
+    input text, allowing for a more nuanced understanding of
+    language\cite{mikolov2013distributed,pennington2014glove,zhao2023}.
+  \item \textbf{Transformer Layers}: These layers are the core of the \gls{llm}
     architecture, responsible for processing the input and generating the
-    output. They consist of multiple attention\cite{attention} heads and
+    output. They consist of multiple attention~\cite{attention} heads and
     feedforward networks that allow the model to capture complex
     relationships between tokens and generate coherent and contextually
     relevant responses.
@@ -235,231 +390,110 @@ The architecture of LLMs can be devided into several main components:
     vocabulary for text generation tasks.
 \end{itemize}
 
-As mentioned above, LLMs are mainly built upon the Transformer
-architecture\cite{attention}, where \textbf{multi-head attention layers} are
-stacked in a very deep neural network. They are based on the Transformer
+As mentioned above, \glspl{llm} are mainly built upon the transformer
+architecture~\cite{attention}, where \textbf{multi-head attention layers} are
+stacked in a very deep neural network. They are based on the transformer
 architecture.\\
 
-The transformer architecture is based on finding relationships between elements
-in a sequence using self-attention mechanisms\cite{naveed2023}. This enables
-the model to recognize patterns and dependencies in the input, which may be
-helpful for decrypting ciphers that rely on patterns in the text.
-
-In original article, previously mentioned Transformers consist of two main
-parts --- \textbf{Encoder} and \textbf{Decoder}. For the purpose of this
-article, it is enough to know that nowadays LLMs are mainly based on
-Decoder-only architecture (also called Causal Decoder), which means they only
-use the Decoder part of the original Transformer architecture.
-
-The usage of Decoder-only architecture implies that the model generates the
+In the original article, previously mentioned transformers
+consist of two main parts~--- \textbf{Encoder} and \textbf{Decoder}.
+The usage of the architecture based on attention implies that the
+model generates the
 output text sequentially, one token at a time, while attending to all
 previously generated tokens. This can be a limitation for long prompts, as the
 model can only attend to a limited number of previous tokens (this limit is
 called \textbf{context length} or \textbf{window size}). Furthermore, the
 longer the prompt, the more computationally expensive it becomes to generate
-the output, as the model has to process all previous tokens for each new token.
+the output, as the model has to process all previous tokens for each new
+token\cite{attention}.\\
 
-Additionally, Decoder-only models are typically easier to train and fine-tune,
-as they require less complex training data and objectives compared to
-Encoder-Decoder models. % TODO: citation from survey zhao2023
+\textbf{Encoder}: The encoder maps an input sequence of symbols (tokens) to a
+sequence of continuous representations. The encoder is composed of a stack of a
+number of identical layers. Each layer has two sub-layers. The first is a
+multi-head self-attention mechanism, and the second is a simple, position-wise
+fully connected feed-forward network\cite{attention}.\\
 
-\subsubsection{Mixture of Experts (MoE) Extension}
+\textbf{Decoder}: The decoder then generates an output sequence of symbols
+(tokens) one element at a time. At each step the model is auto-regressive,
+consuming the previously generated symbols as additional input when generating
+the next. The decoder is also composed of a stack of a number of identical
+layers. In addition to the two sub-layers in each encoder layer, the decoder
+inserts a third sub-layer, which performs multi-head attention over the output
+of the encoder stack\cite{attention}.\\
+
+For the purpose of this thesis, it is enough to know that nowadays \glspl{llm}
+are mainly based on Decoder-only architecture, which means they only use the
+Decoder part of the original transformer architecture. Additionally,
+Decoder-only models seem to be typically easier to train and fine-tune, as they
+require less complex training data and objectives compared to Encoder-Decoder
+models. That means that on the same numbers of training tokens, Decoder-only
+models can achieve better performance than Encoder-Decoder
+models\cite{zhao2023,wei2023chainofthoughtpromptingelicitsreasoning}.\\
+
+\subsubsection{Embedding \gls{llm}}\label{sec:embedding-models}
+
+\textbf{Embedding models} are a type of neural network architecture
+that aims to
+extract features from text with the natural languages (including words,
+sentences, and documents)\cite{nie2025textembeddingmeetslarge}.
+
+An \textbf{Embedding \gls{llm}} is a embedding model that is
+specifically designed
+to generate dense vector representations (embeddings) of content (either text,
+audio, video or other types of data). These embeddings capture the semantic
+meaning of the content, allowing for tasks such as semantic search, clustering,
+and other applications that require understanding of the content's meaning.\\
+
+The advantage of using embedding \gls{llm} in comparison to traditional
+embedding models is that they can capture more complex relationships between
+tokens and provide a more accurate representation of the content's meaning. This
+is because embedding \gls{llm} are typically based on transformer architectures,
+which use attention mechanisms to weigh the importance of different tokens in
+the input text, allowing them to capture context and relationships between
+tokens more effectively than traditional embedding
+models\cite{zhang2024systematicsurveytextsummarization,khan2026retrieval}.\\
+
+\subsubsection{\gls{moe} Extension}
 
 While the architectures above define how information flows through the layers,
-the \textbf{Mixture of Experts (MoE)} is an important extension that changes
-*how* the feedforward layers operate, with the goal to increase scalability and
-efficiency.
+the \gls{moe} is an important extension that changes how the feedforward layers
+operate, with the goal to increase scalability and efficiency.
 
-In a traditional dense Transformer, which can be reffered to as \textbf{Dense},
+In a traditional dense transformer, which can be reffered to as \textbf{Dense},
 the whole decoder is a monolith, meaning that while processing, every neuron is
-used. The Mixture of Experts (MoE) architecture splits the massive, singular
+used. The \gls{moe} architecture splits the massive, singular
 feedforward network into multiple smaller, quasi-specialized (as everything is
 learned) \textsl{expert} subnetworks and introduces a \textsl{router} (or
 gating network) to orchestrate them. The router acts as a traffic controller,
-dynamically selecting only a tiny subset of experts—typically one or two—to
+dynamically selecting only a tiny subset of experts~--- typically one
+or two~---to
 process it.
 
-When it comes to comparing MoE and dense models in scope of smaller devices
-with certain limitations, MoE architectures introduce the changes in two main
+When it comes to comparing \gls{moe} and dense models in scope of
+smaller devices
+with certain limitations, \gls{moe} architectures introduce the
+changes in two main
 aspects compared to dense models: computational efficiency and memory usage.
 \begin{itemize}
-  \item \textbf{Computational Efficiency:} MoE models are more computationally
+  \item \textbf{Computational Efficiency:} \gls{moe} models are more
+    computationally
     lighter as the selective activation leads to significant reductions in
     computation time and energy consumption. However, such step makes the
-    model less intelligent, especially on smaller scales.In contrary, a
+    model less intelligent, especially on smaller scales. In contrary, a
     dense model involves every parameter in the computation for each token,
     leading to higher computational costs, but also more consistent performance.
-  \item \textbf{Memory Usage:} The major drawback of MoE models is their high
+  \item \textbf{Memory Usage:} The major drawback of \gls{moe} models
+    is their high
     memory requirements. Since all experts must be loaded into memory to allow
     the router to select them dynamically, the total memory footprint is
     much larger than that of a dense model. Additionally, such architecture
     allows for knowledge duplication, thus less efficient memory usage.
 \end{itemize}
-Overall, MoE models tend to be more efficient in terms of computation, but have
+Overall, \gls{moe} models tend to be more efficient in terms of
+computation, but have
 worse performance over dense models with same number of parameters. However, if
 VRAM is not a constraint, MoE models can achieve better performance than dense
 models within the same computational budget.
-
-\subsubsection{AI Agent Systems}\label{agent}
-
-The evolution of LLMs has progressed beyond simple text generation to the
-concept of \textbf{AI Agents}, which utilize LLMs with the capacity to plan,
-act, and interact with external environments. AI agents are autonomous
-entities, capable of planning, decision-making, and performing actions to
-achieve complex goals.\cite{naveed2023}\cite{zhao2023} \\
-
-Two major changes that AI Agents bring compared to traditional LLMs are:
-\begin{itemize}
-  \item \textbf{Tool Use:} AI Agents can leverage external tools,
-    RAG pipelines or APIs to retrieve information or perform actions
-    beyond text generation.
-  \item \textbf{Iterative Generation:} AI
-    Agents can generate multiple steps of reasoning or actions iteratively,
-    allowing them to break down complex tasks into manageable sub-tasks.
-\end{itemize}
-
-The secound point is especially important for the purpose of this research, as
-it allows the agent to decompose complex tasks into steps small enough to be
-handled by local LLMs with limited capabilities.
-
-We can define the workflow of AI Agents as follows\cite{nvidia-llm-agent}:
-
-\begin{lstlisting}[,
-  caption={Pseudocode for LLM Agent workflow},
-  label={lst:agent},
-  language=pseudo,
-  style=code-listing
-]
-
-function LLM\_Agent(task, context):
-    subtasks = LLM.decompose\_task(task)  # Break down the main task into smaller sub-tasks
-    for subtask in subtasks:
-        switch subtask.type:
-            case "tool":
-                result = use\_tool(subtask.tool, subtask.tool\_input)
-            case "further\_decomposition":
-                result = AI\_Agent(subtask.task, context)  # Recursive call for further decomposition
-            case "generate":
-                result = LLM.generate\_response(subtask.task)
-        results.append(result)
-    final\_output = LLM.summarize\_results(results)
-    return final\_output
-
-\end{lstlisting}
-
-In essence, AI Agents perform tasks, dividing complex objectives into
-manageable steps, and iteratively prompting themselves to execute
-these steps using various tools.
-
-\subsubsection{Retrieval-Augmented Generation (RAG)}
-
-\textbf{Retrieval-Augmented Generation (RAG)} is a technique that allows LLMs
-to utilize external knowledge bases, significantly reducing hallucinations and
-increasing accuracy.
-
-\begin{lstlisting}[,
-  caption={Pseudocode for Retrieval-Augmented Generation (RAG)},
-  label={lst:rag},
-  language=pseudo,
-  style=code-listing
-]
-
-function LLM\_RAG\_generate(user\_query, LLM, document\_database):
-    # Step 1: Retrieve relevant documents from the document database
-    relevant\_documents = retrieve\_documents(document\_database, user\_query)
-
-    # Step 2: Inject retrieved documents into the input prompt for the LLM
-    augmented\_prompt = construct\_prompt(user\_query, relevant\_documents)
-
-    # Step 3: Pass the augmented prompt to the LLM to generate a response
-    llm\_response = LLM.generate\_response(augmented\_prompt)
-
-    # Step 4: Return the final response
-    return llm\_response
-
-\end{lstlisting}
-
-This case involves document retrieval, for which it is the best to use the
-\textbf{semantic document search and retrieval}. By this, we mean the
-techniques of indexing and searching documents based on their semantic
-representations. Therefore, there are two main components for the retrieval
-system: document representation generator and storage / index with searching
-techinques best suited for the task.\\
-
-\textbf{Semantic representation} of documents, with introduction
-of LLMs, have
-divided into two major groups:
-\begin{itemize}
-  \item \textbf{Sparse vector representations (Sparse retrieval):} This
-    method mostly relies on traditional keyword-based approaches, such as
-    BoW, one-hot encoding, LSI or TF-IDF to retrieve documents based on the
-    presence or quantity of specific terms. It is computationally efficient
-    and works well for simple queries, but it may struggle with complex
-    queries or those that require understanding of context and semantics.\\
-    \textsl{The common example of sparse retrieval is Bag-of-Words (BoW)
-      model, which represents documents as vectors of word counts. It needs
-      the dictionary of all possible words (or subset of them) to
-      be defined.
-      Then, the size of the vector is equal to the size of the dictionary,
-    and each element position corresponds to the word in the dictionary.}
-  \item \textbf{Dense vector representations (Dense retrieval):} This method
-    uses dense vector representations (embeddings) of documents and queries
-    to calculate similarity. It typically involves training a neural
-    network to generate embeddings that capture the semantic meaning of the
-    text. The similarity between the query and documents is then calculated
-    using cosine similarity or other distance metrics. Dense retrieval can
-    be more effective for complex queries and can capture nuances in
-    language, but it may require more computational resources compared to
-    traditional sparse retrieval.
-\end{itemize}
-
-\textbf{Document representation/summarization vector generator techniques}
-is also an important aspect of the representation of documents. As
-embedding layer of either dense or sparse retrieval represents the document
-as a collection of vectors, one for each token, it is important to have the
-techniques to generate the single vector that represents this whole
-collection.
-\begin{itemize}
-  \item \textbf{Classical Approaches:} Theese techniques include
-    methods like averaging, max pooling and other simple
-    aggregation methods to combine the token embeddings into a
-    single vector. These methods are computationally efficient
-    and easy to implement, but they may not capture the full
-    semantic meaning of the document, but rather features like
-    frequency of words or presence and relationships between
-    based on it, but not the context.
-  \item \textbf{Neural Network-based Approaches:} These
-    techniques involve training a neural network, such as a
-    transformer or recurrent neural network, to generate a single
-    vector representation for the entire document. The possible
-    approaches are:
-    \begin{itemize}
-      \item \textbf{Multi-head attention-based summarization:} This method
-        uses a transformer architecture retrieve weights for each token
-        based on its position, relationships with other tokens and
-        context, normalizes them, and then combines the token
-        embeddings into a single vector using these weights. This
-        approach can capture complex relationships between tokens and
-        provide a more accurate representation of the document's
-        meaning.
-      \item \textbf{[CLS] token-based summarization:} This method uses a
-        special token (e.g., [CLS] in BERT) that is added to the
-        beginning of the document. The transformer is trained to update
-        the values of this token based on the context of the entire
-        document, and the final value of this token is used as the
-        summary vector for the document.
-    \end{itemize}
-    \textsl{It is important to note that to increase the accuracy of the
-    summarization, it is often necessary to have single-topic documents}
-\end{itemize}
-
-\textbf{Vector databases} are specialized databases designed to store and
-manage high-dimensional vector data (in this case, document embeddings) and
-perform efficient similarity search based on different metrics (e.g., cosine
-similarity, L2 or Euclidean distance). Examples of vector databases include
-Faiss, Annoy, and Milvus.
-
-\newpage
 
 \subsubsection{OpenAI API}
 
@@ -471,6 +505,146 @@ HTTPS.\@ The protocol supports various endpoints for tasks such as completions,
 chat, embeddings, and file uploads, enabling integration with a wide range of
 applications.
 
+\subsection{AI Agent Systems}\label{agent}
+
+The evolution of \glspl{llm} has progressed beyond simple text generation to the
+concept of \textbf{AI Agents}, which utilize \glspl{llm} with the
+capacity to plan,
+act, and interact with external environments. AI agents are autonomous
+entities, capable of planning, decision-making, and performing actions to
+achieve complex goals\cite{naveed2023,zhao2023}.\\
+
+Two major changes that AI Agents bring compared to traditional \glspl{llm} are:
+\begin{itemize}
+  \item \textbf{Tool Use:} AI Agents can leverage external tools,
+    RAG pipelines or APIs to retrieve information or perform actions
+    beyond text generation.
+  \item \textbf{Iterative Generation:} AI
+    Agents can generate multiple steps of reasoning or actions iteratively,
+    allowing them to break down complex tasks into manageable sub-tasks.
+\end{itemize}
+
+The secound point is especially important for the purpose of this research, as
+it allows the agent to decompose complex tasks into steps small enough to be
+handled by local \glspl{llm} with limited capabilities.
+We can define the workflow of \gls{LLM} Agents
+~\cite{nvidia-llm-agent} as pseudocode in Table\ \ref{lst:agent}.
+
+\begin{lstlisting}[,
+  caption={Pseudocode for \gls{llm} Agent workflow},
+  label={lst:agent},
+  language=pseudo,
+  style=code-listing,
+  float
+]\label{lst:agent}
+
+function LLM_Agent(task, context):
+    subtasks = LLM.decompose_task(task)  # Break down the main task into smaller sub-tasks
+    for subtask in subtasks:
+        switch subtask.type:
+            case "tool":
+                result = use_tool(subtask.tool, subtask.tool_input)
+            case "further_decomposition":
+                # Recursive call for further decomposition
+                result = AI_Agent(subtask.task, context)
+            case "generate":
+                result = LLM.generate_response(subtask.task)
+        results.append(result)
+    final_output = LLM.summarize_results(results)
+    return final_output
+
+\end{lstlisting}
+
+In essence, AI Agents perform tasks, dividing complex objectives into
+manageable steps, and iteratively prompting themselves to execute
+these steps using various tools.
+
+\subsection{Retrieval-Augmented Generation (RAG)}
+
+\textbf{\gls{rag}} is a technique that allows \glspl{llm}
+to utilize external knowledge bases, significantly reducing hallucinations and
+increasing accuracy\cite{zhao2023}.
+
+We can define the workflow of \gls{rag} as follows as
+pseudocode in Table\ \ref{lst:rag}.
+
+\begin{lstlisting}[,
+  caption={Pseudocode for \gls{rag} workflow},
+  label={lst:rag},
+  language=pseudo,
+  style=code-listing,
+  float
+]\label{lst:rag}
+
+function LLM_RAG_generate(user_query, LLM, document_database):
+    # Step 1: Retrieve relevant documents from the document database
+    relevant_documents = retrieve_documents(document_database, user_query)
+
+    # Step 2: Inject retrieved documents into the input prompt for the LLM
+    augmented_prompt = construct_prompt(user_query, relevant_documents)
+
+    # Step 3: Pass the augmented prompt to the LLM to generate a response
+    llm_response = LLM.generate_response(augmented_prompt)
+
+    # Step 4: Return the final response
+    return llm_response
+
+\end{lstlisting}
+
+This technique involves document retrieval, for which it is the best
+to use the \textbf{semantic document search and
+retrieval}\ref{emb:semvec}. By this, we mean the set of techniques of
+indexing and searching documents based on their semantic
+representations. Therefore, there are two main components for the
+retrieval system: document representation generator (embedding model,
+mentioned in Section\ \ref{sec:embedding-models}) and storage with
+searching capabilities suited for the task (see \ref{sec:vector-db}).\\
+
+\subsection{Linux Manual Pages}
+
+In this thesis and implementation, we focus on processing linux man manual
+pages, thus by the term \textbf{document} we mean a man manual page. % TODO:
+citation
+
+In this part we provide the description of the main conventions for
+man pages, which are relevant
+for the solution.
+
+A manual page consists of several sections. Conventional section
+names are listed in\ \ref{t:man-sections}. The most important sections for the
+purpose of this thesis are \textbf{DESCRIPTION}, which provides a detailed
+description of the program, its functionality and usage, and \textbf{OPTIONS},
+which lists the flags and arguments that can be used with the program, along
+with their descriptions.
+
+\begin{table}
+  \caption{Conventional section names in man pages}\label{t:man-sections}
+  \small
+  \begin{multicols}{2}
+    \begin{itemize}
+      \item NAME
+      \item SYNOPSIS (usage)
+      \item CONFIGURATION
+      \item DESCRIPTION
+      \item OPTIONS (flags)
+      \item EXIT STATUS
+      \item RETURN VALUE
+      \item ERRORS
+      \item ENVIRONMENT
+      \item FILES
+      \item VERSIONS
+      \item STANDARDS
+      \item NOTES
+      \item BUGS
+      \item EXAMPLE
+      \item AUTHORS
+      \item SEE ALSO
+    \end{itemize}
+  \end{multicols}
+\end{table}
+
+\newpage
+
 % TODO: description of openai api, refs?
 
 % NOTE: Not relevant for the solution, delete later?
@@ -478,7 +652,8 @@ applications.
 % \subsubsection{Communication protocols. OpenAI API.\ MCP}
 %
 % Agents require robust communication protocols to allow agents to interact with
-% each other and with external services. This is usually achieved through APIs or
+% each other and with external services. This is usually achieved
+% through APIs or
 % Model Context Protocol (MCP), which defines how to request these services.
 %
 % MCP is a protocol designed for structured message exchange between clients and

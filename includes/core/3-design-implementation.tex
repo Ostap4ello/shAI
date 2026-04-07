@@ -1,12 +1,12 @@
 
 \subsection{Design Considerations}
 
-When designing an LLM assistant using small LLMs, several problems
+When designing an \gls{llm} assistant using small \glspl{llm}, several problems
 became apparent. These include:
 
 \subsubsection{Limited Context Window}
 
-Small LLMs are constrained in processing large amounts of text at
+Small \glspl{llm} are constrained in processing large amounts of text at
 once, which poses challenges when using Retrieval-Augmented
 Generation (RAG). This limitation inherently restricts the model's
 ability to handle complex queries or tasks requiring extensive
@@ -14,27 +14,15 @@ context, necessitating innovative strategies for context management.
 
 \subsubsection{RAG --- Prompt Size Overhead}
 
-The RAG mechanism generates great overhead in terms of prompt size,
-negatively affecting performance, precision, and latency of small
-LLMs. This issue must be addressed to ensure the system remains
-efficient and responsive, especially under conditions where hardware
-resources are limited.
-
 \subsubsection{Tokenizer Limitations}
 
-Small LLMs often struggle to handle complex, non-human structures such as bash
+Small \glspl{llm} often struggle to handle complex, non-human structures such as bash
 commands and flags (for example, confusing -m with -M) commonly found in CLI
 commands and man pages. This limits their applicability when dealing with such
 structured data, leading to challenges in understanding and generating relevant
 outputs.
 
 \subsubsection{Document Relevance Filtering}
-
-To minimize RAG-induced overhead, an additional step was implemented
-where the LLM selects the most relevant documents based on their
-beginnings (e.g., command names and short descriptions in man pages).
-This pre-filtering process is designed to improve accuracy and reduce
-the computational load, ensuring that only essential information is processed.
 
 \subsubsection{Iterative Prompt Processing}
 
@@ -45,10 +33,10 @@ input at once and enhances both precision and processing efficiency.
 
 \subsection{System Architecture}
 
-Based on previously reviewed solutions, as well as small local LLM limitations,
+Based on previously reviewed solutions, as well as small local \gls{llm} limitations,
 the best approach to system architecture is to divide the whole system into
 smaller components, each one responsible for one simple task. These defined
-small tasks will (1) reduce the possibility of LLM halucination and (2)
+small tasks will (1) reduce the possibility of \gls{llm} halucination and (2)
 simplify the testing by alloing us to test and evaluate each component in
 separate. The modular design also makes future maintenance and expansion more
 manageable.
@@ -60,7 +48,7 @@ manageable.
     --- will allow the system to distinguish between user commands and
     questions, thus simplifying the interaction for the user.  This is
     critical for seamless operation; the system should intelligently
-    decide whether to execute a command directly or to engage the LLM
+    decide whether to execute a command directly or to engage the \gls{llm}
     for a more conversational response.
   \item \textbf{Information Retriever} --- for specific tasks
     related to information retrieval, the RAG-enabled component will be
@@ -89,7 +77,7 @@ predictable user experience.
 
 \textbf{Idea.}{}
 The first component is a simple proof-of-concept implementation of the proposed
-idea. It uses a local LLM hosted by Ollama to distinguish between shell
+idea. It uses a local \gls{llm} hosted by Ollama to distinguish between shell
 commands and natural language input. If the input is a shell command, it would
 execute it directly; if it's natural language, it would respond with an answer
 or suggestion.\\
@@ -112,13 +100,13 @@ etc.) and will make the wrapper less useful.
 This component is responsible for retrieving information from various sources
 to answer user queries. It's built around a Retrieval-Augmented Generation
 (RAG) architecture, meaning it combines information retrieval from a local
-knowledge base with LLM generation to produce informative and accurate
+knowledge base with \gls{llm} generation to produce informative and accurate
 responses. The task of this module is to summarize the relevant context and
 pass it to user or requesting node, which then generates a response based on
 the retrieved information and its own knowledge.\\
 
 \textbf{RAG Overhead and Proposed Solutions.}{}
-One of the key challenges faced while implementing RAG in small LLMs
+One of the key challenges faced while implementing RAG in small \glspl{llm}
 is the substantial prompt size it generates. This overhead negatively
 impacts performance, precision, and latency. To address this, the
 following two-step approach has been adopted:
@@ -129,7 +117,7 @@ following two-step approach has been adopted:
     documents based on easily identifiable beginnings (e.g., command
     names and short descriptions in manual pages). This is designed
     to optimize the initial retrieval process and ensure minimal
-    context is sent to the LLM.
+    context is sent to the \gls{llm}.
   \item \textbf{Iterative Prompt Processing:} To further optimize,
     the RAG system processes documents in small, manageable parts
     rather than in full. The results are aggregated after processing,
@@ -191,10 +179,41 @@ This implementation will be using following technologies:
     indexing and searching the embeddings. We will test different
     similarity metrics (e.g.~cosine similarity, inner product) to find the
     best one for our use case.
-  \item \textbf{Connection to LLM}: We will be using
+  \item \textbf{Connection to \gls{llm}}: We will be using
     \texttt{OpenAIAPI-Client} to connect to the local
-    LLM for generating responses based on the retrieved information.
+    \gls{llm} for generating responses based on the retrieved information.
 \end{itemize}
+
+\textbf{Man pages processing for embedding database.}{}
+
+For better context management and embedding generation, the pages will be
+compiled to text format (see groff -Tascii and grotty). This will allow us to
+extract the most relevant information without the noise of formatting and other
+non-essential elements.
+
+\textbf{RAG implementation and information extraction by \gls{llm}.}{}
+
+The naive approach to RAG implementation would be to retrieve the top-k
+relevant documents and pass them all to the \gls{llm} in one prompt. However, this
+approach generates great overhead in terms of prompt size,
+negatively affecting performance, precision, and latency of small
+\glspl{llm}.
+
+To minimize RAG-induced overhead, an additional step was implemented
+where the \gls{llm} selects the most relevant documents based on their
+beginnings (e.g., command names and short descriptions in man pages).
+This pre-filtering process is designed to improve accuracy and reduce
+the computational load, ensuring that only essential information is processed.
+
+Another optimization strategy is to process the retrieved documents in smaller,
+manageable parts rather than in full. This can be implemented in two ways:
+first, where the \gls{llm} processes one document at a time and aggregates results,
+or second, where, before passing the documents to the \gls{llm}, they are split into
+smaller parts (e.g., sections or paragraphs) and filtered by the embedding
+model for relevance. The second approach is more efficient as it reduces the
+number of interactions with the \gls{llm}, thus minimizing latency and improving
+precision.
+
 
 \subsubsection{Component 3. Task splitter}
 
@@ -207,18 +226,18 @@ It will use a strategy inspired by multi-agent coordination principles.
 
 \subsection{Deployment}
 
-To deploy the LLM node a docker image is used hosting an Ollama image. This
-ensures a controlled and isolated environment for running the local LLMs
+To deploy the \gls{llm} node a docker image is used hosting an Ollama image. This
+ensures a controlled and isolated environment for running the local \glspl{llm}
 effectively.
 
 \textbf{Service Checking Logic:} A dedicated service-checking routine
-is implemented to verify that the LLM is running and available for
+is implemented to verify that the \gls{llm} is running and available for
 processing requests. This service runs at regular intervals and
 includes retries and logging mechanisms to troubleshoot.
 
 \subsection{Libraries and Technology Stack}
 
-The development of this LLM assistant utilizes the following
+The development of this \gls{llm} assistant utilizes the following
 libraries and technologies:
 
 \begin{itemize}
@@ -227,7 +246,7 @@ libraries and technologies:
       \item \texttt{faiss-cpu}: For vector similarity search and indexing.
       \item \texttt{numpy}: Numerical operations.
       \item \texttt{openai}: Implementation of the OpenAI API client
-        for LLM interactions.
+        for \gls{llm} interactions.
     \end{itemize}
   \item \textbf{Embedding Models:}
     \begin{itemize}
@@ -241,6 +260,6 @@ libraries and technologies:
   \item \textbf{Containerization and services:}
     \begin{itemize}
       \item \texttt{Docker}: For containerized deployment.
-      \item \texttt{Ollama}: For hosting local LLMs.
+      \item \texttt{Ollama}: For hosting local \glspl{llm}.
     \end{itemize}
 \end{itemize}

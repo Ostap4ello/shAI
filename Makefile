@@ -46,13 +46,17 @@ pdf.thesis:
 	$(LOG_INFO) "Starting LaTeX build process..."
 	cd ./.build/$(BUILDER_FOLDER_NAME); \
 		$(LOG_INFO) "Running LaTeX build. Output:"; \
-		sed -i "s/\\FEIdate{00}{00}{0000}/\\FEIdate$(shell date +{%d}{%m}{%Y})/g" thesis.tex; \
+		sed -i "s/\\FEIdate{00}{00}{0000}/\\FEIdate$(shell date +{%d}{%m}{%Y})/g" thesis.tex ; \
+		pdflatex -synctex=1 -output-directory=. -interaction=nonstopmode thesis 2>&1 1>/dev/null ; \
+		makeglossaries thesis ; \
 		make; \
 		$(LOG_INFO) "Build finished."
 	
 	$(LOG_INFO) "Copying built PDF to build folder..."
 	cp ./.build/$(BUILDER_FOLDER_NAME)/thesis.log .build/thesis.log
 	cp ./.build/$(BUILDER_FOLDER_NAME)/thesis.pdf .build/thesis.pdf
+	cp ./.build/$(BUILDER_FOLDER_NAME)/thesis.acr .build/thesis.acr
+	cp ./.build/$(BUILDER_FOLDER_NAME)/thesis.bbl .build/thesis.bbl
 
 pdf.thesis-clean:
 	$(LOG_INFO) "Cleaning local build files..."

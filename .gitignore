@@ -3,3 +3,8 @@
 
 .build/
 build/
+
+# Agent file
+AGENTS.md
+agents.md
+.github/
