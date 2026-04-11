@@ -1,0 +1,7 @@
+@startuml shAI_Use_Cases
+
+title shAI - System Use Cases
+
+actor "User" as User
+
+@enduml

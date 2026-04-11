@@ -1,5 +1,5 @@
-.PHONY: all pdf clean-pdf clean pdf.thesis pdf.usernotes pdf.thesis-clean
-.SILENT: all pdf clean-pdf pdf.thesis pdf.usernotes pdf.thesis-clean
+.PHONY: all pdf clean-pdf clean pdf.thesis pdf.usernotes pdf.thesis-clean diagrams clean-diagrams
+.SILENT: all pdf clean-pdf pdf.thesis pdf.usernotes pdf.thesis-clean diagrams clean-diagrams
 
 BUILDER_GITHUB_REPO = "https://github.com/Kyslik/FEIStyle"
 BUILDER_FOLDER_NAME = FEIStyle
@@ -12,7 +12,22 @@ LOG_INFO := echo "- "
 
 all: pdf
 
-pdf: pdf.thesis pdf.usernotes
+diagrams:
+	$(LOG_INFO) "Generating PlantUML diagrams..."
+	mkdir -p diagrams/out
+	cd diagrams && plantuml -png *.puml -o out/
+	cd diagrams && plantuml -svg *.puml -o out/
+	$(LOG_INFO) "Diagrams generated in diagrams/out/"
+	$(LOG_INFO) "Copying png diagrams to img/."
+	mkdir -p img/
+	cp diagrams/out/*.png img/.
+
+clean-diagrams:
+	$(LOG_INFO) "Cleaning generated diagrams..."
+	rm -rf diagrams/out
+	mkdir -p diagrams/out
+
+pdf: diagrams pdf.thesis pdf.usernotes
 
 clean-pdf: pdf.thesis-clean pdf.thesis pdf.usernotes
 
@@ -27,7 +42,9 @@ pdf.usernotes:
 #
 # The ret variable change supresses error prints
 pdf.thesis:
-	if [ ! -d ".build" ]; then mkdir .build; fi
+	mkdir -p includes img
+	
+	mkdir -p .build
 	if [ ! -d ".build/$(BUILDER_FOLDER_NAME)" ]; then \
 		$(LOG_INFO) "Cloning builder repository..."; \
 		git clone $(BUILDER_GITHUB_REPO) ./.build/$(BUILDER_FOLDER_NAME); \
@@ -68,4 +85,7 @@ pdf.thesis-clean:
 
 
 clean:
+	$(LOG_INFO) "Cleaning all build artifacts..."
 	rm -rf ./.build
+	$(LOG_INFO) "Cleaning generated diagrams..."
+	rm -rf diagrams/out

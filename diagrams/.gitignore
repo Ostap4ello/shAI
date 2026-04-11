@@ -1,0 +1,4 @@
+# Generated diagram outputs
+out/*.png
+out/*.svg
+out/
