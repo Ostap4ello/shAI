@@ -527,8 +527,8 @@ Two major changes that AI Agents bring compared to traditional \glspl{llm} are:
 The secound point is especially important for the purpose of this research, as
 it allows the agent to decompose complex tasks into steps small enough to be
 handled by local \glspl{llm} with limited capabilities.
-We can define the workflow of \gls{LLM} Agents
-~\cite{nvidia-llm-agent} as pseudocode in Table\ \ref{lst:agent}.
+We can define the workflow of \gls{llm} Agents
+~\cite{nvidia-llm-agent} as pseudocode in Listing\ \ref{lst:agent}.
 
 \begin{lstlisting}[,
   caption={Pseudocode for \gls{llm} Agent workflow},
@@ -536,7 +536,7 @@ We can define the workflow of \gls{LLM} Agents
   language=pseudo,
   style=code-listing,
   float
-]\label{lst:agent}
+]
 
 function LLM_Agent(task, context):
     subtasks = LLM.decompose_task(task)  # Break down the main task into smaller sub-tasks
@@ -566,7 +566,7 @@ to utilize external knowledge bases, significantly reducing hallucinations and
 increasing accuracy\cite{zhao2023}.
 
 We can define the workflow of \gls{rag} as follows as
-pseudocode in Table\ \ref{lst:rag}.
+pseudocode in Listing\ \ref{lst:rag}.
 
 \begin{lstlisting}[,
   caption={Pseudocode for \gls{rag} workflow},
@@ -574,7 +574,7 @@ pseudocode in Table\ \ref{lst:rag}.
   language=pseudo,
   style=code-listing,
   float
-]\label{lst:rag}
+]
 
 function LLM_RAG_generate(user_query, LLM, document_database):
     # Step 1: Retrieve relevant documents from the document database
