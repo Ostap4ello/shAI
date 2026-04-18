@@ -133,10 +133,9 @@ on which it runs.\ \gls{cli} shells are \gls{cli} programs that allow users to
 execute commands and other \gls{cli} utilities\cite{man_man,linfo_terminal}.
 
 \textbf{\gls{cli} utilities} are programs that are executed from
-within the \gls{cli} environments. Some popular examples of shells and \gls{cli}
-utilities are mentioned in Table\ \ref{t:utils}.
+within the \gls{cli} environments. Some popular examples of shells
+and \gls{cli} utilities are mentioned in Table\ \ref{t:utils}.
 
-% TODO: caption goes before the table (on top of)
 \begin{table}
   \caption{Examples of shells and \gls{cli} utilities}\label{t:utils}
   \begin{tabular}{p{3cm}|p{4cm}|p{8cm}}
@@ -145,7 +144,6 @@ utilities are mentioned in Table\ \ref{t:utils}.
     Bash, Zsh
     & Linux, macOS
     & Popular Unix-like shells, compliant with POSIX standard.\\
-    % TODO \footnotemark{}
     Cisco IOS Shell
     & Cisco devices
     & Shell used in Cisco network devices. \\
@@ -160,9 +158,6 @@ utilities are mentioned in Table\ \ref{t:utils}.
     & Application for controlling network settings. \\
   \end{tabular}\\
 \end{table}
-
-% TODO:
-% \footnotetext{POSIX will be also explained later in this chapter.}
 
 \subsubsection{\gls{tui} Applications}
 
@@ -330,8 +325,6 @@ based on the user query.
 \newpage %%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Large Language Models}
-
-% TODO: sources for each subsection
 
 This section provides a brief overview of the aspects of \glspl{llm}, relevant
 for this thesis. It describes the architecture, types, limitations of
@@ -522,10 +515,10 @@ Two major changes that AI Agents bring compared to traditional \glspl{llm} are:
     allowing them to break down complex tasks into manageable sub-tasks.
 \end{itemize}
 
-The secound point is especially important for the purpose of this research, as
-it allows the agent to decompose complex tasks into steps small enough to be
-handled by local \glspl{llm} with limited capabilities.
-We can define the workflow of \gls{llm} Agents
+The secound point is especially important for the purpose of this
+research, as it allows the agent to decompose complex tasks into
+steps small enough to be handled by local \glspl{llm} with limited
+capabilities. We can define the workflow of \gls{llm} Agents
 ~\cite{nvidia-llm-agent} as pseudocode in Listing\ \ref{lst:agent}.
 
 \begin{lstlisting}[,
@@ -613,14 +606,13 @@ each of these arguments is then found and displayed. A section, if provided,
 will direct man to look only in that section of the manual\cite{man_man}.
 
 Conventionally, manual pages are divided into several groups, which are listed
-in\ Table \ref{t:man-groups}. 
+in\ Table \ref{t:man-groups}.
 A manual page consists of several sections. Conventional section
 names are listed in\ \ref{t:man-sections}. The most important sections for the
 purpose of this thesis are \textbf{DESCRIPTION}, which provides a detailed
 description of the program, its functionality and usage, and \textbf{OPTIONS},
 which lists the flags and arguments that can be used with the program, along
 with their descriptions.
-
 
 \begin{table}
   \caption{Conventional man page groups}\label{t:man-groups}
@@ -687,6 +679,3 @@ with their descriptions.
 % typically text-based, with clear delimiters and key-value pairs, allowing for
 % flexible and efficient communication of commands, events, and data between
 % connected systems.
-
-% TODO: fine-tuning and custom models?
-% \subsubsection{Fine-tuning and Custom Models}
