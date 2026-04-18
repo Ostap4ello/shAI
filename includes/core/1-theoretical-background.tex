@@ -42,7 +42,7 @@ software program. Here are some examples of terminal emulators:
 \textbf{Terminal applications} are software programs that run within terminal
 emulators and utilize their capabilities to provide text-based user interfaces
 --- either \glspl{cli} or \glspl{tui}. We will discuss it further in
-the following sections\cite{ttyman,linfo_terminal}.\\
+the following sections\cite{man_man,linfo_terminal}.\\
 
 % NOTE: this knowledge is not relevant for the solution. Delete later?
 %
@@ -130,7 +130,7 @@ form.\\
 \textbf{Shells} are special programs (with \gls{cli}, \gls{tui}, as well as
 \gls{gui} interfaces) that provide relatively wide and direct access on system
 on which it runs.\ \gls{cli} shells are \gls{cli} programs that allow users to
-execute commands and other \gls{cli} utilities\cite{ttyman,linfo_terminal}.
+execute commands and other \gls{cli} utilities\cite{man_man,linfo_terminal}.
 
 \textbf{\gls{cli} utilities} are programs that are executed from
 within the \gls{cli} environments. Some popular examples of shells and \gls{cli}
@@ -174,8 +174,8 @@ rich text-based interfaces.\\
 
 \textbf{Terminal capabilities} is a special functionality of the terminal, which
 gives the application more control over it's output (i.e.\ move cursor in all
-directions, change the color of the output and rewrite/clean
-characters)\cite{ttyman,linfo_terminal}.\\
+  directions, change the color of the output and rewrite/clean
+characters)\cite{man_man,linfo_terminal}.\\
 
 Some examples of applications using \gls{tui} are mentioned in
 Table\ \ref{t:utils2}.
@@ -600,20 +600,46 @@ searching capabilities suited for the task (see \ref{sec:vector-db}).\\
 
 \subsection{Linux Manual Pages}
 
-In this thesis and implementation, we focus on processing linux man manual
-pages, thus by the term \textbf{document} we mean a man manual page. % TODO:
-citation
+In this thesis and implementation, we focus on processing linux man manual pages
+as data for testing and validation and by the term \textbf{document} we will
+mean a man manual page.
 
 In this part we provide the description of the main conventions for
-man pages, which are relevant
-for the solution.
+man pages, which are relevant for the solution.
 
+man is the system's manual pager. Each page argument given to man is normally
+the name of a program, utility or function. The manual page associated with
+each of these arguments is then found and displayed. A section, if provided,
+will direct man to look only in that section of the manual\cite{man_man}.
+
+Conventionally, manual pages are divided into several groups, which are listed
+in\ Table \ref{t:man-groups}. 
 A manual page consists of several sections. Conventional section
 names are listed in\ \ref{t:man-sections}. The most important sections for the
 purpose of this thesis are \textbf{DESCRIPTION}, which provides a detailed
 description of the program, its functionality and usage, and \textbf{OPTIONS},
 which lists the flags and arguments that can be used with the program, along
 with their descriptions.
+
+
+\begin{table}
+  \caption{Conventional man page groups}\label{t:man-groups}
+  \small
+  \begin{multicols}{2}
+    \begin{enumerate}
+      \item Executable programs or shell commands
+      \item System calls (functions provided by the kernel)
+      \item Library calls (functions within program libraries)
+      \item Special files (usually found in /dev)
+      \item File formats and conventions, e.g. /etc/passwd
+      \item Games
+      \item Miscellaneous (including macro packages and conventions),
+        e.g. man(7), groff(7), man-pages(7)
+      \item System administration commands (usually only for root)
+      \item Kernel routines [Non standard]
+    \end{enumerate}
+  \end{multicols}
+\end{table}
 
 \begin{table}
   \caption{Conventional section names in man pages}\label{t:man-sections}
