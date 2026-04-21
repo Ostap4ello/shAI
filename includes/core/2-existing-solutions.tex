@@ -1,13 +1,310 @@
-This section contains an overview of already existing tools. This will help us
-to concentrate on essential points and may serve as good consideration points
-when we will be working on the design of our solution.
 
-\subsection{Evaluation Criteria}\label{sec:criteria}
+\subsection{Existing Solutions Overview}
 
-The following criteria are essential for evaluating existing solutions against
-the objectives of the chosen topic.
+This section serves as listing of existing solutions relevant to the
+evolution and formation of the thesis.
+In Section\ \ref{sec:design-evolution} we will be reffering to the
+solutions described
+here, as well as to the key insights gained from their analysis.
 
-% TODO: add thesis history
+\paragraph{Butterfish}
+
+Butterfish is a shell companion that integrates \gls{llm}
+capabilities directly into
+interactive shell environments. It provides features such as command
+suggestions,
+error explanation, and context-aware assistance by streaming \gls{llm} responses
+into the terminal. It relies on remote \glspl{llm} via the OpenAI API
+and does not
+support local \glspl{llm} execution.
+
+\paragraph{llm-zsh-plugin}
+
+The llm-zsh-plugin is a Zsh plugin that extends shell functionality
+with \gls{llm}
+integration for command generation and suggestions. It provides shell completion
+and command assistance features but is dependent on remote \glspl{llm} services
+and lacks support for offline, local model execution.
+
+\paragraph{Zsh Shell Integration (Kruger approach)}
+
+Another solution was proposed in article by Kruger\cite{kruger-web}, which
+describes a setup for zsh shell with \gls{llm} features, such as command
+suggestions, autocompletion, and in-terminal assistance. It uses OpenAI API to
+access remote \glspl{llm}. This approach demonstrates how shell hooks can be
+leveraged for \gls{llm} integration, but shares the limitation of requiring
+external API access.
+
+\paragraph{Warp Terminal}
+
+This is a developement-oriented and general-purpose \gls{ai}-enabled terminal
+emulator, which uses remote Agent \gls{llm} System to enchance the experience of
+users. The most of its code remains closed-source. It is not adapted for
+executing on small \glspl{llm} and it provides no support for local \glspl{llm}.
+Additionally, it is not a \gls{cli}/\gls{tui} application, but a full
+graphical terminal emulator.
+
+This solution is popular and comercially successful, but it does not
+completely fit into the scope of our work, as it is not designed to work with
+local \glspl{llm}. However, it is worth mentioning, as it provides good AI-based
+services for terminal users\cite{warp-web,warp-docs}.
+
+\paragraph{gptme}
+
+This is general-purpose \gls{cli} utility with bread \gls{ai}
+functionality. It is compatible with OpenAI \gls{api}, which allows
+it to use both remote and local \glspl{llm}. It uses Agentic
+architecture and implements \gls{mcp} protocol. This enables it to
+use various tools (terminal, browser, code execution, etc.). It is
+also context-aware, which means it can read and understand the files
+in the current working directory and acknowledge host
+\gls{os}\cite{gptme-web,gptme-docs}. Example of the interaction with
+gptme is provided in Listing\ \ref{lst:gptme}.
+
+\begin{lstlisting}[,
+  caption={Example of gptme interaction with browser tool},
+  label={lst:gptme},
+  language=bash,
+  style=code-listing,
+  float
+]
+\$ gptme --tools=browser "How many calories are there in one spoon of sugar?"
+[11:07:21] WARNING Skipping all confirmation prompts. cli.py:186
+[11:07:21] Using browser tool with lynx
+Found openai API key, using openai provider
+Using model: openai/gpt-5
+[11:07:22] Using logdir: ~/.local/share/gptme/logs/2025-12-10-running-sleepy-robot
+Using workspace: ~/Workspace/bachelor/project/document
+Skipped 2 hidden system messages, show with --show-hidden
+--- ^^^ past messages ^^^ ---
+User: How many calories are there in one spoon of sugar?
+Assistant: Short answer: about 16 calories per level teaspoon.
+
+Details:
+- Level teaspoon (≈4 g sugar): ~15–16 kcal
+- Heaped/rounded teaspoon (≈5–7 g): ~20–28 kcal
+- Tablespoon (≈12–15 g): ~48–60 kcal
+
+Sugar has ~4 kcal per gram (sucrose ~3.87 kcal/g), so you can estimate by weight if needed.
+\end{lstlisting}
+
+Key capabilities:
+\begin{itemize}
+  \item Uses OpenAI API for accessing remote/local \glspl{llm}
+  \item Uses Agent architecture and MCP tools
+  \item Is context-aware and is able to use tools (terminal, browser,
+    code execution, etc.)
+  \item Implements MCP protocol
+\end{itemize}
+
+When tested manually with local \glspl{llm} (Gemma3 4b
+\ \cite{gemma-web}, Qwen2.5 0.5B/1.5B\ \cite{qwen-web}), it performed quite
+poorly, as the models were not able to handle the complexity of the
+tasks. It usually due to too long prompts which made \glspl{llm}
+halucinate on too many details. This shows, that the solution is not
+fully adapted for local \glspl{llm}, which is one of the main goals
+of our work. This should be considered when designing our solution to
+use more fine-grained prompts for local \glspl{llm} and optimize the
+architecture for local \glspl{llm}.
+
+\paragraph{gemini-cli}
+
+This a is general-purpose \gls{cli} chat/agent \gls{tui} application
+by Google. It uses Gemini \glspl{llm} to provide \gls{ai}
+capabilities in terminal. It is useful for various tasks, including
+code generation, data analysis, and general Q\&A. It also supports
+\gls{mcp} protocol and custom tool integration. Hovewer, it is
+dependable on remote \glspl{llm} and cannot be used with local
+\glspl{llm}\cite{gemini-web,gemini-docs}.
+
+\paragraph{Yai (Your \gls{ai} Assistent)}
+
+This application is an interactive \gls{tui} chat application, which
+uses OpenAI to
+provide user with \gls{ai} capabilities in terminal. It supports
+tools interaction
+and basic agentic architecture. In current form, it is not able to use local
+\glspl{llm}. Hovewer, it is possible to adapt it for local \gls{llm}s
+with some modifications
+in its source code.\cite{yai-web,yai-docs}.
+
+\paragraph{Aider}
+
+This is an \gls{llm}-powered code agent with focus on software
+development tasks and
+terminal integration. It supports various tools and is context- and
+project-aware. It is able to use both remote and local \glspl{llm}. It is also
+open-source.\cite{aider-web,aider-docs}.
+
+\paragraph{termai}
+
+This is a terminal-based \gls{llm} assistant similar to gptme,
+written in Rust. It
+supports various \gls{llm} providers, but it is not able to use local
+\glspl{llm} in its
+current form. It is open-source and has basic agentic
+architecture\cite{termai-web}.
+
+\paragraph{AiTerm}
+
+The application that utilizes tmux terminal multiplexer to access the
+terminal \gls{io}. It sends the terminal output as context to chosen
+\gls{llm} and gets the response back. It has execution agent
+capabilities, which allows it to run commands in terminal based on
+\gls{llm} response. It is open-source and is adapted to use with
+OpenAI \gls{api}, thus and it can be used with local \glspl{llm} as well.
+
+We can draw inspiration from its approach to Bash integration using
+tmux sessions to provide seamless interaction between \gls{llm} and
+terminal. Hovewer, this approach turned out to be somewhat clunky in
+practice, as it couldn't handle well the ~\gls{tui} applications, but
+only get bash's responses\cite{aiterm-web}.
+
+\paragraph{Other solutions}
+
+There are also such solutions, like \textsl{ai-terminal-assistent (github)}{}
+or \textsl{cmd-ai (github)}, which are just wrappers for Rest \gls{api} calls to
+remote \glspl{llm}. They provide basic \gls{ai} capabilities in terminal, but
+have no significant features.
+
+\subsection{Technology \& Design Evolution}\label{sec:design-evolution}
+
+The scope of this thesis has changed through multiple iterations as existing
+solutions were found and analyzed and either already existing solutions were
+found, or practical constraints become apparent. This section documents the
+technical decisions and trade-offs that led to the final architecture. We will
+go through the key iterations in the design evolution, highlighting the
+reasoning behind each shift and key knowledge gained from testing and analysis
+of existing solutions.
+
+\subsubsection{Iteration 1: External LLM with Broad Features}
+The initial vision for the project was ambitious: an AI-powered shell
+wrapper with
+broad capabilities including command autocompletion, suggestions, in-terminal
+assistance, and dangerous command detection/prevention. However, numerous
+existing solutions % mention via references relevant tools
+already provided similar features, relying on remote LLMs,
+which were already tested in this space.
+\paragraph{Limitation:} existing numerous solutions.
+\paragraph{Gained Knowledge:} overall overview of the field and
+existing solutions,
+OpenAI API.
+
+\subsubsection{Iteration 2: Local-First Architecture with Modular Design}
+Next iteration of the software was seen as constraint to local \glspl{llm} only,
+while trying to maintain the same broad feature set. However, early testing with
+small local \glspl{llm} revealed significant limitations in knowledge breadth,
+high hallucination rates, and showed that \glspl{llm} struggled with
+classification and reasoning tasks required for features like dangerous command
+detection.
+
+We had to significantly narrow the scope of features to those that could be
+reliably implemented with local \glspl{llm} and empirically tested. This meant
+dropping features like:
+\begin{itemize}
+  \item \textbf{Seamless integration with \texttt{bash} or other shells} ---
+    While shell integration through tools like tmux (as demonstrated by AiTerm)
+    and zsh plugins appeared promising, this approach proved
+    difficult to implement
+    reliably. Testing showed three main challenges: (1) basic command execution
+    and user interaction were hard to verify systematically, (2) distinguishing
+    between natural language queries and bash commands showed low
+    persistence and
+    reliability without a dedicated classification module, and (3) handling I/O
+    streams and terminal state significantly increased system complexity. These
+    challenges suggest shell integration requires more sophisticated
+    architecture
+    than initially apparent.
+
+  \item \textbf{Dangerous command detection} --- While conceptually appealing,
+    empirical validation of dangerous command detection proved infeasible within
+    the thesis scope. The primary challenge was creating a
+    comprehensive verification
+    system and dataset to test the classifier reliably. Additionally,
+    defining what
+    constitutes a "dangerous" command depends heavily on user context and system
+    configuration, making formal evaluation difficult. This feature
+    was deprioritized
+    in favor of more objectively measurable functionality.
+
+  \item \textbf{Agentic systems with autonomous execution} --- AI agents capable
+    of planning and executing complex tasks seemed attractive but
+    posed significant
+    testing challenges. Verifying agent behavior requires extensive
+    integration testing
+    and careful evaluation of edge cases. Within the thesis timeline and without
+    a production deployment scenario, creating reliable tests for
+    autonomous execution
+    was not practical. This direction was deferred to future
+    research, with potential
+    connection to reinforcement learning and multi-step reasoning techniques.
+\end{itemize}
+
+\paragraph{Limitation:} local \glspl{llm} have limited capabilities for complex
+reasoning and long context handling.
+\paragraph{Gained Knowledge}: Through extensive testing with small local models
+(Gemma 3 4B and Qwen2.5 0.5B/1.5B), we identified key constraints that shaped the
+architecture. Local \glspl{llm} exhibited poor performance on:
+\begin{itemize}
+  \item Long prompts and multi-turn conversations (hallucination
+      increases significantly
+    with context length)
+  \item Abstract reasoning and classification tasks (models lack
+      sufficient training
+    on narrow tasks like security classification)
+  \item Complex chained reasoning requiring multiple logic steps
+\end{itemize}
+This led to discovering techniques for enhancing local \gls{llm}
+performance within
+these constraints: Retrieval-Augmented Generation (RAG) to reduce
+reliance on model
+knowledge, embedding models for efficient semantic search, and task
+decomposition
+to avoid complex reasoning chains.
+
+\subsubsection{Iteration 3: Focused RAG System}
+
+Final design: concentrating on RAG (Retrieval-Augmented Generation) using
+embeddings from local \glspl{llm}. Classification and agent modules were found
+to be too demanding for local models to execute reliably. RAG provides a clear,
+empirically testable approach: semantic search over structured knowledge sources
+(Linux man pages) coupled with \gls{llm}-assisted response generation. This
+architecture plays to the strengths of local models---embedding generation and
+content summarization---while avoiding their weaknesses in complex reasoning.
+The system decomposes the assistant task into two simpler operations: (1)
+retrieval of relevant documentation using semantic similarity, and (2)
+generation of a user-friendly response by re-ranking and summarizing retrieved
+content. This decomposition approach is further detailed in the subsequent
+chapters, where the system architecture and implementation are described in
+detail.
+
+\subsubsection{Final Design: Information Retrieval with LLM Assistance}
+
+\textbf{Local LLM Limitations} --- Early experiments with small
+\glspl{llm} revealed that local models struggle with:
+\begin{itemize}
+  \item Complex multi-step reasoning tasks
+  \item Long context windows (hallucination increases with prompt length)
+  \item Abstract feature understanding (e.g., dangerous command classification)
+\end{itemize}
+
+\textbf{Architecture Design} --- The final RAG approach leverages strengths
+of local \glspl{llm}:
+\begin{itemize}
+  \item \textbf{Embedding Generation} --- Local models excel at creating
+    semantic embeddings, enabling offline vector similarity search
+  \item \textbf{Response Generation} --- Local models can re-rank and
+    summarize retrieved content, avoiding long reasoning chains
+  \item \textbf{Offline Operation} --- No dependency on external APIs,
+    enabling deployment on resource-constrained systems
+\end{itemize}
+
+\subsection{Summary Existing Solutions}\label{sec:existing-solutions-summary}
+
+The following criteria are essential for evaluating existing solutions and
+guiding our architectural decisions. These criteria directly influenced which
+features were considered feasible to implement and what trade-offs were
+necessary given the constraints of local \gls{llm} execution:
 
 \begin{itemize}
   \item \textbf{Local \gls{llm} Support} --- Core requirement for our
@@ -45,148 +342,13 @@ the objectives of the chosen topic.
     languages have different performance characteristics and ecosystem support.
 \end{itemize}
 
-\subsection{Existing Solutions Analysis}
+Table\ \ref{tab:solutions-summary} compares existing solutions across
+the evaluation criteria
+described above. Note that this comparison informed architectural decisions in
+designing our solution, particularly regarding which capabilities are feasible
+to implement with local \glspl{llm}.
 
-\subsubsection{Warp Terminal}
-
-This is a developement-oriented and general-purpose \gls{ai}-enabled terminal
-emulator, which uses remote Agent \gls{llm} System to enchance the experience of
-users. The most of its code remains closed-source. It is not adapted for
-executing on small \glspl{llm} and it provides no support for local \glspl{llm}.
-Additionally, it is not a \gls{cli}/\gls{tui} application, but a full
-graphical terminal emulator.\\
-
-This solution is popular and comercially successful, but it does not
-completely fit into the scope of our work, as it is not designed to work with
-local \glspl{llm}. However, it is worth mentioning, as it provides good AI-based
-services for terminal users\cite{warp-web,warp-docs}.\\
-
-\subsubsection{gptme}
-
-This is general-purpose \gls{cli} utility with bread \gls{ai}
-functionality. It is compatible with OpenAI \gls{api}, which allows
-it to use both remote and local \glspl{llm}. It uses Agentic
-architecture and implements \gls{mcp} protocol. This enables it to
-use various tools (terminal, browser, code execution, etc.). It is
-also context-aware, which means it can read and understand the files
-in the current working directory and acknowledge host
-\gls{os}\cite{gptme-web,gptme-docs}. Example of the interaction with
-gptme is provided in Listing\ \ref{lst:gptme}.\\
-
-\begin{lstlisting}[,
-  caption={Example of gptme interaction with browser tool},
-  label={lst:gptme},
-  language=bash,
-  style=code-listing,
-  float
-]
-\$ gptme --tools=browser "How many calories are there in one spoon of sugar?"
-[11:07:21] WARNING Skipping all confirmation prompts. cli.py:186
-[11:07:21] Using browser tool with lynx
-Found openai API key, using openai provider
-Using model: openai/gpt-5
-[11:07:22] Using logdir: ~/.local/share/gptme/logs/2025-12-10-running-sleepy-robot
-Using workspace: ~/Workspace/bachelor/project/document
-Skipped 2 hidden system messages, show with --show-hidden
---- ^^^ past messages ^^^ ---
-User: How many calories are there in one spoon of sugar?
-Assistant: Short answer: about 16 calories per level teaspoon.
-
-Details:
-- Level teaspoon (≈4 g sugar): ~15–16 kcal
-- Heaped/rounded teaspoon (≈5–7 g): ~20–28 kcal
-- Tablespoon (≈12–15 g): ~48–60 kcal
-
-Sugar has ~4 kcal per gram (sucrose ~3.87 kcal/g), so you can estimate by weight if needed.
-\end{lstlisting}
-
-\begin{itemize}
-  \item Uses OpenAI API for accessing remote/local \glspl{llm}
-  \item Uses Agent architecture and MCP tools
-  \item Is context-aware and is able to use tools (terminal, browser,
-    code execution, etc.)
-  \item Implements MCP protocol
-\end{itemize}
-\\
-
-When tested manually with local \glspl{llm} (Gemma3 4b
-\ \cite{gemma-web}, Qwen2.5 1.5b\ \cite{qwen-web}), it did not perform
-well, as the models were not able to handle the complexity of the
-tasks. It usually due to too long prompts which made \glspl{llm}
-halucinate on too many details. This shows, that the solution is not
-fully adapted for local \glspl{llm}, which is one of the main goals
-of our work. This should be considered when designing our solution to
-use more fine-grained prompts for local \glspl{llm} and optimize the
-architecture for local \glspl{llm}.\\
-
-\subsubsection{gemini-cli}
-
-This a is general-purpose \gls{cli} chat/agent \gls{tui} application
-by Google. It uses Gemini \glspl{llm} to provide \gls{ai}
-capabilities in terminal. It is useful for various tasks, including
-code generation, data analysis, and general Q\&A. It also supports
-\gls{mcp} protocol and custom tool integration. Hovewer, it is
-dependable on remote \glspl{llm} and cannot be used with local
-\glspl{llm}\cite{gemini-web,gemini-docs}.\\
-
-\subsubsection{Yai (Your \gls{ai} Assistent)}
-
-This application is an interactive \gls{tui} chat application, which
-uses OpenAI to
-provide user with \gls{ai} capabilities in terminal. It supports
-tools interaction
-and basic agentic architecture. In current form, it is not able to use local
-\glspl{llm}. Hovewer, it is possible to adapt it for local \gls{llm}s
-with some modifications
-in its source code.\cite{yai-web,yai-docs}.\\
-
-\subsubsection{Aider}
-
-This is an \gls{llm}-powered code agent with focus on software
-development tasks and
-terminal integration. It supports various tools and is context- and
-project-aware. It is able to use both remote and local \glspl{llm}. It is also
-open-source.\cite{aider-web,aider-docs}.\\
-
-\subsubsection{termai}
-
-This is a terminal-based \gls{llm} assistant similar to gptme,
-written in Rust. It
-supports various \gls{llm} providers, but it is not able to use local
-\glspl{llm} in its
-current form. It is open-source and has basic agentic
-architecture\cite{termai-web}. \\
-
-\subsubsection{AiTerm}
-
-The application that utilizes tmux terminal multiplexer to access the
-terminal \gls{io}. It sends the terminal output as context to chosen
-\gls{llm} and gets the response back. It has execution agent
-capabilities, which allows it to run commands in terminal based on
-\gls{llm} response. It is open-source and is adapted to use with
-OpenAI \gls{api}, thus and it can be used with local \glspl{llm} as well.\\
-
-We can draw inspiration from its approach to Bash integration using
-tmux sessions to provide seamless interaction between \gls{llm} and
-terminal. Hovewer, this approach turned out to be somewhat clunky in
-practice, as it couldn't handle well the ~\gls{tui} applications, but
-only get bash's responses\cite{aiterm-web}. \\
-
-\subsubsection{Other solutions}
-
-There are also such solutions, like \textsl{ai-terminal-assistent (github)}{}
-or \textsl{cmd-ai (github)}, which are just wrappers for Rest \gls{api} calls to
-remote \glspl{llm}. They provide basic \gls{ai} capabilities in terminal, but
-have no significant features.
-
-\subsection{Comparison of Existing Solutions}
-
-This secion contains a summary table ---
-Table\ \ref{tab:solutions-comparison} --- for existing solutions,
-which compares them based on the criteria described in
-Section\ \ref{sec:criteria}.
-
-\begin{table}[ht]
+\begin{table}
   \centering
   \small
   \begin{tabularx}{\textwidth}{|l|X|X|X|}
@@ -236,4 +398,155 @@ Section\ \ref{sec:criteria}.
     \hline
   \end{tabularx}
 
-\end{table}\label{tab:solutions-comparison}
+  \medskip
+
+  \begin{tabularx}{\textwidth}{|l|X|X|X|}
+    \hline
+    \textbf{Solution} & \textbf{Butterfish} & \textbf{llm-zsh-plugin} &
+    \textbf{Zsh Integration (Kruger)} \\
+    \hline
+    \textbf{Open Source} & Yes & Yes & Yes \\
+    \hline
+    \textbf{Local \gls{llm} Support} & No & No & No \\
+    \hline
+    \textbf{Context Awareness} & Limited & Limited & Limited \\
+    \hline
+    \textbf{Agentic Architecture} & No & No & No \\
+    \hline
+    \textbf{Type} & Shell Companion & Zsh Plugin & Shell Integration \\
+    \hline
+    \textbf{Tool Integration} & Limited & Limited & Shell Hooks \\
+    \hline
+    \textbf{Language} & Python & Python & Zsh/Shell \\
+    \hline
+  \end{tabularx}
+
+\end{table}\label{tab:solutions-summary}
+
+\subsection{Technology Stack}
+
+This section provides an overview of the key technologies and tools used in
+the implementation of the solution.
+
+\subsubsection{Python}
+
+Python was chosen as the primary implementation language for this thesis due to
+its simplicity, readability, and extensive ecosystem of libraries for machine
+learning, and devise integration. Among such libraries, we use \texttt{os},
+\texttt{subprocess}, and \texttt{pathlib}.
+% TODO: add more libraries, such as for testing, logging, etc.
+
+\subsubsection{Ollama}
+
+Ollama\cite{ollama-web} is a local LLM service that enables running large
+language models on consumer hardware without requiring cloud API calls. For this
+thesis, Ollama was chosen as the primary LLM runtime over in-code alternatives
+for several reasons:
+
+\begin{itemize}
+  \item \textbf{Simplicity and Ease of Use} --- Ollama provides a
+    straightforward command-line interface for downloading,
+    installing, and managing LLMs. This eliminates the need to
+    implement model loading and inference logic directly in the application.
+
+  \item \textbf{Model Flexibility} --- Ollama supports a wide variety
+    of open-source models with different sizes and capabilities,
+    allowing for easy experimentation with different architectures
+    and parameter counts.
+
+  \item \textbf{OpenAI API Compatibility} --- Ollama provides an
+    OpenAI-compatible API endpoint, making it possible to test with
+    both local (via Ollama) and remote (via OpenAI) models without
+    changing application code. This flexibility was valuable for
+    development and testing.
+
+  \item \textbf{Resource Efficiency} --- Ollama is designed for local
+    execution and provides optimized inference, reducing memory
+    footprint and latency compared to running models directly in
+    Python or other application languages.
+\end{itemize}
+
+\subsubsection{\gls{annoy}}
+
+For the RAG retrieval component, \gls{annoy}\cite{annoy2026} was selected
+as the vector database for storing and retrieving document
+embeddings. This choice was motivated by:
+
+\begin{itemize}
+  \item \textbf{Simplicity and efficiency} --- a minimal python API
+    with no complex server setup or external dependencies, making it
+    ideal for prototype development.
+
+  \item \textbf{File-Oriented Storage} --- Annoy saves indices
+    to disk files, allowing persistent storage of embeddings without
+    requiring a running database server.
+
+\end{itemize}
+
+\subsubsection{\glspl{llm} and Embedding Models}
+
+The thesis testing and development primarily utilized several small, publicly
+available \glspl{llm} and embedding models, summarized in
+Tables\ \ref{tab:llm-summary} and\ \ref{tab:embedding-summary}.
+
+\begin{table}
+  \centering
+  \scriptsize
+  \caption{Summary of \glspl{llm} used in experiments (parameters,
+  context, and licensing).}
+  \label{tab:llm-summary}
+  \begin{tabularx}{\textwidth}{|X|l|X|X|X|}
+    \hline
+    \textbf{Model} & \textbf{Params} & \textbf{Context} &
+    \textbf{License} & \textbf{Training data (public disclosure)} \\
+    \hline
+    Qwen2.5-0.5B-Instruct & 0.5B & 32K (up to 128K; 8K gen) & Apache 2.0 &
+    Up to 18T tokens (family-level disclosure). \\
+    \hline
+    Qwen2.5-1.5B-Instruct & 1.5B & 32K (up to 128K; 8K gen) & Apache 2.0 &
+    Up to 18T tokens (family-level disclosure). \\
+    \hline
+    Qwen3-0.6B & 0.6B & 32K & Apache 2.0 &
+    \textasciitilde{}36T tokens; web + doc-like corpora + synthetic
+    math/code (family-level disclosure). \\
+    \hline
+    Qwen3-1.7B & 1.7B & 32K & Apache 2.0 &
+    \textasciitilde{}36T tokens; web + doc-like corpora + synthetic
+    math/code (family-level disclosure). \\
+    \hline`
+      Granite-3.1-1B-A400M-Instruct (\gls{moe}) & 1.3B (400M active) & 128K &
+      Apache 2.0 & 10T tokens (\gls{moe}); SFT mix as above (high-level disclosure). \\
+    \hline
+    Gemma 3 (Google) & 4B & 32K & Gemma Terms of Use &
+    Token counts disclosed; broad web/code/math/image sources
+    (high-level disclosure). \\
+    \hline
+  \end{tabularx}
+\end{table}
+
+\begin{table}
+  \centering
+  \scriptsize
+  \caption{Summary of embedding models used in experiments
+  (dimension, context, and licensing).}
+  \label{tab:embedding-summary}
+  % \begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|l|l|l|>{\raggedright\arraybackslash}X|}
+  \begin{tabularx}{\textwidth}{|X|l|l|l|X|}
+    \hline
+    \textbf{Model} & \textbf{Params} & \textbf{Context} &
+    \textbf{Dim} & \textbf{Notes} \\
+    \hline
+    Qwen3-Embedding-0.6B & 0.6B & 32K & up to 1024 & Apache 2.0;
+    supports user-defined dimensions (MRL). \\
+    \hline
+    EmbeddingGemma-300M (Google) & 300M & 2048 & 768 & Gemma Terms of
+    Use; can be truncated to smaller dims via MRL. \\
+    \hline
+    granite-embedding-30m-english & 30M & 512 & 384 & Apache 2.0;
+    English-only embedding model. \\
+    \hline
+    granite-embedding-278m-multilingual & 278M & 512 & 768 & Apache
+    2.0; multilingual embedding model (12 languages listed by IBM). \\
+    \hline
+  \end{tabularx}
+\end{table}

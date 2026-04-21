@@ -195,8 +195,6 @@ Table\ \ref{t:utils2}.
   \end{tabular}\\
 \end{table}
 
-\newpage %%%%%%%%%%%%%%%%%%%%%%%%
-
 \subsection{Document Representation}
 
 This section provides the background on the techniques for representing
@@ -315,14 +313,10 @@ based on different metrics (e.g., cosine similarity, L2 or Euclidean distance).
 Examples of vector databases include FAISS\cite{faiss2026},
 Annoy\cite{annoy2026}, and Milvus\cite{milvus2026}.
 
-% TODO: explain usage/choice of vector databases + citations
-
 For the purpose of this research, we will be using dense retrieval, as it is
 more suitable for complex queries and can capture the semantic meaning of the
 documents, which is more relevant for the task of choosing the right document
 based on the user query.
-
-\newpage %%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Large Language Models}
 
@@ -347,7 +341,7 @@ as \gls{gpt}, \gls{bert}, \gls{lstm} or Mamba.\@ \glspl{llm} exhibit strong
 capacities to understand natural language and solve complex tasks (via text
 generation)\cite{radford2018improving,devlin2018bert,touvron2023llama}.
 
-The architecture of \glspl{llm} can be devided into several main components:
+The architecture of \glspl{llm} can be divided into several main components:
 \begin{itemize}
   \item \textbf{Tokenizer}: This component is responsible for providing the
     representation of the input text in a format that can be processed by
@@ -492,9 +486,10 @@ The OpenAI protocol refers to the set of APIs and communication standards
 developed by OpenAI for interacting with their AI models. It typically uses
 RESTful HTTP endpoints with JSON payloads for requests and responses.
 Authentication is handled via API keys, and communication is secured over
-HTTPS.\@ The protocol supports various endpoints for tasks such as completions,
+HTTPS. The protocol supports various endpoints for tasks such as completions,
 chat, embeddings, and file uploads, enabling integration with a wide range of
-applications.
+applications. More specific information can be found in OpenAI API
+Documentation\ \cite{openai}.
 
 \subsection{AI Agent Systems}\label{agent}
 
@@ -659,23 +654,3 @@ with their descriptions.
   \end{multicols}
 \end{table}
 
-\newpage
-
-% TODO: description of openai api, refs?
-
-% NOTE: Not relevant for the solution, delete later?
-%
-% \subsubsection{Communication protocols. OpenAI API.\ MCP}
-%
-% Agents require robust communication protocols to allow agents to interact with
-% each other and with external services. This is usually achieved
-% through APIs or
-% Model Context Protocol (MCP), which defines how to request these services.
-%
-% MCP is a protocol designed for structured message exchange between clients and
-% servers, often used in MUDs (Multi-User Dungeons) and similar networked
-% applications. It defines a standardized way to encapsulate commands and data
-% within messages, supporting extensibility through modules. MCP messages are
-% typically text-based, with clear delimiters and key-value pairs, allowing for
-% flexible and efficient communication of commands, events, and data between
-% connected systems.
