@@ -350,75 +350,58 @@ to implement with local \glspl{llm}.
 
 \begin{table}
   \centering
+  \caption{Summary of existing solutions across key evaluation criteria.}
   \small
-  \begin{tabularx}{\textwidth}{|l|X|X|X|}
-    \hline
+  \begin{tabularx}{\textwidth}{lXXX}
+    \toprule
     \textbf{Solution} & \textbf{Warp Terminal} & \textbf{gptme} &
     \textbf{gemini-cli} \\
-    \hline
+    \midrule
     \textbf{Open Source} & No & Yes & No \\
-    \hline
     \textbf{Local \gls{llm} Support} & No & Yes (Limited) & No \\
-    \hline
     \textbf{Context Awareness} & Partial (Display) & Yes & Yes \\
-    \hline
     \textbf{Agentic Architecture} & Yes & Yes & Yes \\
-    \hline
     \textbf{Type} & Terminal Emulator & \gls{cli} Utility & \gls{cli} Chat \\
-    \hline
     \textbf{Tool Integration} & Limited & \gls{mcp} Protocol &
     \gls{mcp} Protocol \\
-    \hline
     \textbf{Language} & Proprietary & Python & Go \\
-    \hline
+    \bottomrule
   \end{tabularx}
 
   \medskip
 
-  \begin{tabularx}{\textwidth}{|l|X|X|X|X|}
-    \hline
+  \begin{tabularx}{\textwidth}{lXXXX}
+    \toprule
     \textbf{Solution} & \textbf{Aider} & \textbf{Yai} &
     \textbf{termai} & \textbf{AiTerm} \\
-    \hline
+    \midrule
     \textbf{Open Source} & Yes & Yes & Yes & Yes \\
-    \hline
     \textbf{Local \gls{llm} Support} & Yes & Limited & No & Yes \\
-    \hline
     \textbf{Context Awareness} & Yes & No & No & Partial \\
-    \hline
     \textbf{Agentic Architecture} & Yes & Partial & Yes & Yes \\
-    \hline
     \textbf{Type} & Code Agent & \gls{tui} Chat & \gls{cli} Chat &
     Terminal Wrapper \\
-    \hline
     \textbf{Tool Integration} & Code Execution & Limited & Basic &
     Bash Integration \\
-    \hline
     \textbf{Language} & Python & Go & Rust & Python \\
-    \hline
+    \bottomrule
   \end{tabularx}
 
   \medskip
 
-  \begin{tabularx}{\textwidth}{|l|X|X|X|}
-    \hline
+  \begin{tabularx}{\textwidth}{lXXX}
+    \toprule
     \textbf{Solution} & \textbf{Butterfish} & \textbf{llm-zsh-plugin} &
     \textbf{Zsh Integration (Kruger)} \\
-    \hline
+    \midrule
     \textbf{Open Source} & Yes & Yes & Yes \\
-    \hline
     \textbf{Local \gls{llm} Support} & No & No & No \\
-    \hline
     \textbf{Context Awareness} & Limited & Limited & Limited \\
-    \hline
     \textbf{Agentic Architecture} & No & No & No \\
-    \hline
     \textbf{Type} & Shell Companion & Zsh Plugin & Shell Integration \\
-    \hline
     \textbf{Tool Integration} & Limited & Limited & Shell Hooks \\
-    \hline
     \textbf{Language} & Python & Python & Zsh/Shell \\
-    \hline
+    \bottomrule
   \end{tabularx}
 
 \end{table}\label{tab:solutions-summary}
@@ -495,32 +478,27 @@ Tables\ \ref{tab:llm-summary} and\ \ref{tab:embedding-summary}.
   \caption{Summary of \glspl{llm} used in experiments (parameters,
   context, and licensing).}
   \label{tab:llm-summary}
-  \begin{tabularx}{\textwidth}{|X|l|X|X|X|}
-    \hline
+  \begin{tabularx}{\textwidth}{XlXXX}
+    \toprule
     \textbf{Model} & \textbf{Params} & \textbf{Context} &
     \textbf{License} & \textbf{Training data (public disclosure)} \\
-    \hline
+    \midrule
     Qwen2.5-0.5B-Instruct & 0.5B & 32K (up to 128K; 8K gen) & Apache 2.0 &
     Up to 18T tokens (family-level disclosure). \\
-    \hline
     Qwen2.5-1.5B-Instruct & 1.5B & 32K (up to 128K; 8K gen) & Apache 2.0 &
     Up to 18T tokens (family-level disclosure). \\
-    \hline
     Qwen3-0.6B & 0.6B & 32K & Apache 2.0 &
     \textasciitilde{}36T tokens; web + doc-like corpora + synthetic
     math/code (family-level disclosure). \\
-    \hline
     Qwen3-1.7B & 1.7B & 32K & Apache 2.0 &
     \textasciitilde{}36T tokens; web + doc-like corpora + synthetic
     math/code (family-level disclosure). \\
-    \hline`
-      Granite-3.1-1B-A400M-Instruct (\gls{moe}) & 1.3B (400M active) & 128K &
-      Apache 2.0 & 10T tokens (\gls{moe}); SFT mix as above (high-level disclosure). \\
-    \hline
+    Granite-3.1-1B-A400M-Instruct (\gls{moe}) & 1.3B (400M active) & 128K &
+    Apache 2.0 & 10T tokens (\gls{moe}); SFT mix as above (high-level disclosure). \\
     Gemma 3 (Google) & 4B & 32K & Gemma Terms of Use &
     Token counts disclosed; broad web/code/math/image sources
     (high-level disclosure). \\
-    \hline
+    \bottomrule
   \end{tabularx}
 \end{table}
 
@@ -530,23 +508,19 @@ Tables\ \ref{tab:llm-summary} and\ \ref{tab:embedding-summary}.
   \caption{Summary of embedding models used in experiments
   (dimension, context, and licensing).}
   \label{tab:embedding-summary}
-  % \begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|l|l|l|>{\raggedright\arraybackslash}X|}
-  \begin{tabularx}{\textwidth}{|X|l|l|l|X|}
-    \hline
+  \begin{tabularx}{\textwidth}{XlllX}
+    \toprule
     \textbf{Model} & \textbf{Params} & \textbf{Context} &
     \textbf{Dim} & \textbf{Notes} \\
-    \hline
+    \midrule
     Qwen3-Embedding-0.6B & 0.6B & 32K & up to 1024 & Apache 2.0;
     supports user-defined dimensions (MRL). \\
-    \hline
     EmbeddingGemma-300M (Google) & 300M & 2048 & 768 & Gemma Terms of
     Use; can be truncated to smaller dims via MRL. \\
-    \hline
     granite-embedding-30m-english & 30M & 512 & 384 & Apache 2.0;
     English-only embedding model. \\
-    \hline
     granite-embedding-278m-multilingual & 278M & 512 & 768 & Apache
     2.0; multilingual embedding model (12 languages listed by IBM). \\
-    \hline
+    \bottomrule
   \end{tabularx}
 \end{table}
