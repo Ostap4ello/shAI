@@ -577,14 +577,218 @@ function LLM_RAG_generate(user_query, LLM, document_database):
 
 \end{lstlisting}
 
-This technique involves document retrieval, for which it is the best
-to use the \textbf{semantic document search and
-retrieval}\ref{emb:semvec}. By this, we mean the set of techniques of
-indexing and searching documents based on their semantic
-representations. Therefore, there are two main components for the
-retrieval system: document representation generator (embedding model,
-mentioned in Section\ \ref{sec:embedding-models}) and storage with
-searching capabilities suited for the task (see \ref{sec:vector-db}).\\
+This technique involves document retrieval, the best general approach for which
+is to use
+\textbf{semantic document search and retrieval}\ref{emb:semvec}. By this, we
+mean the set of techniques of indexing and searching documents based on their
+semantic representations. Therefore, there are two main components for the
+retrieval system: document representation generator (embedding model, mentioned
+in Section\ \ref{sec:embedding-models}) and storage with searching capabilities
+suited for the task (see \ref{sec:vector-db}).\\
+
+\paragraph{Different Granularities In Retrieval}
+
+\gls{rag} systems can retrieve information at multiple granularities, for
+example:
+
+\begin{itemize}
+  \item \textbf{Document-level retrieval}
+  \item \textbf{Passage-level retrieval}
+  \item \textbf{Sentence-level retrieval}
+\end{itemize}
+
+The choice of granularity defines the smallest unit, for which the (vector)
+representation is generated. This affects the computational load for the
+\gls{rag} system for the creation and retrieval, or how much different units can
+be fit into \gls{llm} context window or answer size.
+
+\paragraph{Query Types}
+
+%  Level-1
+%
+% Explicit Facts: These queries are asking about explicit facts
+% directly present in the given data without requiring any additional
+% reasoning. This is the simplest form of query, where the model’s
+% task is primarily to locate and extract the relevant information.
+% For example, "Where will the 2024 Summer Olympics be held?" targets
+% a fact contained in the external data.
+% Level-2
+%
+% Implicit Facts: These queries ask about implicit facts in the data,
+% which are not immediately obvious and may require some level of
+% common sense reasoning or basic logical deductions. The necessary
+% information might be spread across multiple segments or require
+% simple inferencing. For instance, the question "What is the
+% majority party now in the country where Canberra is located?" can
+% be answered by combining the fact that Canberra is in Australia
+% with the information about the current majority party in Australia.
+% Level-3
+%
+% Interpretable Rationales: These queries demand not only a grasp of
+% the factual content but also the capacity to comprehend and apply
+% domain-specific rationales that are integral to the data’s context.
+% These rationales are often explicitly provided in external
+% resources and is typically not present or rarely encountered during
+% the pre-training phase of a general large language model. For
+% example, in the realm of pharmaceuticals, an LLM must interpret FDA
+% Guidance1 documents—which represent the FDA’s current thinking—to
+% evaluate whether a specific drug application adheres to regulatory
+% requirements. Similarly, in customer support scenarios, the LLM
+% must navigate the intricacies of a predefined workflow to process
+% user inquiries effectively. In the medical field, many diagnostic
+% manuals provide authoritative and standardized diagnostic criteria,
+% such as management guidelines for patients with acute chest pain
+% [14]. By effectively following these external rationales, it is
+% possible to develop a specialized LLM expert system for managing
+% chest pain. This involves understanding the procedural steps and
+% decision trees that guide a support agent’s interactions with
+% customers, ensuring responses are not only accurate but also comply
+% with the company’s service standards and protocols.
+% Level-4
+%
+% Hidden Rationales: This category of queries delves into the more
+% challenging realm where the rationales are not explicitly
+% documented but must be inferred from patterns and outcomes observed
+% in external data. The hidden rationales here refer not only to the
+% implicit reasoning chains and logical relationships, but also to
+% the inherently challenging and non-trivial task of identifying and
+% extracting the external rationales required for each specific
+% query. In IT operational scenarios, for example, a cloud operations
+% team may have addressed numerous incidents in the past, each with
+% its own unique set of circumstances and resolutions. The LLM must
+% be adept at mining this rich repository of tacit knowledge to
+% discern the implicit strategies and decision-making processes that
+% were successful. Similarly, in software development, the debugging
+% history of previous bugs can provide a wealth of implicit insights.
+% While the step-by-step rationale for each debugging decision may
+% not be systematically recorded, the LLM must be capable of
+% extracting the underlying principles that guided those decisions.
+% By synthesizing these hidden rationales, the LLM can generate
+% responses that are not only accurate but also reflective of the
+% unspoken expertise and problem-solving approaches that have been
+% honed over time by experienced professionals.
+
+We can generally classify queries that user can ask to the \gls{rag} system into
+four main types, defined in the original article\
+\cite{zhao2024retrievalaugmentedgenerationrag}:
+
+\begin{itemize}
+  \item \textbf{Level-1: Explicit Facts:} These queries are asking
+    about explicit facts
+    directly present in the given data without requiring any additional
+    reasoning. This is the simplest form of query, where the model’s task is
+    primarily to locate and extract the relevant information.
+  \item \textbf{Level-2: Implicit Facts:} These queries ask about implicit
+    facts in the data, usually searching for the information in multiple
+    segments and require some level of common sense reasoning or basic logical
+    deductions.
+  \item \textbf{Level-3: Interpretable Rationales:} To answer these queries,
+    the model needs to not only retrieve and understand the facts in the
+    database, but also suit the answer to the specific domain, by
+    understanding and applying the domain-specific rationales.
+  \item \textbf{Level-4: Hidden Rationales:} The answer to these queries is
+    usually not explicitly documented, but must be deduced from patterns and
+    outcomes found in external data.
+\end{itemize}
+
+With such definition of query types, it is possible to map the responsibilities
+of the parts of the \gls{rag} system to the query types.\\
+
+Level-1 queries can be mostly handled by the retrieval component, with the role
+of the \gls{llm} being to filter the relevant information from the retrieved
+documents.\\
+Level-2 queries require the \gls{llm} to perform some reasoning and inference,
+to deduct Level-1 queries from the Level-2 to ask the retrieval component, and
+then combine the retrieved information to produce the final answer.\\
+Level-3 queries require the \gls{llm} to understand the domain-specific
+rationales, usually to be pre-trained on the documents containing these
+rationales, and then apply them to the retrieved information to produce the
+final answer. Along with Level-4 it requires advanced reasoning capabilities.\\
+
+In this thesis, we will be focusing on the Level-1 and Level-2 queries, as they
+are more relevant for the task of choosing the right document based on the user
+query, and the application of the system in the context of operating on
+manuals usually requires the retrieval of explicit and implicit facts, rather
+than the deduction of hidden rationales.
+
+\subsubsection{Common RAG Testing Techniques}
+
+This subsecion describes most common RAG Testing Techniques, essential for the
+evaluation of the performance of \gls{rag} systems\cite{rag-evaluation}.
+
+\paragraph{Precision@k}
+
+\textbf{Precision@k} measures the proportion of relevant documents or passages
+that appear within the top-k retrieved results. It is defined as:
+
+\[
+  \text{Precision@k} = \frac{\text{number of relevant documents in
+  top-k}}{\text{k}}
+\]
+
+This metric directly assesses the quality of the retrieval component. For
+example, Precision@1 measures whether the most relevant document is ranked
+first, while Precision@5 measures whether relevant documents appear within the
+top 5 results. Higher precision at low k values (e.g., k=1) is generally
+preferred, as it indicates the system's top results are highly relevant.
+
+\paragraph{Recall@k}
+
+\textbf{Recall@k} measures the proportion of all relevant documents that are
+successfully retrieved within the top-k results:
+
+\[
+  \text{Recall@k} = \frac{\text{number of relevant documents
+  retrieved in top-k}}{\text{total number of relevant documents}}
+\]
+
+Recall provides a complementary perspective to precision: a system can achieve
+high precision by returning few results, but recall indicates whether the system
+finds a significant portion of all relevant documents. Recall@k is particularly
+important when comprehensive coverage is needed.
+
+\paragraph{Mean Reciprocal Rank (MRR)}
+
+\textbf{Mean Reciprocal Rank} measures the average rank of the first relevant
+result across all queries:
+
+\[
+  \text{MRR} = \frac{1}{|Q|} \sum_{i=1}^{|Q|} \frac{1}{\text{rank}_i}
+\]
+
+where \textsl{rank\textsubscript{i}} is the position of the first relevant
+document for query i, and |Q| is the total number of queries. MRR rewards
+systems that find relevant documents early in the ranking and is particularly
+useful when users typically only examine the top few results.
+
+\paragraph{Normalized Discounted Cumulative Gain (NDCG)}
+
+\textbf{Normalized Discounted Cumulative Gain} combines relevance judgments with
+ranking position to account for the fact that lower-ranked relevant documents
+are less valuable than higher-ranked ones:
+
+\[
+  \text{DCG} = \sum_{i=1}^{k} \frac{\text{rel}_i}{\log_2(i+1)}
+\]
+
+where \textsl{rel\textsubscript{i}} is the relevance score of the document at
+position i. \gls{ndcg} normalizes this by the ideal ranking (IDCG) to produce a
+score between 0 and 1. NDCG is valuable for assessing ranking quality when there
+are multiple levels of relevance (e.g., highly relevant, partially relevant, not
+relevant).
+
+\paragraph{F1 Score for Retrieval}
+
+For binary relevance judgments (relevant or not relevant), the \textbf{F1 score}
+combines precision and recall:
+
+\[
+  \text{F1} = 2 \times \frac{\text{Precision} \times
+  \text{Recall}}{\text{Precision} + \text{Recall}}
+\]
+
+The F1 score is useful for balancing the trade-off between precision and recall
+when a single metric is needed to optimize system performance.
 
 \subsection{Linux Manual Pages}
 
@@ -653,4 +857,3 @@ with their descriptions.
     \end{itemize}
   \end{multicols}
 \end{table}
-
