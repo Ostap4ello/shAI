@@ -1,0 +1,72 @@
+@startuml shAI_User_Interaction_Paths
+title shAI - Example User Interaction Paths
+
+== Path 1: System Initialization ==
+participant User as user
+participant "shAI CLI" as cli
+participant "Utils Module" as utils
+participant "Ollama Server" as ollama
+
+user -> cli: shai utils start_ollama
+cli -> utils: start_ollama()
+utils -> ollama: docker pull & docker run
+ollama --> utils: container started
+utils --> cli: success
+cli --> user: Ollama running on port 11434
+
+== Path 2: Database Building ==
+participant "shAI CLI" as cli2
+participant "Utils Module" as utils2
+participant "DB Module" as db
+participant "LLM Module" as llm
+participant "Ollama" as ollama2
+
+user -> cli2: shai utils fetch_man_db --db-path ./man-db
+cli2 -> utils2: fetch_man_db()
+utils2 -> ollama2: verify running
+utils2 -> utils2: convert man pages from /usr/share/man
+utils2 -> db: pass converted text files
+
+db -> llm: generate embeddings for each doc
+llm -> ollama2: embedding request
+ollama2 --> llm: embedding vectors
+llm --> db: return embeddings
+
+db -> db: build FAISS index
+db -> db: save .index + metadata
+db --> user: index built (5000 documents)
+
+== Path 3: RAG Query Execution ==
+participant User as user3
+participant "shAI CLI" as cli3
+participant "RAG Module" as rag
+participant "DB Module" as db2
+participant "LLM Module" as llm2
+participant Ollama as ollama3
+
+user3 -> cli3: shai rag find "what is grep?"
+cli3 -> rag: execute_rag("what is grep?")
+
+rag -> llm2: embed query
+llm2 -> ollama3: embedding API
+ollama3 --> llm2: query embedding
+llm2 --> rag: embedding vector
+
+rag -> db2: vector_search(embedding, top_k=5)
+db2 --> rag: top 5 documents + scores
+
+rag -> llm2: select_best_document(query, candidates)
+llm2 -> ollama3: generation API (LLM call)
+ollama3 --> llm2: selected document
+llm2 --> rag: best_doc
+
+rag -> rag: prepare RAG prompt
+rag -> llm2: generate_answer(prompt)
+llm2 -> ollama3: streaming generation
+ollama3 --> llm2: streamed tokens
+llm2 --> rag: final answer
+
+rag --> cli3: answer text
+cli3 --> user3: Display answer to terminal
+
+@enduml

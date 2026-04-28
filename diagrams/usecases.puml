@@ -1,7 +1,78 @@
 @startuml shAI_Use_Cases
+/'!include .style.puml'/
+/'!pragma layout smetana'/
+/'skinparam linetype polyline'/
+/'skinparam linetype ortho'/
 
 title shAI - System Use Cases
 
+left to right direction
+
 actor "User" as User
+actor "LLM Node\n(Ollama)" as LLM_Actor
+
+rectangle "shAI System" {
+  usecase "Execute RAG Query" as UC1
+  usecase "Generate NL answer to NL query" as UC2
+
+  usecase "Retrieve top-k relevant documents from Database" as UC3
+  usecase "Build database index" as UC4
+
+  usecase "Manage Ollama docker container" as UC6
+  usecase "Configure Application via config" as UC7
+  usecase "Create default config" as UC7.1
+}
+
+' User interactions
+User --> UC1
+User --> UC2
+
+User --> UC3
+User --> UC4
+
+User --> UC6
+User --> UC7
+User --> UC7.1
+
+' System interactions
+LLM_Actor -u-> UC2: LLM capabilities
+LLM_Actor -u-> UC4: embedding LLM\ncapabilities
+
+
+' Dependencies (<<include>> and <<extend>> relationships)
+UC1 .l.> UC2 : <<include>>
+UC1 .r.> UC3 : <<include>>
+
+UC7 .r.> UC7.1 : <<extend>>
 
 @enduml
+
+% \paragraph{Information Retrieval Module (RAG)}
+% \begin{itemize}
+%   \item User can receive answers to queries in human-readable format, based on
+%     a local document database.
+%   \item User can create, update, and remove documents in the local database.
+%   \item User can receive a list of documents relevant to a query in human-readable
+%     format.
+%   \item User can build and maintain search indices for efficient document retrieval.
+% \end{itemize}
+
+% \paragraph{Command Execution and Classification}
+% \begin{itemize}
+%   \item User can execute shell commands directly through the assistant interface.
+%   \item The assistant intelligently distinguishes between natural language questions
+%     and shell commands.
+%   \item User receives real-time feedback on command execution status and results.
+% \end{itemize}
+
+% \paragraph{Package Management}
+% \begin{itemize}
+%   \item User can download the application as a package and install it on their system.
+%   \item User can uninstall the application cleanly without leaving residual files.
+%   \item Installation process automatically configures dependencies and system paths.
+% \end{itemize}
+%
+% \paragraph{Network Requirements}
+% \begin{itemize}
+%   \item No internet connection required for runtime operation (fully offline). Internet required only for initial installation and model downloads
+% \end{itemize}

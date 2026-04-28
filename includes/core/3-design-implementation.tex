@@ -1,111 +1,156 @@
 
-\subsection{Design Considerations}
+\subsection{Software specification}
 
-When designing an \gls{llm} assistant using small \glspl{llm}, several problems
-became apparent. These include:
+\paragraph{ShAI} is Linux shell AI assistant, which leverages small local \glspl{llm} to
+help user process information and enchance the smoothness of interaction with 
+terminal.
 
-\subsubsection{Limited Context Window}
+\subsubsection{Application Architecture}
 
-Small \glspl{llm} are constrained in processing large amounts of text at
-once, which poses challenges when using Retrieval-Augmented
-Generation (RAG). This limitation inherently restricts the model's
-ability to handle complex queries or tasks requiring extensive
-context, necessitating innovative strategies for context management.
+The application is designed as a monolithic system, separated into several components,
+each responsible for a specific aspect of the overall functionality to ensure modularity
+and per-module maintainability, testing and reuse. This modular approach reduces the
+possibility of \gls{llm} hallucination by decomposing tasks into smaller, well-defined
+components, and simplifies testing by allowing evaluation of each component independently.
+The goal of each component is to provide a simple interface and functionality needed for
+other components to work. The interaction between the application and the user is
+primarily through a \gls{cli} interface.
 
-\subsubsection{RAG --- Prompt Size Overhead}
+\subsubsection{Requirements specification}
 
-\subsubsection{Tokenizer Limitations}
+The target user of the application is a general Linux user who is familiar with
+the command line. The application provides them with an assistant that can retrieve
+information from local documents such as man manual pages database, as well as
+other local textual resources in the form of text files running locally on the
+user's machine without the need for internet connection.
 
-Small \glspl{llm} often struggle to handle complex, non-human structures such as bash
-commands and flags (for example, confusing -m with -M) commonly found in CLI
-commands and man pages. This limits their applicability when dealing with such
-structured data, leading to challenges in understanding and generating relevant
-outputs.
+The application is divided into several functional modules, each with distinct
+user-facing capabilities. This will be detailed in the Architectural Design section below, with
+diagrams showing the component structure and use cases.
 
-\subsubsection{Document Relevance Filtering}
 
-\subsubsection{Iterative Prompt Processing}
+\subsubsection{Architectural Design}
 
-To further reduce prompt sizes, the RAG system was customized to
-process each chosen document in smaller parts, aggregating results
-afterward. This approach avoids overwhelming the model with excessive
-input at once and enhances both precision and processing efficiency.
+Based on the requirements above and the limitations of small \glspl{llm}
+observed during development, the system is divided into focused, single-purpose
+components. This modular approach prevents hallucination by constraining each
+component's responsibility and enables thorough testing of individual modules.
+Figure~\ref{fig:use-cases} presents the system's use cases and user
+interactions.
 
-\subsection{System Architecture}
+\begin{figure}[ht]
+  \centering\label{fig:use-cases}
+  \includegraphics[width=0.8\textwidth]{./img/shAI_Use_Cases.png}
+  \caption{Use-case diagram for ShAI}
+\end{figure}
 
-Based on previously reviewed solutions, as well as small local \gls{llm} limitations,
-the best approach to system architecture is to divide the whole system into
-smaller components, each one responsible for one simple task. These defined
-small tasks will (1) reduce the possibility of \gls{llm} halucination and (2)
-simplify the testing by alloing us to test and evaluate each component in
-separate. The modular design also makes future maintenance and expansion more
-manageable.
-
-% repetitive prompting >> onebigprompt due to context + halucinations
+The application is structured around three main components, each designed to
+handle specific aspects of the user interaction and information retrieval
+process:
 
 \begin{enumerate}
-  \item \textbf{Natural Language vs. Shell Command Classifier}
-    --- will allow the system to distinguish between user commands and
-    questions, thus simplifying the interaction for the user.  This is
-    critical for seamless operation; the system should intelligently
-    decide whether to execute a command directly or to engage the \gls{llm}
-    for a more conversational response.
-  \item \textbf{Information Retriever} --- for specific tasks
-    related to information retrieval, the RAG-enabled component will be
-    designed. It should be able to retrieve information from manuals or
-    the web to provide accurate answers. This component will leverage
-    a knowledge base (local documents, indexed websites, etc.) and
-    utilize retrieval techniques to provide contextually relevant
-    information to address user inquiries.
-  \item \textbf{Task splitter} ---
-    this component will split complex tasks into smaller ones, thus
-    dividing the work for other nodes. This is inspired by multi-agent
-    architecture and will follow similar principles.  It will be
-    responsible for taking a user's request (after classification) and
-    breaking it down into sequential or parallel sub-tasks that can be
-    handled by the Information Retriever or other subsequent
-    components.
+  \item \textbf{Natural Language vs. Shell Command Classifier (part of CLI
+    Module)} --- will allow the system to distinguish between user commands
+    and questions, making the interaction more seamless. It will use a
+    combination of syntax checking and LLM-based classification to achieve
+    high accuracy in distinguishing between shell commands and natural
+    language queries.
+  \item \textbf{Information Retriever (DB Module)}
+    The task of this component is to maintain the document database and
+    provide programmatic interface for dense search and managing
+    documents. It will use a locally run embedding model to index
+    these documents and enable contextual search.
+  \item \textbf{Information Summarizer (RAG Module)}
+    This component serves as master for \gls{rag} system, passing
+    user query to \textbf{Information Retriever} and processing its outputs.
 \end{enumerate}
 
-The interface will remain as close as possible to CLI with certain
-TUI elements where needed.  We will prioritize a minimal,
-predictable user experience.
+More detailed system architecture is visualized in
+Figure~\ref{fig:component-arch}, which shows the module structure of the
+application and the interactions between them. The architecture is designed to
+be modular and extensible, allowing for future enhancements and easy software
+reuse.
 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\textwidth]{./img/shAI_Use_Cases.png}
+  \caption{Component architecture of ShAI}\label{fig:component-arch}
+\end{figure}
+
+
+\newpage
 \subsection{Development Process}
+
+The section describes the development-related aspects of the project, including
+the implementation details of each component, testing strategies, and other
+important information.
 
 \subsubsection{Component 1. Natural Language vs. Shell Command Classifier}
 
-\textbf{Idea.}{}
-The first component is a simple proof-of-concept implementation of the proposed
-idea. It uses a local \gls{llm} hosted by Ollama to distinguish between shell
-commands and natural language input. If the input is a shell command, it would
-execute it directly; if it's natural language, it would respond with an answer
-or suggestion.\\
+\paragraph{Idea.}{}
+The classifier component distinguishes between shell commands and natural language input using
+LLM-based classification. If the input is a shell command, it can be executed directly
+in the shell; if natural language, it engages the RAG pipeline for contextual answers.
 
-While using such architecture is feasible, the problem that arises is how
-should the wrapper interact with the shell. It cannot attach to an existing
-bash process, as it is not possible to determine when the shell is waiting for
-user input (e.g.~after running a TUI program) and when it is executing commands
-(this will be visible when using TUI applications inside the wrapper).\\
+\paragraph{Shell Integration Architecture.}{}
+To capture user input without disrupting the shell environment, the implementation uses Bash
+Readline hooks. The \texttt{get\_current\_user\_input} function is registered as a configurable
+callback that extracts the current input buffer. Example hook for bash is shown
+in Listing~\ref{lst:readline-hook}.
 
-Another approach is to create new shell process for each command, but this will
-lead to loss of context (e.g.~current working directory, environment variables,
-etc.) and will make the wrapper less useful.
+\begin{lstlisting}[,
+  caption={Bash Readline Hook for Capturing User Input},
+  label={lst:readline-hook},
+  language=bash,
+  style=code-listing,
+  float
+]
+    extract_input() {
+        echo -e "\n--- Captured Buffer ---"
+        echo "Current input is: \$READLINE_LINE"
+        echo "--- End Capture ---"
+    }
 
-\textbf{Testing. }{}
+    # Bind Ctrl-Y to execute that function
+    bind -x '"\C-y": extract_input'
+\end{lstlisting}
 
-\subsubsection{Component 2. Information retriever}
+\paragraph{Generic CLI Support.}{}
+The design is generalized to support any command-line interface, not just Bash.
+Main limiting factor is that each CLI requires registration of the hooks. In
+this thesis, Bash is the primary implementation target.
 
-\textbf{Idea.}{}
-This component is responsible for retrieving information from various sources
-to answer user queries. It's built around a Retrieval-Augmented Generation
-(RAG) architecture, meaning it combines information retrieval from a local
-knowledge base with \gls{llm} generation to produce informative and accurate
-responses. The task of this module is to summarize the relevant context and
-pass it to user or requesting node, which then generates a response based on
-the retrieved information and its own knowledge.\\
+\paragraph{Testing.}{}
+The testing for this component focuses on evaluating the accuracy of input
+classification and consists of testing two versions of the classifier:
 
-\textbf{RAG Overhead and Proposed Solutions.}{}
+\begin{enumerate}
+  \item \textbf{LLM-Only} Use the LLM alone to classify input using zero-shot
+    prompting. This tests the generation model's language understanding capability on command
+    vs.\ natural language distinction. Expected to work well for clear-cut cases but may
+    struggle with ambiguous inputs.
+
+  \item \textbf{Syntax Checker + LLM} Combine a deterministic syntax checker that
+    validates input against Bash syntax rules with LLM fallback for ambiguous cases. The syntax
+    checker parses the current input buffer to detect executable shell constructs (pipes,
+    redirects, variables, etc.). Only if the syntax checker is inconclusive does the LLM
+    classify the input. This hybrid approach is expected to achieve higher accuracy on
+    well-formed shell commands while retaining LLM flexibility for natural language.
+\end{enumerate}
+
+
+\subsubsection{Component 2. Document retriever}
+
+\paragraph{Idea.}{}
+This component is responsible for managing document indexes and retrieving documents, relevant user queries.
+
+\paragraph{Man pages processing for embedding database.}{}
+For better context management and embedding generation, the pages will be
+compiled to text format (see groff -Tascii and grotty). This will allow us to
+extract the most relevant information without the noise of formatting and other
+non-essential elements.
+
+\paragraph{RAG Overhead and Proposed Solutions.}{}
 One of the key challenges faced while implementing RAG in small \glspl{llm}
 is the substantial prompt size it generates. This overhead negatively
 impacts performance, precision, and latency. To address this, the
@@ -122,107 +167,42 @@ following two-step approach has been adopted:
     the RAG system processes documents in small, manageable parts
     rather than in full. The results are aggregated after processing,
     reducing latency and improving precision.
+  \item \textbf{Passage-level Retrieval:} Instead of passing entire documents to
+    the \gls{llm}, the system retrieves and processes smaller passages from
+    retrieved top-k documents.
 \end{enumerate}
 
-\textbf{Testing. }{}
-
-\textbf{Testing. }{}
-
-\textbf{Retrieval Module.}{}
-The task of this module is, provided with a path to a folder with resources
-(man pages, in our case), assuming that each document in it can be assigned one
-topic, to (1) search the data and return top-k document identifiers (file
-paths). It will use a locally run embedding model to (2) index these documents
-and enable contextual search.\\
-
-The interface it should provide will consist of mainly three functions:
+\paragraph{Testing. }{}
+Two levels of evaluation are implemented for the document retriever component:
 
 \begin{enumerate}
-  \item \texttt{build (db\_path, index\_path\_within\_db,
-    OpenAIAPI-Client, model)} --- will build
-    an index at the specified \texttt{db\_path}, and save it, along
-    with the model used for
-    embedding creation (as \texttt{config.json}) into
-    \texttt{db\_path/index\_path\_within\_db}.
-    \texttt{index\_path\_within\_db} is a non-mandatory parameter,
-    and its default value is
-    \texttt{.index}. For creating embeddings, it will use
-    \texttt{OpenAIAPI-Client} with the specified model.
+  \item \textbf{Test 1 (Document-level Precision@k):} Evaluates document retrieval accuracy
+    using the testing collection of queries and expected documents with top@k
+    metric. The test queries the indexed documents and measures how
+    frequently the expected document appears in the top-k results.
 
-  \item \texttt{check (db\_path, index\_path\_within\_db)} --- will
-    check the availability of the index
-    within \texttt{db\_path}.
+  \item \textbf{Test 2 (Passage-level Precision@k):} Extends Test 1 by using passage-level
+    extraction via \texttt{search\_in\_files\_dynamic}. This test splits documents into
+    smaller passages and ranks them by relevance.
 
-  \item \texttt{search (db\_path, index\_path\_within\_db,
-    OpenAIAPI-Client)} --- will conduct a search
-    on \texttt{db\_path}, using the index from
-    \texttt{db\_path/index\_path\_within\_db}, with
-    \texttt{OpenAIAPI-Client} and the model from
-    \texttt{db\_path/index\_path\_within\_db}. Calls
-    \texttt{check (db\_path, index\_path\_within\_db)} --- will check
-    the availability of the index
-    within \texttt{db\_path} and \texttt{index\_path\_within\_db}.\\
 \end{enumerate}
 
-It should also implement its own CLI interface with \texttt{build} and
-\texttt{search} commands for testing purposes.
 
-This implementation will be using following technologies:
-\begin{itemize}
-  \item \textbf{Embedding model}: We will be choosing a local
-    embedding model from:
-    \begin{itemize}
-      \item \texttt{qwen3-embedding:0.6b}
-      \item \texttt{ibm/granite-embedding:125m}
-    \end{itemize}
-  \item \textbf{Vector database}: We will be using \texttt{FAISS} for
-    indexing and searching the embeddings. We will test different
-    similarity metrics (e.g.~cosine similarity, inner product) to find the
-    best one for our use case.
-  \item \textbf{Connection to \gls{llm}}: We will be using
-    \texttt{OpenAIAPI-Client} to connect to the local
-    \gls{llm} for generating responses based on the retrieved information.
-\end{itemize}
+\subsubsection{Component 3. Information Summarizer}
 
-\textbf{Man pages processing for embedding database.}{}
+\paragraph{Idea.}{}
+This component serves as the master for the RAG system, orchestrating the
+retrieval and summarization process. It takes user queries, interacts with the
+Information Retriever to fetch relevant documents, and processes the retrieved
+information to generate summarized responses using techniques, described in the
+Component 2 section.
 
-For better context management and embedding generation, the pages will be
-compiled to text format (see groff -Tascii and grotty). This will allow us to
-extract the most relevant information without the noise of formatting and other
-non-essential elements.
-
-\textbf{RAG implementation and information extraction by \gls{llm}.}{}
-
-The naive approach to RAG implementation would be to retrieve the top-k
-relevant documents and pass them all to the \gls{llm} in one prompt. However, this
-approach generates great overhead in terms of prompt size,
-negatively affecting performance, precision, and latency of small
-\glspl{llm}.
-
-To minimize RAG-induced overhead, an additional step was implemented
-where the \gls{llm} selects the most relevant documents based on their
-beginnings (e.g., command names and short descriptions in man pages).
-This pre-filtering process is designed to improve accuracy and reduce
-the computational load, ensuring that only essential information is processed.
-
-Another optimization strategy is to process the retrieved documents in smaller,
-manageable parts rather than in full. This can be implemented in two ways:
-first, where the \gls{llm} processes one document at a time and aggregates results,
-or second, where, before passing the documents to the \gls{llm}, they are split into
-smaller parts (e.g., sections or paragraphs) and filtered by the embedding
-model for relevance. The second approach is more efficient as it reduces the
-number of interactions with the \gls{llm}, thus minimizing latency and improving
-precision.
-
-
-\subsubsection{Component 3. Task splitter}
-
-\textbf{Idea.}{}
-This component serves as the central coordinator for more complex requests. It
-receives the user input and decomposes it into a series of manageable sub-tasks.
-It will use a strategy inspired by multi-agent coordination principles.
-
-\textbf{Testing. }{}
+\paragraph{Testing. }{}
+Testing here is performed end-to-end RAG evaluation. This test uses the
+\texttt{sample-10} collection to execute the full RAG pipeline: query embedding, document
+retrieval, passage ranking, and finally LLM-based answer generation. The test generates
+a file containing system-produced answers for each query, which are then manually evaluated
+by human raters.
 
 \subsection{Deployment}
 
@@ -230,28 +210,38 @@ To deploy the \gls{llm} node a docker image is used hosting an Ollama image. Thi
 ensures a controlled and isolated environment for running the local \glspl{llm}
 effectively.
 
-\textbf{Service Checking Logic:} A dedicated service-checking routine
+\paragraph{Service Checking Logic:} A dedicated service-checking routine
 is implemented to verify that the \gls{llm} is running and available for
 processing requests. This service runs at regular intervals and
 includes retries and logging mechanisms to troubleshoot.
 
 \subsection{Libraries and Technology Stack}
 
-The development of this \gls{llm} assistant utilizes the following
+The implementation of this \gls{llm} assistant utilizes mainly these
 libraries and technologies:
 
 \begin{itemize}
   \item \textbf{Python Libraries:}
     \begin{itemize}
       \item \texttt{faiss-cpu}: For vector similarity search and indexing.
-      \item \texttt{numpy}: Numerical operations.
       \item \texttt{openai}: Implementation of the OpenAI API client
         for \gls{llm} interactions.
     \end{itemize}
   \item \textbf{Embedding Models:}
     \begin{itemize}
-      \item \texttt{qwen3-embedding}: Versions 0.6b, 1.7b, 4b.
-      \item \texttt{ibm/granite-embedding}: Versions 125m, 268m.
+      \item \texttt{Qwen3-Embedding-0.6B} --- 0.6B parameters, 32K context
+      \item \texttt{EmbeddingGemma-300M} --- 300M parameters, 2048 context
+      \item \texttt{granite-embedding-30m-english} --- 30M parameters, English-only
+      \item \texttt{granite-embedding-278m-multilingual} --- 278M parameters, 12 languages
+    \end{itemize}
+  \item \textbf{LLM Models:}
+    \begin{itemize}
+      \item \texttt{Qwen2.5-0.5B-Instruct} --- 0.5B, up to 128K context
+      \item \texttt{Qwen2.5-1.5B-Instruct} --- 1.5B, up to 128K context
+      \item \texttt{Qwen3-0.6B} --- 0.6B, 32K context
+      \item \texttt{Qwen3-1.7B} --- 1.7B, 32K context
+      \item \texttt{Granite-3.1-1B-A400M-Instruct} --- 1.3B (MoE), 128K context
+      \item \texttt{Gemma 3} --- 4B, 32K context
     \end{itemize}
   \item \textbf{Vector Database:}
     \begin{itemize}
@@ -263,3 +253,40 @@ libraries and technologies:
       \item \texttt{Ollama}: For hosting local \glspl{llm}.
     \end{itemize}
 \end{itemize}
+
+% \subsection{Design Considerations}
+%
+% When designing an \gls{llm} assistant using small \glspl{llm}, several problems
+% became apparent. These include:
+%
+% \subsubsection{Limited Context Window}
+%
+% Small \glspl{llm} are constrained in processing large amounts of text at
+% once, which poses challenges when using Retrieval-Augmented
+% Generation (RAG). This limitation inherently restricts the model's
+% ability to handle complex queries or tasks requiring extensive
+% context, necessitating innovative strategies for context management.
+%
+% \subsubsection{RAG --- Prompt Size Overhead}
+%
+% \subsubsection{Tokenizer Limitations}
+%
+% Small \glspl{llm} often struggle to handle complex, non-human structures such as bash
+% commands and flags (for example, confusing -m with -M) commonly found in CLI
+% commands and man pages. This limits their applicability when dealing with such
+% structured data, leading to challenges in understanding and generating relevant
+% outputs.
+%
+% \subsubsection{Document Relevance Filtering}
+%
+% \subsubsection{Iterative Prompt Processing}
+%
+% To further reduce prompt sizes, the RAG system was customized to
+% process each chosen document in smaller parts, aggregating results
+% afterward. This approach avoids overwhelming the model with excessive
+% input at once and enhances both precision and processing efficiency.
+%
+% The interface will remain as close as possible to CLI with certain
+% TUI elements where needed.  We will prioritize a minimal,
+% predictable user experience.
+%

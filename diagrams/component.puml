@@ -1,0 +1,73 @@
+@startuml shAI_Component_Architecture
+/'!pragma layout smetana'/
+skinparam linetype polyline
+left to right direction
+title shAI - Component Architecture
+
+' Define interfaces based on actual module exports
+
+' Application Components
+package "shAI Application" {
+interface "generate()/embed()" as IGeneration
+interface "IDatabase" as IDatabase
+interface "IRAGPipeline" as IRAG
+interface "IConfiguration" as IConfig
+interface "IUtils" as IUtils
+  component [Main CLI] as CLI
+  component [LLM Module] as LLM
+  component [DB Module (FAISS)] as DB
+  component [RAG Module] as RAG
+  component [Config Module] as Config
+  component [Utils Module] as Utils
+
+  LLM -l- IGeneration
+  DB -l- IDatabase
+  RAG -u- IRAG
+  Config -u- IConfig
+  Utils -u- IUtils
+}
+
+' External Systems
+interface "HTTP-OpenAI API" as IHTTPAPI
+interface "Docker API" as IDockerAPI
+interface "File I/O" as IFileIO
+package "External Systems" {
+  component "Docker" {
+  component "Ollama Service" as Ollama {
+      component "LLM Model"
+      component "Embedding Model"
+    }
+  }
+
+  component "Storage" as Storage {
+    component [DB Documents and Index]
+    component [Config] as AppConfig
+  }
+
+  Storage -u- IFileIO
+  Ollama -u- IHTTPAPI
+  Docker -u- IDockerAPI
+}
+
+/'' CLI interactions'/
+CLI -d-( IGeneration
+CLI -d-( IDatabase : DB Creation and\n direct document search
+CLI -d-( IRAG
+CLI -d-( IConfig
+CLI -d-( IUtils
+
+/'' RAG interactions'/
+RAG -l-( IGeneration
+RAG -r-( IDatabase
+
+/'' DB interactions'/
+DB --( IFileIO: Access index files\nand stored documents
+
+/'' LLM interactions'/
+LLM --( IHTTPAPI: API Calls for\nLLM generation/embedding
+
+/'' Utils interactions'/
+Config --( IFileIO: Read config files
+Utils --( IDockerAPI: Manage Docker containers
+
+@enduml
