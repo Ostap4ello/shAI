@@ -56,6 +56,8 @@ output:
 
 - qualitative testing
 - trying different models
+- put diagrams in pdf instad of png (png = bad resolution)
+- appenix with mention of gh, user quide, docs
 
 
 \newpage <!-- --- -->
