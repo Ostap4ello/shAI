@@ -1,0 +1,142 @@
+
+\subsection{Component 1. Natural Language vs. Shell Command Classifier}
+
+\paragraph{Chosen Metrics}{}
+The testing for this component focuses on evaluating the accuracy of
+input classification and consists of testing two versions of the classifier, and
+will classify a collection of test inputs on binary classification accuracy for
+both approaches (see\ \ref{sec:classifier-approaches} for details on the
+approaches):
+
+\paragraph{Testing Collection}{}
+For testing the classifier, we will use manually curated collection
+\texttt{classifier-100} of 100 inputs, which includes a balanced mix of
+natural language queries and shell command inputs. It must be classified as
+follows:
+\begin{itemize}
+  \item 50 natural language queries (e.g., ``How do I list files in a
+    directory? '')
+  \item 50 shell command inputs (e.g., ``ls -la /home/user'')
+\end{itemize}
+
+\paragraph{Testing Results}{}
+Table~\ref{tab:eval-1-results} presents results from evaluation for each
+collection:
+
+\begin{table}[h]
+  \centering
+  \caption{Evaluation results on \ldots} % TODO
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{Test} & \textbf{Metric} & \textbf{Result} & \textbf{Avg Latency} \\
+    \midrule
+    Test 1 & Metric 1 & Result 1 & Number \\
+    \bottomrule
+  \end{tabular}\label{tab:eval-1-results}
+\end{table}
+\ldots % TODO: see precision metrics for bin-cl
+
+\subsection{Component 2. Document retriever}
+
+\paragraph{Chosen Metrics}{}
+The application will be evaluated on its ability to retrieve relevant
+information from the document collection, by testing whether the
+correct document file is retrieved within the top-k results. We will
+evaluate the retrieval performance on two levels of granularity:
+
+\begin{enumerate}
+  \item \textbf{Test 1 (Document-level Precision@k):} This test will use whole
+    files as the unit of retrieval.
+  \item \textbf{Test 2 (Document-to-Passage-level Precision@k):} Extends Test 1
+    by using passage-level extraction on top-k retrieved documents.
+  \item \textbf{Test 3 (Passage-level Precision@k):} This test will
+    use multiline passages as the unit of retrieval, evaluating
+    whether the correct passage is ranked within the top-k results.
+\end{enumerate}
+
+\paragraph{Testing Collection}{}
+For testing the document retriever, we will use the two collections of documents
+and queries:
+\begin{itemize}
+  \item \texttt{sample-10}: A small collection of 10 documents with
+    50 queries in total, designed for initial testing and debugging
+    of the retrieval components.
+  \item \texttt{sample-100}: A larger collection of 100 documents
+    with 300 queries, intended for more comprehensive evaluation of
+    retrieval performance and scalability.
+\end{itemize}
+
+\paragraph{Testing Results}{}
+Table~\ref{tab:eval-2-results} presents results from evaluation for each
+collection:
+
+\begin{table}[h]
+  \centering
+  \caption{Evaluation results on \ldots} % TODO
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{Test} & \textbf{Metric} & \textbf{Result} & \textbf{Avg Latency} \\
+    \midrule
+    Test 1 & Metric 1 & Result 1 & Number \\
+    \bottomrule
+  \end{tabular}\label{tab:eval-2-results}
+\end{table}
+\ldots % TODO
+
+\subsection{Component 3. Information Summarizer}
+
+\paragraph{Chosen Metrics}{}
+\ldots % TODO
+
+\paragraph{Testing Collection}{}
+For testing the information summarizer, we will use a collection of queries and
+reference answers derived from the \texttt{sample-10} and \texttt{sample-100}
+document collections. The collection of 150 queries will be designed, namely
+\texttt{summarizer-150}.
+
+\paragraph{Testing Results}{}
+Table~\ref{tab:eval-3-results} presents results from evaluation for each
+collection:
+
+\begin{table}[h]
+  \centering
+  \caption{Evaluation results on \ldots} % TODO
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{Test} & \textbf{Metric} & \textbf{Result} & \textbf{Avg Latency} \\
+    \midrule
+    Test 1 & Metric 1 & Result 1 & Number \\
+    \bottomrule
+  \end{tabular}\label{tab:eval-3-results}
+\end{table}
+\ldots % TODO
+
+\subsection{End-to-end testing}
+
+\paragraph{Chosen Metrics}{}
+The goal of end-to-end testing for this thesis is to evaluate the overall
+performance of the application on a set of chosen devices, taking into account
+the latency and load.
+
+\paragraph{Testing Collection}{}
+For end-to-end testing, we will reuse the \textt{summarizer-150} collection of
+queries, which will be executed on a set of devices with varying hardware
+capabilities.
+\ldots % TODO
+
+\paragraph{Testing Results}{}
+Table~\ref{tab:eval-4-results} presents results from evaluation for each
+collection:
+
+\begin{table}[h]
+  \centering
+  \caption{Evaluation results on \ldots} % TODO
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{Test} & \textbf{Metric} & \textbf{Result} & \textbf{Avg Latency} \\
+    \midrule
+    Test 1 & Metric 1 & Result 1 & Number \\
+    \bottomrule
+  \end{tabular}\label{tab:eval-4-results}
+\end{table}
+\ldots % TODO

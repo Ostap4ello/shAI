@@ -115,29 +115,29 @@ in Listing~\ref{lst:readline-hook}.
     bind -x '"\C-y": extract_input'
 \end{lstlisting}
 
-\paragraph{Generic CLI Support.}{}
+\paragraph{Generic CLI Support}{}
 The design is generalized to support any command-line interface, not just Bash.
 Main limiting factor is that each CLI requires registration of the hooks. In
 this thesis, Bash is the primary implementation target.
 
-\paragraph{Testing.}{}
-The testing for this component focuses on evaluating the accuracy of input
-classification and consists of testing two versions of the classifier:
+\paragraph{Improvement to the Classifier}{}
 
+To experiment with the classifier's performance, two versions are implemented
+and tested:\label{sec:classifier-approaches}
 \begin{enumerate}
-  \item \textbf{LLM-Only} Use the LLM alone to classify input using zero-shot
-    prompting. This tests the generation model's language understanding capability on command
-    vs.\ natural language distinction. Expected to work well for clear-cut cases but may
-    struggle with ambiguous inputs.
+  \item \textbf{LLM-Only Approach} will use the LLM alone to classify
+    input using zero-shot prompting. This tests the generation
+    model's language understanding capability on command vs.\ natural
+    language distinction. Expected to work well for clear-cut cases
+    but may struggle with ambiguous inputs.
 
-  \item \textbf{Syntax Checker + LLM} Combine a deterministic syntax checker that
-    validates input against Bash syntax rules with LLM fallback for ambiguous cases. The syntax
-    checker parses the current input buffer to detect executable shell constructs (pipes,
-    redirects, variables, etc.). Only if the syntax checker is inconclusive does the LLM
-    classify the input. This hybrid approach is expected to achieve higher accuracy on
-    well-formed shell commands while retaining LLM flexibility for natural language.
+  \item \textbf{Syntax Checker + LLM} will combine a deterministic
+    syntax checker that validates input against Bash syntax rules. If
+    the syntax is invalid it is passed to the LLM to be classified
+    and processed. This hybrid approach is expected to achieve higher
+    accuracy and better latency on well-formed shell commands while retaining
+    LLM flexibility for natural language.
 \end{enumerate}
-
 
 \subsubsection{Component 2. Document retriever}
 
@@ -196,13 +196,6 @@ retrieval and summarization process. It takes user queries, interacts with the
 Information Retriever to fetch relevant documents, and processes the retrieved
 information to generate summarized responses using techniques, described in the
 Component 2 section.
-
-\paragraph{Testing. }{}
-Testing here is performed end-to-end RAG evaluation. This test uses the
-\texttt{sample-10} collection to execute the full RAG pipeline: query embedding, document
-retrieval, passage ranking, and finally LLM-based answer generation. The test generates
-a file containing system-produced answers for each query, which are then manually evaluated
-by human raters.
 
 \subsection{Deployment}
 
