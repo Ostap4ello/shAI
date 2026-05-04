@@ -208,44 +208,138 @@ is implemented to verify that the \gls{llm} is running and available for
 processing requests. This service runs at regular intervals and
 includes retries and logging mechanisms to troubleshoot.
 
-\subsection{Libraries and Technology Stack}
+\subsection{Technology Stack}
 
-The implementation of this \gls{llm} assistant utilizes mainly these
-libraries and technologies:
+This section provides an overview of the technologies and tools used in the
+implementation, as well as the rationale behind their selection.
+
+\subsubsection{Python, Python Libraries}
+
+Python was chosen as the primary implementation language for this thesis due to
+its simplicity, readability, and extensive ecosystem of libraries for machine
+learning, and devise integration. smong such libraries, we use:
 
 \begin{itemize}
-  \item \textbf{Python Libraries:}
-    \begin{itemize}
-      \item \texttt{faiss-cpu}: For vector similarity search and indexing.
-      \item \texttt{openai}: Implementation of the OpenAI API client
-        for \gls{llm} interactions.
-    \end{itemize}
-  \item \textbf{Embedding Models:}
-    \begin{itemize}
-      \item \texttt{Qwen3-Embedding-0.6B} --- 0.6B parameters, 32K context
-      \item \texttt{EmbeddingGemma-300M} --- 300M parameters, 2048 context
-      \item \texttt{granite-embedding-30m-english} --- 30M parameters, English-only
-      \item \texttt{granite-embedding-278m-multilingual} --- 278M parameters, 12 languages
-    \end{itemize}
-  \item \textbf{LLM Models:}
-    \begin{itemize}
-      \item \texttt{Qwen2.5-0.5B-Instruct} --- 0.5B, up to 128K context
-      \item \texttt{Qwen2.5-1.5B-Instruct} --- 1.5B, up to 128K context
-      \item \texttt{Qwen3-0.6B} --- 0.6B, 32K context
-      \item \texttt{Qwen3-1.7B} --- 1.7B, 32K context
-      \item \texttt{Granite-3.1-1B-A400M-Instruct} --- 1.3B (MoE), 128K context
-      \item \texttt{Gemma 3} --- 4B, 32K context
-    \end{itemize}
-  \item \textbf{Vector Database:}
-    \begin{itemize}
-      \item \texttt{FAISS}: For fast similarity search.
-    \end{itemize}
-  \item \textbf{Containerization and services:}
-    \begin{itemize}
-      \item \texttt{Docker}: For containerized deployment.
-      \item \texttt{Ollama}: For hosting local \glspl{llm}.
-    \end{itemize}
+  \item \texttt{openai}: Implementation of the OpenAI API client,
+    used for interacting with \glspl{llm} services via HTTP requests.
+    This standartized way to interact is ideal for architectural
+    modularity and flexibility.
+  \item \texttt{faiss-cpu}: A library for efficient similarity search
+    and clustering of dense vectors, used for implementing the vector
+    database for document retrieval. It provides fast indexing and
+    querying capabilities, making it suitable for handling large
+    collections of document embeddings.
+  \item \textt{os, pathlib, subprocess, shutil}: Standard Python
+    libraries for managing operating system resources, like
+    filesystem operations, running subprocesses, and handling paths.
 \end{itemize}
+% TODO: cite
+
+\subsubsection{Ollama}
+
+Ollama\cite{ollama-web} is a local LLM service that enables running large
+language models on consumer hardware without requiring cloud API calls. For this
+thesis, Ollama was chosen as the primary LLM runtime over in-code alternatives
+for several reasons:
+
+\begin{itemize}
+  \item \textbf{Simplicity and Ease of Use} --- Ollama provides a
+    straightforward command-line interface for downloading,
+    installing, and managing LLMs. This eliminates the need to
+    implement model loading and inference logic directly in the application.
+
+  \item \textbf{Model Flexibility} --- Ollama supports a wide variety
+    of open-source models with different sizes and capabilities,
+    allowing for easy experimentation with different architectures
+    and parameter counts.
+
+  \item \textbf{OpenAI API Compatibility} --- Ollama provides an
+    OpenAI-compatible API endpoint, making it possible to test with
+    both local (via Ollama) and remote (via OpenAI) models without
+    changing application code. This flexibility was valuable for
+    development and testing.
+
+  \item \textbf{Resource Efficiency} --- Ollama is designed for local
+    execution and allows both \gls{gpu}-enabled and \gls{cpu}-only
+    inference, making it accessible for users without high-end hardware.
+\end{itemize}
+
+\subsubsection{\gls{faiss}}
+
+For the RAG retrieval component, \gls{faiss}\cite{faiss2026} was
+selected as the vector database for storing and retrieving document
+embeddings. This choice was motivated by:
+
+\begin{itemize}
+  \item \textbf{Simplicity and efficiency} --- a minimal python API
+    with no complex server setup or external dependencies, making it
+    ideal for prototype development.
+
+  \item \textbf{File-Oriented Storage} --- Annoy saves indices
+    to disk files, allowing persistent storage of embeddings without
+    requiring a running database server.
+\end{itemize}
+
+\subsubsection{\glspl{llm} and Embedding Models}
+
+The thesis testing and development primarily utilized several small, publicly
+available \glspl{llm} and embedding models, summarized in
+Tables\ \ref{tab:llm-summary} and\ \ref{tab:embedding-summary}.
+
+\begin{table}
+  \centering
+  \scriptsize
+  \caption{Summary of \glspl{llm} used in experiments (parameters,
+  context, and licensing).}
+  \label{tab:llm-summary}
+  \begin{tabularx}{\textwidth}{XlXXX}
+    \toprule
+    \textbf{Model} & \textbf{Params} & \textbf{Context} &
+    \textbf{License} & \textbf{Training data (public disclosure)} \\
+    \midrule
+    Qwen2.5-0.5B-Instruct & 0.5B & 32K (up to 128K; 8K gen) & Apache 2.0 &
+    Up to 18T tokens (family-level disclosure). \\
+    Qwen2.5-1.5B-Instruct & 1.5B & 32K (up to 128K; 8K gen) & Apache 2.0 &
+    Up to 18T tokens (family-level disclosure). \\
+    Qwen3-0.6B & 0.6B & 32K & Apache 2.0 &
+    \textasciitilde{}36T tokens; web + doc-like corpora + synthetic
+    math/code (family-level disclosure). \\
+    Qwen3-1.7B & 1.7B & 32K & Apache 2.0 &
+    \textasciitilde{}36T tokens; web + doc-like corpora + synthetic
+    math/code (family-level disclosure). \\
+    Granite-3.1-1B-A400M-Instruct (\gls{moe}) & 1.3B (400M active) & 128K &
+    Apache 2.0 & 10T tokens (\gls{moe}); SFT mix as above (high-level disclosure). \\
+    Gemma 3 (Google) & 4B & 32K & Gemma Terms of Use &
+    Token counts disclosed; broad web/code/math/image sources
+    (high-level disclosure). \\
+    \bottomrule
+    % TODO: review on HuggingFace + connect with ollama namings
+  \end{tabularx}
+\end{table}
+
+\begin{table}
+  \centering
+  \scriptsize
+  \caption{Summary of embedding models used in experiments
+  (dimension, context, and licensing).}
+  \label{tab:embedding-summary}
+  \begin{tabularx}{\textwidth}{XlllX}
+    \toprule
+    \textbf{Model} & \textbf{Params} & \textbf{Context} &
+    \textbf{Dim} & \textbf{Notes} \\
+    \midrule
+    Qwen3-Embedding-0.6B & 0.6B & 32K & up to 1024 & Apache 2.0;
+    supports user-defined dimensions (MRL). \\
+    EmbeddingGemma-300M (Google) & 300M & 2048 & 768 & Gemma Terms of
+    Use; can be truncated to smaller dims via MRL. \\
+    granite-embedding-30m-english & 30M & 512 & 384 & Apache 2.0;
+    English-only embedding model. \\
+    granite-embedding-278m-multilingual & 278M & 512 & 768 & Apache
+    2.0; multilingual embedding model (12 languages listed by IBM). \\
+    % TODO: review on HuggingFace + connect with ollama namings
+    \bottomrule
+  \end{tabularx}
+\end{table}
 
 % \subsection{Design Considerations}
 %
