@@ -44,82 +44,9 @@ emulators and utilize their capabilities to provide text-based user interfaces
 --- either \glspl{cli} or \glspl{tui}. We will discuss it further in
 the following sections\cite{man_man,linfo_terminal}.\\
 
-% NOTE: this knowledge is not relevant for the solution. Delete later?
-%
-% In most cases, always, when the application is POSIX-compatible, we can define
-% text streams, used by terminal application for
-% communication.\cite{wiki_terminal}\cite{wiki_terminal_emulator} \\
-%
-% \begin{enumerate}
-%   \item STDIN --- used for input fron user; initially as file descriptor 0.
-%   \item STDOUT --- used for application output; initially as file
-% descriptor 1.
-%   \item STDIN --- used for error output; initially as file descriptor 2.
-% \end{enumerate}
-% \cite{open_group} \\
-% POSIX on default communication streams for application: (hidden)\\
-% \textit{\uv{
-%     3.353 Standard Error
-%
-%     In the context of file descriptors (see 3.141 File Descriptor),
-% file descriptor number 2.
-%
-%     In the context of standard I/O streams (see XSH 2.5 Standard
-% I/O Streams), an output stream
-%     usually intended to be used for diagnostic messages, and
-% accessed using the global variable
-%     stderr.
-%
-%     Note:
-%     The file descriptor underlying stderr is initially 2, but it
-% can be changed by freopen() to 0
-%     or 1 (and implementations may have extensions that allow it to
-% be changed to other numbers).
-%     Therefore, writing to the standard error stream does not always
-% produce output on the standard error
-%     file descriptor.
-%
-%     3.354 Standard Input
-%
-%     In the context of file descriptors (see 3.141 File Descriptor),
-% file descriptor number 0.
-%
-%     In the context of standard I/O streams (see XSH 2.5 Standard
-% I/O Streams), an input stream usually
-%     intended to be used for primary data input, and accessed using
-% the global variable stdin.
-%
-%     Note:
-%     The file descriptor underlying stdin is initially 0; this
-% cannot change through the use of
-%     interfaces defined in this standard, but implementations may
-% have extensions that allow it to be
-%     changed. Therefore, in conforming applications using
-% extensions, reading from the standard input
-%     stream does not always obtain input from the standard input
-% file descriptor.
-%
-%     3.355 Standard Output
-%
-%     In the context of file descriptors (see 3.141 File Descriptor),
-% file descriptor number 1.
-%
-%     In the context of standard I/O streams (see XSH 2.5 Standard
-% I/O Streams), an output stream
-%     usually intended to be used for primary data output, and
-% accessed using the global variable
-%     stdout.
-%
-%     Note: The file descriptor underlying stdout is initially 1, but
-% it can be changed by freopen() to 0
-%     (and implementations may have extensions that allow it to be
-% changed to other numbers). Therefore,
-%     writing to the standard output stream does not always produce
-% output on the standard output file
-%     descriptor.
-% }}
 
 \subsubsection{Shells and \gls{cli} Utilities}
+
 
 The definition of \gls{cli} extends previous definition to the specific case of
 command line interfaces, which are text-based interfaces between the user and
@@ -444,7 +371,7 @@ While the architectures above define how information flows through the layers,
 the \gls{moe} is an important extension that changes how the feedforward layers
 operate, with the goal to increase scalability and efficiency.
 
-In a traditional dense transformer, which can be reffered to as \textbf{Dense},
+In a traditional dense transformer, which can be referred to as \textbf{Dense},
 the whole decoder is a monolith, meaning that while processing, every neuron is
 used. The \gls{moe} architecture splits the massive, singular
 feedforward network into multiple smaller, quasi-specialized (as everything is

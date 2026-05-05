@@ -3,7 +3,7 @@
 
 This section serves as listing of existing solutions relevant to the
 evolution and formation of the thesis.
-In Section\ \ref{sec:design-evolution} we will be reffering to the
+In Section\ \ref{sec:design-evolution} we will be referring to the
 solutions described
 here, as well as to the key insights gained from their analysis.
 
@@ -38,7 +38,7 @@ external API access.
 \paragraph{Warp Terminal}
 
 This is a developement-oriented and general-purpose \gls{ai}-enabled terminal
-emulator, which uses remote Agent \gls{llm} System to enchance the experience of
+emulator, which uses remote Agent \gls{llm} System to enhance the experience of
 users. The most of its code remains closed-source. It is not adapted for
 executing on small \glspl{llm} and it provides no support for local \glspl{llm}.
 Additionally, it is not a \gls{cli}/\gls{tui} application, but a full
@@ -51,7 +51,7 @@ services for terminal users\cite{warp-web,warp-docs}.
 
 \paragraph{gptme}
 
-This is general-purpose \gls{cli} utility with bread \gls{ai}
+This is general-purpose \gls{cli} utility with broad \gls{ai}
 functionality. It is compatible with OpenAI \gls{api}, which allows
 it to use both remote and local \glspl{llm}. It uses Agentic
 architecture and implements \gls{mcp} protocol. This enables it to
@@ -98,14 +98,11 @@ Key capabilities:
 \end{itemize}
 
 When tested manually with local \glspl{llm} (Gemma3 4b
-\ \cite{gemma-web}, Qwen2.5 0.5B/1.5B\ \cite{qwen-web}), it performed quite
-poorly, as the models were not able to handle the complexity of the
-tasks. It usually due to too long prompts which made \glspl{llm}
-halucinate on too many details. This shows, that the solution is not
-fully adapted for local \glspl{llm}, which is one of the main goals
-of our work. This should be considered when designing our solution to
-use more fine-grained prompts for local \glspl{llm} and optimize the
-architecture for local \glspl{llm}.
+\ \cite{gemma-web}, Qwen2.5 0.5B/1.5B\ \cite{qwen-web}), it performed poorly.
+The models struggled with task complexity due to long prompts, which caused \glspl{llm}
+to hallucinate on too many details. This indicates the solution is not
+fully adapted for local \glspl{llm}, highlighting a key consideration for our design:
+use fine-grained prompts for local \glspl{llm} and optimize architecture accordingly.
 
 \paragraph{gemini-cli}
 
@@ -166,6 +163,17 @@ There are also such solutions, like \textsl{ai-terminal-assistent (github)}{}
 or \textsl{cmd-ai (github)}, which are just wrappers for Rest \gls{api} calls to
 remote \glspl{llm}. They provide basic \gls{ai} capabilities in terminal, but
 have no significant features.
+
+\paragraph{Analysis of Existing Solutions}
+
+These existing solutions demonstrate the feasibility of \gls{llm}-based \gls{cli}
+assistants but reveal critical limitations in local model performance. Most solutions
+either depend on remote \glspl{llm} or lack sophisticated handling of local models.
+When tested with local \glspl{llm}, solutions like gptme showed poor performance due to
+complex task handling and long prompts that cause model hallucination. This analysis
+informed the design of \textbf{ShAI}, leading us to focus on a \gls{rag}-based architecture
+optimized for small local \glspl{llm}, with fine-grained prompts and modular components
+to minimize hallucination and improve task-specific performance.
 
 \subsection{Technology \& Design Evolution}\label{sec:design-evolution}
 
