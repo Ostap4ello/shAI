@@ -86,57 +86,74 @@ important information.
 
 \subsubsection{Component 1. Natural Language vs. Shell Command Classifier}
 
-\paragraph{Idea.}{}
-The classifier component distinguishes between shell commands and natural language input using
-LLM-based classification. If the input is a shell command, it can be executed directly
-in the shell; if natural language, it engages the RAG pipeline for contextual answers.
+\paragraph{Status}{}
+This component was designed to distinguish between shell commands and natural language input,
+but is left as a \textbf{proof-of-concept} implementation. During development, two significant
+challenges emerged:
 
-\paragraph{Shell Integration Architecture.}{}
-To capture user input without disrupting the shell environment, the implementation uses Bash
-Readline hooks. The \texttt{get\_current\_user\_input} function is registered as a configurable
-callback that extracts the current input buffer. Example hook for bash is shown
-in Listing~\ref{lst:readline-hook}.
+\begin{enumerate}
+  \item \textbf{LLM-based Classification Performance:} Testing revealed that \gls{llm}-based
+    classification of commands vs.\ queries performs poorly with small local models. The models
+    struggle with edge cases and ambiguous inputs, requiring either hardcoded heuristics
+    (reducing generalizability) or multiple LLM calls (increasing latency significantly).
+  \item \textbf{Shell Integration Complexity:} Implementing seamless shell integration without
+    disrupting user experience proved highly shell-specific. Bash Readline hooks, Zsh completion
+    functions, and Fish event listeners require fundamentally different implementations. A
+    robust multi-shell solution would add substantial complexity and maintenance burden
+    without clear benefit for this thesis.
+\end{enumerate}
 
-\begin{lstlisting}[,
-  caption={Bash Readline Hook for Capturing User Input},
-  label={lst:readline-hook},
-  language=bash,
-  style=code-listing,
-  float
-]
-    extract_input() {
-        echo -e "\n--- Captured Buffer ---"
-        echo "Current input is: \$READLINE_LINE"
-        echo "--- End Capture ---"
-    }
+\paragraph{Implemented Concept}{}
+The classifier component concept is designed to distinguish between shell commands and natural
+language input using LLM-based classification. If the input is a shell command, it can be executed
+directly in the shell; if natural language, it engages the \gls{rag} pipeline for contextual answers.
 
-    # Bind Ctrl-Y to execute that function
-    bind -x '"\C-y": extract_input'
-\end{lstlisting}
+% \paragraph{Shell Integration Architecture}{}
+% To capture user input without disrupting the shell environment, the implementation uses Bash
+% Readline hooks. The \texttt{get\_current\_user\_input} function is registered as a configurable
+% callback that extracts the current input buffer. Example hook for bash is shown
+% in Listing~\ref{lst:readline-hook}.
+%
+% \begin{lstlisting}[,
+%   caption={Bash Readline Hook for Capturing User Input},
+%   label={lst:readline-hook},
+%   language=bash,
+%   style=code-listing,
+%   float
+% ]
+%     extract_input() {
+%         echo -e "\n--- Captured Buffer ---"
+%         echo "Current input is: \$READLINE_LINE"
+%         echo "--- End Capture ---"
+%     }
+%
+%     # Bind Ctrl-Y to execute that function
+%     bind -x '"\C-y": extract_input'
+% \end{lstlisting}
 
 \paragraph{Generic CLI Support}{}
-The design is generalized to support any command-line interface, not just Bash.
-Main limiting factor is that each CLI requires registration of the hooks. In
-this thesis, Bash is the primary implementation target.
+The main limiting factor is that each CLI requires separate hook registration and
+management. In this thesis, Bash is the primary implementation target for demonstration
+purposes only.
 
-\paragraph{Improvement to the Classifier}{}
+\paragraph{Classification Approaches Tested}{}
 
-To experiment with the classifier's performance, two versions are implemented
-and tested:\label{sec:classifier-approaches}
+Two versions were explored to improve classifier performance:\label{sec:classifier-approaches}
 \begin{enumerate}
-  \item \textbf{LLM-Only Approach} will use the LLM alone to classify
-    input using zero-shot prompting. This tests the generation
-    model's language understanding capability on command vs.\ natural
-    language distinction. Expected to work well for clear-cut cases
-    but may struggle with ambiguous inputs.
+  \item \textbf{LLM-Only Approach} uses the LLM alone for zero-shot classification.
+    This tests language understanding on command vs.\ query distinction but struggles
+    with ambiguous inputs and requires multiple calls for validation.
 
-  \item \textbf{Syntax Checker + LLM} will combine a deterministic
-    syntax checker that validates input against Bash syntax rules. If
-    the syntax is invalid it is passed to the LLM to be classified
-    and processed. This hybrid approach is expected to achieve higher
-    accuracy and better latency on well-formed shell commands while retaining
-    LLM flexibility for natural language.
+  \item \textbf{Syntax Checker + LLM Hybrid} combines deterministic Bash syntax validation
+    with LLM classification. While more efficient for well-formed commands, it remains
+    limited by the underlying LLM classification accuracy on edge cases.
 \end{enumerate}
+
+Despite these approaches, the fundamental limitation remains: \textbf{small local \glspl{llm}
+lack sufficient classification accuracy for reliable real-world usage without significant
+latency overhead or hardcoded rule-based augmentation.} This motivated the focus on the
+\gls{rag} component, which achieves better results through information retrieval rather
+than pure generative classification.
 
 \subsubsection{Component 2. Document retriever}
 
@@ -171,23 +188,8 @@ following two-step approach has been adopted:
     retrieved top-k documents.
 \end{enumerate}
 
-\paragraph{Testing. }{}
-Two levels of evaluation are implemented for the document retriever component:
 
-\begin{enumerate}
-  \item \textbf{Test 1 (Document-level Precision@k):} Evaluates document retrieval accuracy
-    using the testing collection of queries and expected documents with top@k
-    metric. The test queries the indexed documents and measures how
-    frequently the expected document appears in the top-k results.
-
-  \item \textbf{Test 2 (Passage-level Precision@k):} Extends Test 1 by using passage-level
-    extraction via \texttt{search\_in\_files\_dynamic}. This test splits documents into
-    smaller passages and ranks them by relevance.
-
-\end{enumerate}
-
-
-\subsubsection{Component 3. Information Summarizer}
+\subsubsection{Component 3. Master Information Summarizer}
 
 \paragraph{Idea.}{}
 This component serves as the master for the RAG system, orchestrating the

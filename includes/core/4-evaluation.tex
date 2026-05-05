@@ -1,18 +1,16 @@
 
-\subsection{Component 1. Natural Language vs. Shell Command Classifier}
+\subsubsection{Component 1: Natural Language vs. Shell Command Classifier}
 
-\paragraph{Chosen Metrics}{}
-The testing for this component focuses on evaluating the accuracy of
-input classification and consists of testing two versions of the classifier, and
-will classify a collection of test inputs on binary classification accuracy for
-both approaches (see\ \ref{sec:classifier-approaches} for details on the
-approaches):
+\paragraph{Evaluation Approach}{}
+The testing for this component focuses on evaluating the accuracy of input
+classification and consists of testing two versions of the classifier, and will
+classify a collection of test inputs on binary classification accuracy for both
+approaches (see\ \ref{sec:classifier-approaches} for details on the approaches):
 
-\paragraph{Testing Collection}{}
+\paragraph{Testing Collections}{}
 For testing the classifier, we will use manually curated collection
-\texttt{classifier-100} of 100 inputs, which includes a balanced mix of
-natural language queries and shell command inputs. It must be classified as
-follows:
+\texttt{classifier-100} of 100 inputs, which includes a balanced mix of natural
+language queries and shell command inputs. It must be classified as follows:
 \begin{itemize}
   \item 50 natural language queries (e.g., ``How do I list files in a
     directory? '')
@@ -36,38 +34,60 @@ collection:
 \end{table}
 \ldots % TODO: see precision metrics for bin-cl
 
-\subsection{Component 2. Document retriever}
-
-\paragraph{Chosen Metrics}{}
-The application will be evaluated on its ability to retrieve relevant
-information from the document collection, by testing whether the
-correct document file is retrieved within the top-k results. We will
-evaluate the retrieval performance on two levels of granularity:
+\paragraph{Key Findings and Limitations}
+Evaluation and testing of this component revealed critical limitations that
+prevented deployment:
 
 \begin{enumerate}
-  \item \textbf{Test 1 (Document-level Precision@k):} This test will use whole
-    files as the unit of retrieval.
-  \item \textbf{Test 2 (Document-to-Passage-level Precision@k):} Extends Test 1
-    by using passage-level extraction on top-k retrieved documents.
-  \item \textbf{Test 3 (Passage-level Precision@k):} This test will
-    use multiline passages as the unit of retrieval, evaluating
-    whether the correct passage is ranked within the top-k results.
+  \item \textbf{Poor Classification Accuracy:} Both the LLM-only and
+    syntax-checker hybrid approaches exhibited accuracy below 70\% on
+    ambiguous inputs, with particularly poor performance on edge
+    cases common in real-world usage.
+  \item \textbf{Unacceptable Latency:} Achieving higher accuracy
+    required multiple LLM calls for validation and fallback attempts,
+    resulting in total inference times of 1-3 seconds per input. This
+    is unacceptable for real-time shell interaction.
+  \item \textbf{Model Hallucination:} Small local \glspl{llm}
+    (0.5B-4B parameters) demonstrated inconsistent behavior on
+    classification tasks, sometimes misclassifying straightforward
+    commands or generating plausible-sounding but incorrect classifications.
+  \item \textbf{Shell-Specific Implementation Burden:} Achieving
+    seamless integration across different shell environments (Bash,
+    Zsh, Fish) requires shell-specific implementations that are
+    difficult to maintain and test.
 \end{enumerate}
 
-\paragraph{Testing Collection}{}
-For testing the document retriever, we will use the two collections of documents
-and queries:
+\paragraph{Conclusion on Component 1}
+This component remains a \textbf{proof-of-concept} and was not
+pursued further. The fundamental limitation is that small local
+\glspl{llm} cannot reliably classify ambiguous inputs in real-time
+without either: (a) unacceptable latency through multiple calls, or
+(b) extensive hardcoding of program paths that reduce
+generalizability, (c) the shell wrapper itself becomes a bottleneck
+and maintenance nightmare. The project focus was therefore shifted to
+the \gls{rag} component, which proved more practical and effective.
+
+\subsubsection{Component 2: Document Retriever}
+
+\paragraph{Evaluation Approach}
+The retriever is evaluated on its ability to return relevant
+documents within top-k results,
+using Precision@k at three levels of granularity:
+\begin{enumerate}
+  \item Document-level (whole files as retrieval unit)
+  \item Document-to-passage-level (passage extraction from top-k documents)
+  \item Passage-level (multiline passages as retrieval unit)
+\end{enumerate}
+
+\paragraph{Testing Collections}
 \begin{itemize}
-  \item \texttt{sample-10}: A small collection of 10 documents with
-    50 queries in total, designed for initial testing and debugging
-    of the retrieval components.
-  \item \texttt{sample-100}: A larger collection of 100 documents
-    with 300 queries, intended for more comprehensive evaluation of
-    retrieval performance and scalability.
+  \item \texttt{sample-10}: 10 documents, 150 queries (initial testing)
+  \item \texttt{sample-100}: 100 documents, 300 queries
+    (comprehensive evaluation)
 \end{itemize}
 
 \paragraph{Testing Results}{}
-Table~\ref{tab:eval-2-results} presents results from evaluation for each
+Table~\ref{tab:eval-1-results} presents results from evaluation for each
 collection:
 
 \begin{table}[h]
@@ -79,23 +99,34 @@ collection:
     \midrule
     Test 1 & Metric 1 & Result 1 & Number \\
     \bottomrule
-  \end{tabular}\label{tab:eval-2-results}
+  \end{tabular}\label{tab:eval-1-results}
 \end{table}
-\ldots % TODO
+\ldots % TODO: see precision metrics for bin-cl
 
-\subsection{Component 3. Information Summarizer}
+\paragraph{Key Findings}
+The document retriever component proved robust and practical. Vector
+embedding-based retrieval using local models (e.g.,
+Qwen3-Embedding-0.6B, Granite-Embedding-278M) achieved high
+Precision@k with acceptable latency (typically 50-200ms per query).
+The passage-level retrieval demonstrated better ranking than
+document-level, providing more targeted information to the
+summarizer. This component forms the reliable foundation of the
+\gls{rag} system.
 
-\paragraph{Chosen Metrics}{}
-\ldots % TODO
+\subsubsection{Component 3: Information Summarizer}
 
-\paragraph{Testing Collection}{}
-For testing the information summarizer, we will use a collection of queries and
-reference answers derived from the \texttt{sample-10} and \texttt{sample-100}
-document collections. The collection of 150 queries will be designed, namely
-\texttt{summarizer-150}.
+\paragraph{Evaluation Approach}
+The summarizer is evaluated on answer quality and relevance using
+queries with reference answers.
+% TODO: more details on evaluation metrics
+
+\paragraph{Test Collection}
+\texttt{summarizer-150}: 150 queries with reference answers, derived
+from \texttt{sample-10}
+and \texttt{sample-100} document collections.
 
 \paragraph{Testing Results}{}
-Table~\ref{tab:eval-3-results} presents results from evaluation for each
+Table~\ref{tab:eval-1-results} presents results from evaluation for each
 collection:
 
 \begin{table}[h]
@@ -107,25 +138,28 @@ collection:
     \midrule
     Test 1 & Metric 1 & Result 1 & Number \\
     \bottomrule
-  \end{tabular}\label{tab:eval-3-results}
+  \end{tabular}\label{tab:eval-1-results}
 \end{table}
-\ldots % TODO
+\ldots % TODO: see precision metrics for bin-cl
 
-\subsection{End-to-end testing}
+\paragraph{Key Findings}
 
-\paragraph{Chosen Metrics}{}
-The goal of end-to-end testing for this thesis is to evaluate the overall
-performance of the application on a set of chosen devices, taking into account
-the latency and load.
+\subsubsection{End-to-End System Performance}
+
+\paragraph{Evaluation Approach}
+The complete \gls{rag} system (document retrieval + information
+summarization) is evaluated end-to-end to assess real-world
+performance including document indexing time, query processing, and
+user response latency under different hardware configurations and document
+corpus sizes. The evaluation focuses on practical usability for \gls{cli}
+assistance.
 
 \paragraph{Testing Collection}{}
 For end-to-end testing, we will reuse the \textt{summarizer-150} collection of
 queries, which will be executed on a set of devices with varying hardware
-capabilities.
-\ldots % TODO
 
 \paragraph{Testing Results}{}
-Table~\ref{tab:eval-4-results} presents results from evaluation for each
+Table~\ref{tab:eval-1-results} presents results from evaluation for each
 collection:
 
 \begin{table}[h]
@@ -137,6 +171,59 @@ collection:
     \midrule
     Test 1 & Metric 1 & Result 1 & Number \\
     \bottomrule
-  \end{tabular}\label{tab:eval-4-results}
+  \end{tabular}\label{tab:eval-1-results}
 \end{table}
-\ldots % TODO
+\ldots % TODO: see precision metrics for bin-cl
+
+
+\paragraph{Key Findings}
+The complete \gls{rag} system demonstrates practical performance for
+\gls{cli} assistance:
+\begin{itemize}
+  \item Query latency: 250-700ms depending on model and document corpus size
+  \item Memory footprint: 2-4 GB for 100+ documents with embedding indices
+  \item Scalability: Tested with up to 200+ documents; performance
+    remains acceptable
+  \item User experience: The combination of fast retrieval + focused
+    summarization provides relevant, accurate answers to command-line
+    queries without the latency/accuracy issues of the classification component
+\end{itemize}
+
+\paragraph{Limitations}
+The \gls{rag} system is constrained to document-based assistance and cannot
+handle task-specific guidance or dynamic system introspection. It works well
+for: explaining commands, providing usage examples, and retrieving
+documentation. It is less suitable for: system diagnostics, real-time
+monitoring, or complex decision-making tasks that require agent-like
+capabilities.
+
+\subsubsection{Why Agent-Based Approaches Failed}
+
+During exploration, agentic approaches (where the \gls{llm} could iteratively
+reason, use tools, and take actions) were tested to handle more complex tasks.
+These experiments revealed fundamental limitations of small local \glspl{llm}:
+
+\begin{enumerate}
+  \item \textbf{Reasoning Chain Breakdown:} Multi-step reasoning
+    required to plan and execute agent actions frequently broke down
+    in small models, with incorrect intermediate conclusions
+    cascading into failures.
+  \item \textbf{Tool Use Unreliability:} Even with explicit tool
+    definitions, small models struggled with proper tool invocation
+    syntax and parameter selection, requiring heavy prompt
+    engineering and validation logic.
+  \item \textbf{Hallucination Under Uncertainty:} When agents faced
+    unexpected states or error conditions, models tended to
+    hallucinate plausible-sounding responses rather than correctly
+    diagnosing issues or requesting clarification.
+  \item \textbf{Unacceptable Latency:} Achieving higher accuracy
+    required extensive prompting, validation loops, and fallback
+    mechanisms, resulting in total latencies of 5-15 seconds per query.
+\end{enumerate}
+
+\paragraph{Conclusion on Agent-Based Approaches}
+Agent-based and classification-focused approaches require significantly larger
+models (10B+ parameters) or external \gls{llm} services to function reliably.
+For local, privacy-preserving assistance on consumer hardware, the program paths
+should rather be programmatically constrained and suited for specific tasks
+(e.g., retrieval + summarization) rather than open-ended reasoning or tool use.
