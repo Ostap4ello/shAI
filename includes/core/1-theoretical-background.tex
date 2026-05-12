@@ -16,7 +16,7 @@ The definition of the interface is adopted from Branden Hookway's book
       two or more separate components of a computer system exchange information.
       The exchange can be between software, computer hardware, peripheral
   devices, humans, and combinations of these}}\cite{hookway2014}.
-\end{quote}\\
+\end{quote}~\\
 
 \subsubsection{Terminal emulator, Terminal Application}
 
@@ -151,7 +151,7 @@ groups\cite{khan2026retrieval}:
   \item \textbf{Sparse vector representations (sparse retrieval):} This
     method mostly relies on traditional keyword-based approaches,
     such as \gls{bow}, one-hot encoding, \gls{lsindexing} or
-    \gls{tf-idf} to retrieve documents based on the presence or
+    \gls{tfidf} to retrieve documents based on the presence or
     quantity of specific terms. It is computationally efficient and
     works well for simple queries, but it may struggle with complex
     queries or those that require understanding of context and
@@ -446,7 +446,7 @@ capabilities. We can define the workflow of \gls{llm} Agents
 \begin{lstlisting}[,
   caption={Pseudocode for \gls{llm} Agent workflow},
   label={lst:agent},
-  language=pseudo,
+  language={},
   style=code-listing,
   float
 ]
@@ -484,7 +484,7 @@ pseudocode in Listing\ \ref{lst:rag}.
 \begin{lstlisting}[,
   caption={Pseudocode for \gls{rag} workflow},
   label={lst:rag},
-  language=pseudo,
+  language={},
   style=code-listing,
   float
 ]
@@ -690,7 +690,7 @@ useful when users typically only examine the top few results.
 
 \paragraph{Normalized Discounted Cumulative Gain (NDCG)}
 
-\textbf{Normalized Discounted Cumulative Gain} combines relevance judgments with
+\textbf{\gls{ndcg}} combines relevance judgments with
 ranking position to account for the fact that lower-ranked relevant documents
 are less valuable than higher-ranked ones:
 
@@ -699,7 +699,7 @@ are less valuable than higher-ranked ones:
 \]
 
 where \textsl{rel\textsubscript{i}} is the relevance score of the document at
-position i. \gls{ndcg} normalizes this by the ideal ranking (IDCG) to produce a
+position i.\ \gls{ndcg} normalizes this by the ideal ranking (IDCG) to produce a
 score between 0 and 1. NDCG is valuable for assessing ranking quality when there
 are multiple levels of relevance (e.g., highly relevant, partially relevant, not
 relevant).
