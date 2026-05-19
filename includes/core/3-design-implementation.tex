@@ -59,7 +59,7 @@ process:
     provide programmatic interface for dense search and managing
     documents. It will use a locally run embedding model to index
     these documents and enable contextual search.
-  \item \textbf{Information Summarizer (RAG Module)}
+  \item \textbf{Master Information Summarizer (RAG Module)}
     This component serves as master for \gls{rag} system, passing
     user query to \textbf{Information Retriever} and processing its outputs.
 \end{enumerate}
@@ -276,7 +276,7 @@ embeddings. This choice was motivated by:
     with no complex server setup or external dependencies, making it
     ideal for prototype development.
 
-  \item \textbf{File-Oriented Storage} --- Annoy saves indices
+\item \textbf{File-Oriented Storage} --- \gls{faiss} saves indices
     to disk files, allowing persistent storage of embeddings without
     requiring a running database server.
 \end{itemize}
@@ -291,16 +291,15 @@ Tables\ \ref{tab:llm-summary} and\ \ref{tab:embedding-summary}.
   \centering
   \scriptsize
   \caption{Summary of \glspl{llm} used in experiments (parameters,
-  context, and licensing).}
-  \label{tab:llm-summary}
-  \begin{tabularx}{\textwidth}{XlXXX}
+  context, and licensing).}\label{tab:llm-summary}
+    \begin{tabularx}{\textwidth}{XXXXX}
     \toprule
     \textbf{Model} & \textbf{Params} & \textbf{Context} &
     \textbf{License} & \textbf{Training data (public disclosure)} \\
     \midrule
-    Qwen2.5-0.5B-Instruct & 0.5B & 32K (up to 128K; 8K gen) & Apache 2.0 &
+    Qwen2.5-0.5B-Instruct & 0.5B & 32K \newline (up to 128K;\ 8K gen) & Apache 2.0 &
     Up to 18T tokens (family-level disclosure). \\
-    Qwen2.5-1.5B-Instruct & 1.5B & 32K (up to 128K; 8K gen) & Apache 2.0 &
+    Qwen2.5-1.5B-Instruct & 1.5B & 32K \newline (up to 128K;\ 8K gen) & Apache 2.0 &
     Up to 18T tokens (family-level disclosure). \\
     Qwen3-0.6B & 0.6B & 32K & Apache 2.0 &
     \textasciitilde{}36T tokens; web + doc-like corpora + synthetic
@@ -308,7 +307,7 @@ Tables\ \ref{tab:llm-summary} and\ \ref{tab:embedding-summary}.
     Qwen3-1.7B & 1.7B & 32K & Apache 2.0 &
     \textasciitilde{}36T tokens; web + doc-like corpora + synthetic
     math/code (family-level disclosure). \\
-    Granite-3.1-1B-A400M-Instruct (\gls{moe}) & 1.3B (400M active) & 128K &
+    Granite-3.1-1B-A400M-Instruct (\gls{moe}) & 1.3B \newline (400M active) & 128K &
     Apache 2.0 & 10T tokens (\gls{moe}); SFT mix as above (high-level disclosure). \\
     Gemma 3 (Google) & 4B & 32K & Gemma Terms of Use &
     Token counts disclosed; broad web/code/math/image sources
@@ -322,8 +321,7 @@ Tables\ \ref{tab:llm-summary} and\ \ref{tab:embedding-summary}.
   \centering
   \scriptsize
   \caption{Summary of embedding models used in experiments
-  (dimension, context, and licensing).}
-  \label{tab:embedding-summary}
+  (dimension, context, and licensing).}\label{tab:embedding-summary}
   \begin{tabularx}{\textwidth}{XlllX}
     \toprule
     \textbf{Model} & \textbf{Params} & \textbf{Context} &
