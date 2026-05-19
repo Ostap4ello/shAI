@@ -157,12 +157,20 @@ terminal. Hovewer, this approach turned out to be somewhat clunky in
 practice, as it couldn't handle well the ~\gls{tui} applications, but
 only get bash's responses\cite{aiterm-web}.
 
+\paragraph{OpenClaw}
+While not strictly a terminal assistant, OpenClaw is an open-source project that
+runs locally on user machines and provides various \gls{ai} capabilities through
+a \gls{gui} or chat interface. It's focus is on general-purpose machine
+maintenance and system management tasks, but it is not focused on small local
+\glspl{llm} and terminal integration\cite{openclaw-web}. It demonstrates the
+possible alternative approach to interation with local \gls{ai}-enabled system.
+
 \paragraph{Other solutions}
 
 There are also such solutions, like \textsl{ai-terminal-assistent (github)}{}
 or \textsl{cmd-ai (github)}, which are just wrappers for Rest \gls{api} calls to
 remote \glspl{llm}. They provide basic \gls{ai} capabilities in terminal, but
-have no significant features.
+have no significant features.\\
 
 \paragraph{Analysis of Existing Solutions}
 
@@ -175,7 +183,7 @@ informed the design of \textbf{ShAI}, leading us to focus on a \gls{rag}-based a
 optimized for small local \glspl{llm}, with fine-grained prompts and modular components
 to minimize hallucination and improve task-specific performance.
 
-\subsection{Technology \& Design Evolution}\label{sec:design-evolution}
+\subsection{Thesis Scope Evolution}\label{sec:design-evolution}
 
 The scope of this thesis has changed through multiple iterations as existing
 solutions were found and analyzed and either already existing solutions were
