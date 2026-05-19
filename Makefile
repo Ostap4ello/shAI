@@ -27,7 +27,7 @@ clean-diagrams:
 	rm -rf diagrams/out
 	mkdir -p diagrams/out
 
-pdf: diagrams pdf.thesis pdf.usernotes
+pdf: pdf.thesis pdf.usernotes
 
 clean-pdf: pdf.thesis-clean pdf.thesis pdf.usernotes
 
