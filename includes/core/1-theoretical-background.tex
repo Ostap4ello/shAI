@@ -615,7 +615,7 @@ performance on the target task while keeping low training effort and costs.
 While not used in this thesis, it is important to mention these techniques as
 relevant concepts.
 
-\subsection{Document Representation For Retrieval}
+\subsection{Document Representation And Retrieval}
 
 This section provides the background on the techniques for representing
 documents in a way that allows for accurate retrieval. It also describes the
@@ -623,21 +623,13 @@ techniques for generating the semantic vector representations of documents,as
 well as the storage and retrieval of these representations using vector
 databases.
 
-\subsubsection{Text Summarization}
+\subsubsection{Document Representation}\label{emb:semvec}
 
-\textbf{Text summarization} is defined as the process of a short, accurate, and
-fluent summary of a longer text document. This technique is extensively used in
-various applications, such as intent-classification, question-answering, and
-information retrieval\cite{zhang2024systematicsurveytextsummarization}.
-
-For the purpose of this thesis, we will focus on the single-document
-summarization, with generation of semantic vector representation of
-the document as the main goal.\\
-
-\subsubsection{Semantic Document Search and Retrieval}\label{emb:semvec}
-
-Currently, the semantic representation of
-documents is generally categorized into two primary
+\paragraph{Semantic representation of documents} is the process of converting
+documents into a format that captures their meaning. In scope of this thesis, we
+are interested in the techniques that create numerical representations of
+documents, which are much better for the machine to process. Currently, the
+semantic representation of documents is generally categorized into two primary
 groups\cite{khan2026retrieval}:
 
 \begin{itemize}
@@ -666,29 +658,30 @@ groups\cite{khan2026retrieval}:
     traditional sparse retrieval.
 \end{itemize}
 
-The original article also mentions \textbf{hybrid retrieval techniques},
-that aim to combine the computational efficiency of sparse methods
-with the ability of dense representations to alleviate the vocabulary
-mismatch problem described in the article. These techniques typically
-utilize \textbf{document expansion} to bridge the gap between exact
-lexical matches and semantic meaning.
-\textsl{For example, the
-  SPLADE model expands the sparse representation of a document or query
-  with semantically related terms, allowing for better retrieval
-performance even when exact keywords are missing..}
-The thesis is not going to focus on the hybrid retrieval techniques,
-but it is important to acknowledge the existence of such techniques,
-as they can be used in the future research to further improve the
-retrieval performance of the system.\\
+The original article also mentions \textbf{hybrid retrieval techniques}, that
+aim to combine the computational efficiency of sparse methods with the ability
+of dense representations to alleviate the vocabulary mismatch problem described
+in the article. These techniques typically utilize \textbf{document expansion}
+to bridge the gap between exact lexical matches and semantic meaning.
+\textsl{For example, the SPLADE model expands the sparse representation of a
+document or query with semantically related terms, allowing for better retrieval
+performance even when exact keywords are missing..} The thesis is not going to
+focus on the hybrid retrieval techniques, but it is important to acknowledge the
+existence of such techniques, as they can be used in the future research to
+further improve the retrieval performance of the system.\\
 
-\subsubsection{Dense Representation Vector Generation}
+For the purpose of this research, we will focus on dense retrieval, as it is
+more suitable for complex queries and can capture the semantic meaning of the
+documents, which is more relevant for the task of choosing the right document
+based on the user query.
 
-\textbf{Dense representation vector generation} is also an important
-aspect of the representation of documents. As the embedding
-layer\ref{sec:emb-layer} of either dense or sparse retrieval
-represents the document as a collection of vectors, one for each
-token, it is important to have the techniques to generate the single
-vector that represents this whole collection.
+% TODO: why going to dense (natlang, better acc)
+\paragraph{Dense representation vector generation}
+is an important aspect of the representation of documents. As the embedding
+layer~\ref{sec:emb-layer} of either dense or sparse retrieval represents the
+document as a collection of vectors, one for each token, it is important to have
+the techniques to generate the single vector that represents this whole
+collection.
 
 \begin{itemize}
   \item \textbf{Classical Approaches:} Theese techniques include
@@ -725,18 +718,25 @@ vector that represents this whole collection.
     summarization, it is often necessary to have single-topic documents}
 \end{itemize}
 
-\subsubsection{Vector Databases}\label{sec:vector-db}
+\subsubsection{Document Storage and Retrieval}
 
-\textbf{Vector databases} are specialized databases designed to store and
-manage high-dimensional vector data and perform efficient similarity search
-based on different metrics (e.g., cosine similarity, L2 or Euclidean distance).
-Examples of vector databases include \gls{faiss}\cite{faiss2026},
-\gls{annoy}\cite{annoy2026}, and Milvus\cite{milvus2026}.
+When document representations are generated, they need to be stored in a way
+that allows for efficient retrieval based on similarity. For chosen purpose, we
+focus on the storage and retrieval of dense vector representations. For this
+purpose, \textbf{vector databases} are used.
 
-For the purpose of this research, we will be using dense retrieval, as it is
-more suitable for complex queries and can capture the semantic meaning of the
-documents, which is more relevant for the task of choosing the right document
-based on the user query.
+\paragraph{Vector databases}\label{sec:vector-db} are specialized databases
+designed to store and manage high-dimensional vector data and perform efficient
+similarity search based on different metrics (e.g., cosine similarity, L2 or
+Euclidean distance). Examples of vector databases include
+\gls{faiss}\cite{faiss2026}, \gls{annoy}\cite{annoy2026}, and
+Milvus\cite{milvus2026}. Simplest way to use vector database is to store the
+vector representations of documents along with corresponding metadata (e.g.,
+document identifier, title), and then retrieve the most similar documents based
+on the similarity between the vector, generated from the user query, and the
+stored document vectors.\\
+
+% TODO: more details on vector databases, how they work, how to use them, etc.
 
 
 \subsection{Linux Manual Pages}
@@ -745,22 +745,21 @@ In this thesis and implementation, we focus on processing linux man manual pages
 as data for testing and validation and by the term \textbf{document} we will
 mean a man manual page.
 
-In this part we provide the description of the main conventions for
-man pages, which are relevant for the solution.
+In this part we provide the description of the main conventions for man pages,
+which are relevant for the solution.
 
 man is the system's manual pager. Each page argument given to man is normally
-the name of a program, utility or function. The manual page associated with
-each of these arguments is then found and displayed. A section, if provided,
-will direct man to look only in that section of the manual\cite{man_man}.
+the name of a program, utility or function. The manual page associated with each
+of these arguments is then found and displayed. A section, if provided, will
+direct man to look only in that section of the manual\cite{man_man}.
 
 Conventionally, manual pages are divided into several groups, which are listed
-in\ Table \ref{t:man-groups}.
-A manual page consists of several sections. Conventional section
-names are listed in\ \ref{t:man-sections}. The most important sections for the
-purpose of this thesis are \textbf{DESCRIPTION}, which provides a detailed
-description of the program, its functionality and usage, and \textbf{OPTIONS},
-which lists the flags and arguments that can be used with the program, along
-with their descriptions.
+in\ Table \ref{t:man-groups}. A manual page consists of several sections.
+Conventional section names are listed in\ \ref{t:man-sections}. The most
+important sections for the purpose of this thesis are \textbf{DESCRIPTION},
+which provides a detailed description of the program, its functionality and
+usage, and \textbf{OPTIONS}, which lists the flags and arguments that can be
+used with the program, along with their descriptions.
 
 \begin{table}
   \caption{Conventional man page groups}\label{t:man-groups}
