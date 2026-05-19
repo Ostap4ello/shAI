@@ -1,8 +1,23 @@
-This document describes the process of designing and developing a Local
-LLM-based Terminal Assistant for Linux CLI with RAG functionality to assist
-users in retrieving relevant information from various sources, such as Linux
-manual pages. The document covers the analysis of existing solutions, the
-design and implementation of the assistant. The goal is to assess how well the
-assistant, powered by small local LLMs, performs in various usage scenarios.
+This thesis investigates whether a practical Linux \gls{cli} assistant can be
+built with small local \glspl{llm} under strict offline and privacy constraints.
+After surveying existing assistants, the work identifies heavy reliance on
+remote APIs and limited suitability of agentic workflows for local models. It
+proposes shAI, a modular \gls{rag}-based prototype composed of a
+command-vs.-query classifier, a document retriever that indexes Linux man pages,
+and a summarizer that generates concise answers from retrieved passages. The
+implementation uses Ollama for local inference and \gls{faiss} for vector
+indexing.
 
-% replace acronyms?
+Evaluation is component-focused. The classifier was tested on a balanced
+\texttt{classifier-100} dataset; the best model achieved 88\% accuracy but
+required 2.9s per query, while smaller models remained near chance-level. The
+retriever was evaluated on \texttt{sample-10} (14 documents, 250 queries) and
+\texttt{sample-100} (101 documents, 300 queries). Document-level retrieval
+achieved Top-5 accuracy up to 100\% and 92\% respectively, with low per-query
+latency for Granite embeddings; passage re-ranking increased latency without
+improving Top-1 accuracy.
+
+The results show that embedded-LLM-focused architectures are practical for local
+\gls{cli} assistance, while  agentic and open-ended approaches remain unreliable
+on small models. The thesis delivers an open-source prototype and empirical
+guidance for future work on model optimization and constrained tasks.
