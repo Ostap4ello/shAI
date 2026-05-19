@@ -1,1 +1,110 @@
-% TODO
+% This thesis explores whether a practical Linux \gls{cli} assistant can be built
+% on small local \glspl{llm} without network dependency. The motivation is to
+% combine the usability benefits of natural-language assistance with the privacy
+% and latency advantages of offline execution. The work therefore targets
+% resource-constrained hardware and explicitly evaluates which architectural
+% approaches remain reliable under these constraints.
+%
+% \paragraph{Theoretical Background}
+% The theoretical background introduces terminal interfaces (\gls{cli} and
+% \gls{tui}), provides an overview of modern \glspl{llm} based on transformers,
+% along with advanced concepts like \gls{moe}, agents, \gls{rag}. It explains
+% embedding models, semantic search, \gls{rag} nuances and testing. Then, Linux
+% man pages are also defined, along with relevant conventions needed for document
+% processing.
+%
+% \paragraph{Analysis of Existing Solutions And Technologies}
+% Next part of thesis provides an analysis of existing assistants (e.g., shell
+% companions, agentic \gls{cli} tools, and terminal emulators) and shows heavy
+% reliance on remote APIs or large models and highlights poor reliability of
+% agentic workflows when run locally. Based on this analysis, the thesis documents
+% a scope evolution from ambitious shell automation to a narrower, testable
+% \gls{rag}-centered design that minimizes hallucination and reduces prompt size.
+%
+% \paragraph{Design and Implementation}
+% The final system, shAI, is a modular monolithic application with three
+% components: a classifier that distinguishes commands from questions, a document
+% retriever that indexes local man pages, and a summarizer that generates concise
+% answers from retrieved passages. Implementation details include converting man
+% pages to plain text, building vector indices with \gls{faiss}, and running models
+% via Ollama's OpenAI-compatible API. The design favors small prompts, controlled
+% context windows, and configurable retrieval parameters to keep latency low.
+%
+% \paragraph{Evaluation and Key Findings}
+% Evaluation is component-focused. The classifier was tested on a balanced
+% \texttt{classifier-100} dataset across multiple local models; the best accuracy
+% was 88\% but required 2.9s per query, while smaller models stayed near chance,
+% making real-time classification impractical. The retriever was evaluated on
+% \texttt{sample-10} (14 documents, 250 queries) and \texttt{sample-100} (101
+% documents, 300 queries). Document-level retrieval achieved Top-5 accuracy up to
+% 100\% and 92\% respectively; Granite embeddings provided the lowest query
+% latencies, while qwen3-embedding produced longer index build times on larger
+% corpora. Passage re-ranking increased latency without improving Top-1 accuracy,
+% and passage-level retrieval matched document-level precision.
+%
+% \paragraph{Conclusion And Discussion}
+% The thesis concludes that local \gls{llm} assistants are viable when constrained
+% to retrieval and summarization, while classification-heavy and agentic designs
+% remain unreliable on small models. It delivers an open-source prototype and
+% empirical benchmarks that guide future work toward model optimization,
+% UI improvements, and additional constrained tasks, along with future end-to-end
+% evaluation of summarization quality.
+
+Táto diplomová práca skúma, či je možné zostaviť praktického linuxového
+asistenta príkazového riadka (\gls{cli}) na báze malých lokálnych \glspl{llm}
+bez závislosti od siete. Motiváciou je skombinovať výhody použiteľnosti
+asistencie založenej na prirodzenom jazyku s výhodami súkromia a latencie pri
+offline spustení. Práca sa preto zameriava na hardvér s obmedzenými zdrojmi a
+explicitne vyhodnocuje, ktoré architektonické prístupy zostávajú pri týchto
+obmedzeniach spoľahlivé.
+
+\paragraph{Teoretické východiská}
+Teoretické východiská predstavujú rozhrania terminálu (\gls{cli} a \gls{tui}),
+poskytujú prehľad moderných \glspl{llm} založených na architektúre Transformer,
+spolu s pokročilými konceptmi ako \gls{moe}, agenti a \gls{rag}. Vysvetľujú sa v
+nich modely na vytváranie vektorových reprezentácií (embeddingy), sémantické
+vyhľadávanie, nuansy \gls{rag} a testovanie. Ďalej sú definované manuálové
+stránky Linuxu (man pages), spolu s príslušnými konvenciami potrebnými na
+spracovanie dokumentov.
+
+\paragraph{Analýza existujúcich riešení a technológií}
+Nasledujúca časť práce poskytuje analýzu existujúcich asistentov (napr.
+spoločníkov do shellu, agentných \gls{cli} nástrojov a terminálových emulátorov)
+a poukazuje na silnú závislosť od vzdialených API alebo veľkých modelov, pričom
+zdôrazňuje nízku spoľahlivosť agentných pracovných postupov pri lokálnom
+spustení. Na základe tejto analýzy práca dokumentuje vývoj rozsahu od
+ambicióznej automatizácie shellu až po užší dizajn zameraný na \gls{rag}, ktorý
+minimalizuje halucinácie a znižuje veľkosť promptov.
+
+\paragraph{Návrh a implementácia}
+Finálny systém, shAI, je modulárna monolitická aplikácia s tromi komponentmi:
+klasifikátorom, ktorý rozlišuje príkazy od otázok, vyhľadávačom dokumentov,
+ktorý indexuje lokálne manuálové stránky, a sumarizátorom, ktorý generuje
+stručné odpovede z vyhľadaných pasáží. Implementačné detaily zahŕňajú prevod
+manuálových stránok na čistý text, budovanie vektorových indexov pomocou
+\gls{faiss} a spúšťanie modelov prostredníctvom API kompatibilného s OpenAI v
+rámci Ollama. Dizajn uprednostňuje malé prompty, kontrolované okná kontextu a
+konfigurovateľné parametre vyhľadávania, aby sa udržala nízka latencia.
+
+\paragraph{Vyhodnotenie a kľúčové zistenia}
+Vyhodnotenie je zamerané na jednotlivé komponenty. Klasifikátor bol testovaný na
+vyváženej množine údajov \texttt{classifier-100} naprieč viacerými lokálnymi
+modelmi; najlepšia presnosť bola 88 %, avšak vyžadovala 2,9 s na dotaz, zatiaľ
+čo menšie modely zostali na úrovni náhody, čo robí klasifikáciu v reálnom čase
+nepraktickou. Vyhľadávač bol vyhodnotený na \texttt{sample-10} (14 dokumentov,
+250 dotazov) a \texttt{sample-100} (101 dokumentov, 300 dotazov). Vyhľadávanie
+na úrovni dokumentov dosiahlo presnosť Top-5 až 100 %, resp. 92 %; modely
+Granite na embeddingy poskytli najnižšiu latenciu dotazov, zatiaľ čo
+qwen3-embedding produkoval dlhšie časy budovania indexu pri väčších korpusoch.
+Preusporiadanie pasáží (re-ranking) zvýšilo latenciu bez zlepšenia presnosti
+Top-1 a vyhľadávanie na úrovni pasáží dosiahlo rovnakú presnosť ako vyhľadávanie
+na úrovni dokumentov.
+
+\paragraph{Záver a diskusia}
+Práca dospieva k záveru, že lokálni asistenti na báze \gls{llm} sú
+životaschopní, ak sa obmedzia na vyhľadávanie a sumarizáciu, zatiaľ čo návrhy
+založené na intenzívnej klasifikácii a agentnom správaní zostávajú na malých
+modeloch nespoľahlivé. Práca prináša open-source prototyp a empirické
+benchmarky, ktoré usmerňujú budúcu prácu smerom k optimalizácii modelov,
+vylepšeniam používateľského rozhrania a ďalším obmedzeným úlohám, spolu s
+budúcim komplexným vyhodnotením kvality sumarizácie.
