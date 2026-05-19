@@ -1,16 +1,16 @@
 
-\subsubsection{Component 1: Natural Language vs. Shell Command Classifier}
+\subsection{Component 1: Natural Language vs. Shell Command Classifier}
 
 \paragraph{Evaluation Approach}{}
 The testing for this component focuses on evaluating the accuracy of input
-classification and consists of testing two versions of the classifier, and will
-classify a collection of test inputs on binary classification accuracy for both
-approaches (see\ \ref{sec:classifier-approaches} for details on the approaches):
+classification across different local \gls{llm} models. A fixed, balanced dataset
+is classified into natural language vs.\ shell command inputs (see\
+\ref{sec:classifier-approaches} for details on the approaches).
 
 \paragraph{Testing Collections}{}
-For testing the classifier, we will use manually curated collection
-\texttt{classifier-100} of 100 inputs, which includes a balanced mix of natural
-language queries and shell command inputs. It must be classified as follows:
+For testing the classifier, the manually curated collection
+\texttt{classifier-100} contains 100 inputs with a balanced mix of natural
+language queries and shell command inputs. It is split as follows:
 \begin{itemize}
   \item 50 natural language queries (e.g., ``How do I list files in a
     directory? '')
@@ -18,43 +18,42 @@ language queries and shell command inputs. It must be classified as follows:
 \end{itemize}
 
 \paragraph{Testing Results}{}
-Table~\ref{tab:eval-1-results} presents results from evaluation for each
-collection:
+Table~\ref{tab:eval-classifier-results} summarizes the classification accuracy
+and average per-query latency for each model:
 
 \begin{table}[h]
   \centering
-  \caption{Evaluation results on \ldots} % TODO
-  \begin{tabular}{lccc}
+  \caption{Binary classification results on \texttt{classifier-100}.}
+  \begin{tabular}{lcc}
     \toprule
-    \textbf{Test} & \textbf{Metric} & \textbf{Result} & \textbf{Avg Latency} \\
+    \textbf{Model} & \textbf{Accuracy} & \textbf{Avg Latency (s)} \\
     \midrule
-    Test 1 & Metric 1 & Result 1 & Number \\
+    ibm/granite3.1-moe:1b & 53.0\% & 0.278 \\
+    ibm/granite3.1-moe:3b & 60.0\% & 0.101 \\
+    ibm/granite3.1-dense:2b & 83.0\% & 0.377 \\
+    qwen3:0.6b & 79.0\% & 1.183 \\
+    qwen3:1.7b & 88.0\% & 2.871 \\
+    qwen2.5:0.5b & 50.0\% & 0.180 \\
+    qwen2.5:1.5b & 78.0\% & 0.150 \\
+    gemma3:1b & 65.0\% & 0.233 \\
     \bottomrule
-  \end{tabular}\label{tab:eval-1-results}
+  \end{tabular}\label{tab:eval-classifier-results}
 \end{table}
-\ldots % TODO: see precision metrics for bin-cl
 
 \paragraph{Key Findings and Limitations}
 Evaluation and testing of this component revealed critical limitations that
 prevented deployment:
 
 \begin{enumerate}
-  \item \textbf{Poor Classification Accuracy:} Both the LLM-only and
-    syntax-checker hybrid approaches exhibited accuracy below 70\% on
-    ambiguous inputs, with particularly poor performance on edge
-    cases common in real-world usage.
-  \item \textbf{Unacceptable Latency:} Achieving higher accuracy
-    required multiple LLM calls for validation and fallback attempts,
-    resulting in total inference times of 1-3 seconds per input. This
-    is unacceptable for real-time shell interaction.
-  \item \textbf{Model Hallucination:} Small local \glspl{llm}
-    (0.5B-4B parameters) demonstrated inconsistent behavior on
-    classification tasks, sometimes misclassifying straightforward
-    commands or generating plausible-sounding but incorrect classifications.
-  \item \textbf{Shell-Specific Implementation Burden:} Achieving
-    seamless integration across different shell environments (Bash,
-    Zsh, Fish) requires shell-specific implementations that are
-    difficult to maintain and test.
+  \item \textbf{Accuracy Ceiling:} Even the best-performing model
+    (qwen3:1.7b) reached only 88\% accuracy on a balanced dataset, while several
+    smaller models remained near chance-level performance (50--65\%).
+  \item \textbf{Latency vs.\ Accuracy Trade-off:} Higher accuracy required
+    larger models with substantially higher latency (up to 2.9s per query),
+    which is too slow for interactive shell use.
+  \item \textbf{Inconsistent Behavior on Ambiguous Inputs:} Misclassifications
+    were frequent on short or context-dependent prompts, which are common in
+    CLI workflows.
 \end{enumerate}
 
 \paragraph{Conclusion on Component 1}
@@ -67,51 +66,133 @@ generalizability, (c) the shell wrapper itself becomes a bottleneck
 and maintenance nightmare. The project focus was therefore shifted to
 the \gls{rag} component, which proved more practical and effective.
 
-\subsubsection{Component 2: Document Retriever}
+\subsection{Component 2: Document Retriever}
 
 \paragraph{Evaluation Approach}
-The retriever is evaluated on its ability to return relevant
-documents within top-k results,
-using Precision@k at three levels of granularity:
+The retriever is evaluated on its ability to return relevant documents within
+top-k results using Precision@k and MRR, with three automated test variants:
 \begin{enumerate}
-  \item Document-level (whole files as retrieval unit)
-  \item Document-to-passage-level (passage extraction from top-k documents)
-  \item Passage-level (multiline passages as retrieval unit)
+  \item Document-level retrieval (test1)
+  \item Document retrieval with passage-level re-ranking (test2)
+      \textit{(retrieving documents first, then re-ranking passages within them, evaluating by passage matches)}
+  \item Passage-scope retrieval (test3)
 \end{enumerate}
+Test1 checks whether the correct document appears in the top-k results. Test2
+first retrieves top-k documents and then re-ranks passages within them
+(top\_k\_extended=10) to locate the expected section. Test3 indexes and retrieves
+passages directly (passage\_size=20 lines), evaluating whether the correct
+document is found via passage matches.
 
 \paragraph{Testing Collections}
 \begin{itemize}
-  \item \texttt{sample-10}: 10 documents, 150 queries (initial testing)
-  \item \texttt{sample-100}: 100 documents, 300 queries
-    (comprehensive evaluation)
+  \item \texttt{sample-10}: 14 documents, 250 queries
+  \item \texttt{sample-100}: 101 documents, 300 queries
 \end{itemize}
 
 \paragraph{Testing Results}{}
-Table~\ref{tab:eval-1-results} presents results from evaluation for each
-collection:
+Tables~\ref{tab:eval-retriever-sample10-doc}--\ref{tab:eval-retriever-sample100-passage}
+summarize document-level retrieval (test1), passage-level re-ranking (test2), and
+passage-level retrieval (test3). All tests used top\_k=5; test2 uses
+top\_k\_extended=10.
 
 \begin{table}[h]
   \centering
-  \caption{Evaluation results on \ldots} % TODO
-  \begin{tabular}{lccc}
+  \caption{Document-level retrieval on \texttt{sample-10} (test1).}
+  \begin{tabular}{lccccc}
     \toprule
-    \textbf{Test} & \textbf{Metric} & \textbf{Result} & \textbf{Avg Latency} \\
+    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg Latency (s)} & \textbf{Index Build (s)} \\
     \midrule
-    Test 1 & Metric 1 & Result 1 & Number \\
+    ibm/granite-embedding:30m & 83.6\% & 95.2\% & 0.881 & 0.071 & 0.348 \\
+    ibm/granite-embedding:125m & 85.2\% & 92.4\% & 0.880 & 0.075 & 16.603 \\
+    ibm/granite-embedding:278m & 84.8\% & 87.6\% & 0.861 & 0.099 & 2.292 \\
+    qwen3-embedding:0.6b & 86.8\% & 100.0\% & 0.916 & 0.074 & 17.503 \\
     \bottomrule
-  \end{tabular}\label{tab:eval-1-results}
+  \end{tabular}\label{tab:eval-retriever-sample10-doc}
 \end{table}
-\ldots % TODO: see precision metrics for bin-cl
+
+\begin{table}[h]
+  \centering
+  \caption{Document retrieval with passage re-ranking on \texttt{sample-10} (test2).}
+  \begin{tabular}{lccccc}
+    \toprule
+    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg Latency (s)} & \textbf{Index Build (s)} \\
+    \midrule
+    ibm/granite-embedding:30m & 48.4\% & 87.2\% & 0.628 & 0.817 & 1.138 \\
+    ibm/granite-embedding:125m & 39.2\% & 87.6\% & 0.557 & 1.264 & 1.044 \\
+    ibm/granite-embedding:278m & 46.4\% & 81.6\% & 0.594 & 1.514 & 1.900 \\
+    qwen3-embedding:0.6b & 55.2\% & 94.0\% & 0.685 & 3.777 & 10.322 \\
+    \bottomrule
+  \end{tabular}\label{tab:eval-retriever-sample10-rerank}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \caption{Passage-level retrieval on \texttt{sample-10} (test3).}
+  \begin{tabular}{lccccc}
+    \toprule
+    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg Latency (s)} & \textbf{Index Build (s)} \\
+    \midrule
+    ibm/granite-embedding:30m & 83.6\% & 95.2\% & 0.881 & 0.028 & 1.075 \\
+    ibm/granite-embedding:125m & 85.2\% & 92.4\% & 0.880 & 0.032 & 1.002 \\
+    ibm/granite-embedding:278m & 84.8\% & 87.6\% & 0.861 & 0.099 & 2.134 \\
+    qwen3-embedding:0.6b & 86.8\% & 100.0\% & 0.916 & 0.074 & 10.684 \\
+    \bottomrule
+  \end{tabular}\label{tab:eval-retriever-sample10-passage}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \caption{Document-level retrieval on \texttt{sample-100} (test1).}
+  \begin{tabular}{lccccc}
+    \toprule
+    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg Latency (s)} & \textbf{Index Build (s)} \\
+    \midrule
+    ibm/granite-embedding:30m & 62.7\% & 86.3\% & 0.724 & 0.043 & 2.270 \\
+    ibm/granite-embedding:125m & 69.7\% & 88.7\% & 0.768 & 0.036 & 1.706 \\
+    ibm/granite-embedding:278m & 65.7\% & 84.0\% & 0.734 & 0.098 & 1.652 \\
+    qwen3-embedding:0.6b & 72.7\% & 92.0\% & 0.806 & 0.074 & 128.222 \\
+    \bottomrule
+  \end{tabular}\label{tab:eval-retriever-sample100-doc}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \caption{Document retrieval with passage re-ranking on \texttt{sample-100} (test2).}
+  \begin{tabular}{lccccc}
+    \toprule
+    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg Latency (s)} & \textbf{Index Build (s)} \\
+    \midrule
+    ibm/granite-embedding:30m & 42.7\% & 72.7\% & 0.530 & 0.595 & 2.132 \\
+    ibm/granite-embedding:125m & 43.0\% & 77.0\% & 0.539 & 0.802 & 2.451 \\
+    ibm/granite-embedding:278m & 45.7\% & 72.7\% & 0.549 & 1.192 & 3.219 \\
+    qwen3-embedding:0.6b & 45.7\% & 79.7\% & 0.571 & 3.745 & 128.563 \\
+    \bottomrule
+  \end{tabular}\label{tab:eval-retriever-sample100-rerank}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \caption{Passage-level retrieval on \texttt{sample-100} (test3).}
+  \begin{tabular}{lccccc}
+    \toprule
+    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg Latency (s)} & \textbf{Index Build (s)} \\
+    \midrule
+    ibm/granite-embedding:30m & 62.7\% & 86.3\% & 0.724 & 0.037 & 2.200 \\
+    ibm/granite-embedding:125m & 69.7\% & 88.7\% & 0.768 & 0.036 & 1.783 \\
+    ibm/granite-embedding:278m & 65.7\% & 84.0\% & 0.734 & 0.101 & 1.705 \\
+    qwen3-embedding:0.6b & 72.7\% & 92.0\% & 0.806 & 0.072 & 134.423 \\
+    \bottomrule
+  \end{tabular}\label{tab:eval-retriever-sample100-passage}
+\end{table}
 
 \paragraph{Key Findings}
-The document retriever component proved robust and practical. Vector
-embedding-based retrieval using local models (e.g.,
-Qwen3-Embedding-0.6B, Granite-Embedding-278M) achieved high
-Precision@k with acceptable latency (typically 50-200ms per query).
-The passage-level retrieval demonstrated better ranking than
-document-level, providing more targeted information to the
-summarizer. This component forms the reliable foundation of the
-\gls{rag} system.
+The document retriever component proved robust and practical. On
+\texttt{sample-10}, document-level Top-1 accuracy ranged from 83.6\% to 86.8\%
+with Top-5 accuracy up to 100\%. On \texttt{sample-100}, Top-1 ranged from
+62.7\% to 72.7\% with Top-5 up to 92.0\%. The qwen3-embedding:0.6b model
+provided the best precision, but its index build time was substantially higher
+on the larger corpus (128--134s vs.\ 1.6--2.3s for Granite embeddings).
+% TODO: test1-3 comparison, context size
 
 \subsubsection{Component 3: Information Summarizer}
 
@@ -121,9 +202,8 @@ queries with reference answers.
 % TODO: more details on evaluation metrics
 
 \paragraph{Test Collection}
-\texttt{summarizer-150}: 150 queries with reference answers, derived
-from \texttt{sample-10}
-and \texttt{sample-100} document collections.
+\texttt{summarize-30}: 30 queries with reference answers, derived from user
+queries, from \texttt{sample-10} and \texttt{sample-100} document collections.
 
 \paragraph{Testing Results}{}
 Table~\ref{tab:eval-1-results} presents results from evaluation for each
@@ -143,8 +223,6 @@ collection:
 \ldots % TODO: see precision metrics for bin-cl
 
 \paragraph{Key Findings}
-
-\subsubsection{End-to-End System Performance}
 
 \paragraph{Evaluation Approach}
 The complete \gls{rag} system (document retrieval + information
@@ -175,19 +253,18 @@ collection:
 \end{table}
 \ldots % TODO: see precision metrics for bin-cl
 
-
 \paragraph{Key Findings}
-The complete \gls{rag} system demonstrates practical performance for
-\gls{cli} assistance:
-\begin{itemize}
-  \item Query latency: 250-700ms depending on model and document corpus size
-  \item Memory footprint: 2-4 GB for 100+ documents with embedding indices
-  \item Scalability: Tested with up to 200+ documents; performance
-    remains acceptable
-  \item User experience: The combination of fast retrieval + focused
-    summarization provides relevant, accurate answers to command-line
-    queries without the latency/accuracy issues of the classification component
-\end{itemize}
+% The complete \gls{rag} system demonstrates practical performance for
+% \gls{cli} assistance:
+% \begin{itemize}
+%   \item Query latency: 250-700ms depending on model and document corpus size
+%   \item Memory footprint: 2-4 GB for 100+ documents with embedding indices
+%   \item Scalability: Tested with up to 200+ documents; performance
+%     remains acceptable
+%   \item User experience: The combination of fast retrieval + focused
+%     summarization provides relevant, accurate answers to command-line
+%     queries without the latency/accuracy issues of the classification component
+% \end{itemize}
 
 \paragraph{Limitations}
 The \gls{rag} system is constrained to document-based assistance and cannot
@@ -197,7 +274,7 @@ documentation. It is less suitable for: system diagnostics, real-time
 monitoring, or complex decision-making tasks that require agent-like
 capabilities.
 
-\subsubsection{Why Agent-Based Approaches Failed}
+\subsection{Why Agent-Based Approaches Failed}
 
 During exploration, agentic approaches (where the \gls{llm} could iteratively
 reason, use tools, and take actions) were tested to handle more complex tasks.
