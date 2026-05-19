@@ -1,67 +1,64 @@
 
-\subsection{Terminal and Command Line Interfaces and Applications}
+\subsection{Terminal-based Interface Concepts}
 
-This section describes the interfaces and programs that are relevant to our
-solution. It defines two interfaces: \glspl{cli} and
-\glspl{tui}. It also describes the programs that leverage
-these interfaces: shells, \gls{cli} utilities, and \gls{tui} applications.
+This section describes the interfaces as such, and defines two interfaces that
+are relevant to our solution: \glspl{cli} and \glspl{tui}, along with underlying
+concepts. It also mentions the programs that leverage these interfaces.\\
 
-For the beginning, we need to understand what \glspl{cli} are, as well as the
-utilities that are used within them.\\
+\paragraph{Interface}
+In computing, an interface is a shared boundary across which two or more
+separate components of a computer system exchange information. The exchange can
+be between software, computer hardware, peripheral devices, humans, and
+combinations of these\cite{hookway2014}.\\
 
-The definition of the interface is adopted from Branden Hookway's book
-\textit{Interface}, where he defines it as follows:
-\begin{quote}
-  \textit{\uv{In computing, an interface is a shared boundary across which
-      two or more separate components of a computer system exchange information.
-      The exchange can be between software, computer hardware, peripheral
-  devices, humans, and combinations of these}}\cite{hookway2014}.
-\end{quote}~\\
+\paragraph{Terminal}
+(later reffered to as \textbf{Hardware terminal})
+is a an electronic or electromechanical hardware device that can be used for
+entering data into, and transcribing data from, a computer or a computing
+system. The main functionality of terminals is to provide an elementary
+text-based interface for user to interact with the computer
+system\cite{terminfo}.\\
 
-\subsubsection{Terminal emulator, Terminal Application}
-
-The thesis focuses on \glspl{tui}, which are a specific type of interface used
-in computing environments. Here is how we define terminals, terminal emulators
-and terminal applications.\\
-
-\textbf{Terminal} is a \uv{\textit{an electronic or electromechanical hardware
-    device that can be used for entering data into, and transcribing
-data from, a computer or a computing system}}. In essence, the main
-functionality of terminals and terminal emulators, which is to provide an
-elementary interface for user to interact with the computer system.\\
-
-\textbf{Terminal emulator/Terminal application} is a software application
-that replicates the functionality of a traditional hardware terminal as a
-software program. Here are some examples of terminal emulators:
+\paragraph{Terminal emulator}
+(later reffered to as \textbf{Terminal})
+is a software application that replicates the functionality of a traditional
+hardware terminal as a software program. Here are some examples of terminal
+emulators:
 \begin{itemize}
   \item iTerm2 (macOS)
   \item Windows Terminal (Windows)
   \item Alacritty (Cross-platform)
-\end{itemize}
+\end{itemize}~\\
 
-\textbf{Terminal applications} are software programs that run within terminal
-emulators and utilize their capabilities to provide text-based user interfaces
---- either \glspl{cli} or \glspl{tui}. We will discuss it further in
-the following sections\cite{man_man,linfo_terminal}.\\
+\paragraph{Terminal application}
+is a software program that runs within terminal emulators and utilizes their
+capabilities to provide text-based user interfaces --- either \glspl{cli} or
+\glspl{tui}. We will discuss it further in the following sections.\\
 
+The communication between terminal applications and the terminal emulator is
+typically done through standard input and output streams, which use file
+descriptors as the underlying mechanism for data exchange. This restricts the
+interaction to text-based commands and responses. Terminal applications can vary
+from simple \gls{cli} utilities to complex \gls{tui} programs
+\cite{man_man,linfo_terminal}.\\
 
-\subsubsection{Shells and \gls{cli} Utilities}
-
-
+\paragraph{\gls{cli}}
 The definition of \gls{cli} extends previous definition to the specific case of
 command line interfaces, which are text-based interfaces between the user and
 the computer system, where user inputs commands in the form of text, to
 manipulate the system or perform specific tasks, and gets responses in the same
 form.\\
 
-\textbf{Shells} are special programs (with \gls{cli}, \gls{tui}, as well as
-\gls{gui} interfaces) that provide relatively wide and direct access on system
+\paragraph{Shell}
+is special program (with \gls{cli}, \gls{tui}, as well as
+\gls{gui} interfaces) that provides relatively wide and direct access on system
 on which it runs.\ \gls{cli} shells are \gls{cli} programs that allow users to
-execute commands and other \gls{cli} utilities\cite{man_man,linfo_terminal}.
+execute commands and other \gls{cli} utilities\cite{man_man,linfo_terminal}.\\
 
-\textbf{\gls{cli} utilities} are programs that are executed from
-within the \gls{cli} environments. Some popular examples of shells
-and \gls{cli} utilities are mentioned in Table\ \ref{t:utils}.
+\paragraph{\gls{cli} utility}
+is program executed from within the \gls{cli} environments. Some popular
+examples of shells and \gls{cli} utilities are mentioned in Table\
+\ref{t:utils}.\\
 
 \begin{table}
   \caption{Examples of shells and \gls{cli} utilities}\label{t:utils}
@@ -83,24 +80,25 @@ and \gls{cli} utilities are mentioned in Table\ \ref{t:utils}.
     nmcli (NetworkManager)
     & Linux
     & Application for controlling network settings. \\
-  \end{tabular}\\
+  \end{tabular}
 \end{table}
 
-\subsubsection{\gls{tui} Applications}
+\paragraph{\gls{tui}}
+is a type of user interface that is a further extension of \glspl{cli}. They
+provide a more visually structured and intuitive way for users to interact with
+applications by using libraries such as ncurses, which use the \textbf{terminal
+capabilities} within emulators to create rich text-based
+interfaces\cite{linfo_terminal}.\\
 
-\glspl{tui} are a type of user interface that is a
-further extension of \glspl{cli}. They provide a more visually structured and
-intuitive way for users to interact with applications by using libraries such
-as ncurses, which use the \textbf{terminal capabilities} emulators to create
-rich text-based interfaces.\\
+\paragraph{Terminal capabilities}
+are a special functionality of the terminal, which gives the application more
+control over it's output. Such capabilities usually include the ability to move
+the cursor, change text color, and rewrite or clean characters on the screen.
+This is achieved by sending specific control sequences to the terminal emulator,
+which then are interpreted to perform the desired actions. The examples of such
+sequences are ANSI escape codes\cite{terminfo,iso6429}. Some examples of
+applications using \gls{tui} are mentioned in Table\ \ref{t:utils2}.\\
 
-\textbf{Terminal capabilities} is a special functionality of the terminal, which
-gives the application more control over it's output (i.e.\ move cursor in all
-  directions, change the color of the output and rewrite/clean
-characters)\cite{man_man,linfo_terminal}.\\
-
-Some examples of applications using \gls{tui} are mentioned in
-Table\ \ref{t:utils2}.
 \begin{table}
   \caption{Examples of \gls{tui} utilities and programs}\label{t:utils2}
   \begin{tabular}{p{3cm}|p{5cm}|p{8cm}}
@@ -122,7 +120,7 @@ Table\ \ref{t:utils2}.
   \end{tabular}\\
 \end{table}
 
-\subsection{Document Representation}
+\subsection{Document Representation For Retrieval}
 
 This section provides the background on the techniques for representing
 documents in a way that allows for accurate retrieval. It also describes the
