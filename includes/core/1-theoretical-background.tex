@@ -3,13 +3,13 @@
 
 This section describes the interfaces as such, and defines two interfaces that
 are relevant to our solution: \glspl{cli} and \glspl{tui}, along with underlying
-concepts. It also mentions the programs that leverage these interfaces.\\
+concepts. It also mentions the programs that leverage these interfaces.
 
 \paragraph{Interface}
 In computing, an interface is a shared boundary across which two or more
 separate components of a computer system exchange information. The exchange can
 be between software, computer hardware, peripheral devices, humans, and
-combinations of these\cite{hookway2014}.\\
+combinations of these\cite{hookway2014}.
 
 \paragraph{Terminal}
 (later reffered to as \textbf{Hardware terminal})
@@ -17,7 +17,7 @@ is a an electronic or electromechanical hardware device that can be used for
 entering data into, and transcribing data from, a computer or a computing
 system. The main functionality of terminals is to provide an elementary
 text-based interface for user to interact with the computer
-system\cite{terminfo}.\\
+system\cite{terminfo}.
 
 \paragraph{Terminal emulator}
 (later reffered to as \textbf{Terminal})
@@ -28,41 +28,41 @@ emulators:
   \item iTerm2 (macOS)
   \item Windows Terminal (Windows)
   \item Alacritty (Cross-platform)
-\end{itemize}~\\
+\end{itemize}
 
 \paragraph{Terminal application}
 is a software program that runs within terminal emulators and utilizes their
 capabilities to provide text-based user interfaces --- either \glspl{cli} or
-\glspl{tui}. We will discuss it further in the following sections.\\
+\glspl{tui}. We will discuss it further in the following sections.
 
 The communication between terminal applications and the terminal emulator is
 typically done through standard input and output streams, which use file
 descriptors as the underlying mechanism for data exchange. This restricts the
 interaction to text-based commands and responses. Terminal applications can vary
 from simple \gls{cli} utilities to complex \gls{tui} programs
-\cite{man_man,linfo_terminal}.\\
+\cite{man_man,linfo_terminal}.
 
 \paragraph{\gls{cli}}
 The definition of \gls{cli} extends previous definition to the specific case of
 command line interfaces, which are text-based interfaces between the user and
 the computer system, where user inputs commands in the form of text, to
 manipulate the system or perform specific tasks, and gets responses in the same
-form.\\
+form.
 
 \paragraph{Shell}
 is special program (with \gls{cli}, \gls{tui}, as well as
 \gls{gui} interfaces) that provides relatively wide and direct access on system
 on which it runs.\ \gls{cli} shells are \gls{cli} programs that allow users to
-execute commands and other \gls{cli} utilities\cite{man_man,linfo_terminal}.\\
+execute commands and other \gls{cli} utilities\cite{man_man,linfo_terminal}.
 
 \paragraph{\gls{cli} utility}
 is program executed from within the \gls{cli} environments. Some popular
 examples of shells and \gls{cli} utilities are mentioned in Table\
-\ref{t:utils}.\\
+\ref{t:utils}.
 
 \begin{table}
   \caption{Examples of shells and \gls{cli} utilities}\label{t:utils}
-  \begin{tabular}{p{3cm}|p{4cm}|p{8cm}}
+    \begin{tabularx}{\textwidth}{lXX}
     Name & System & Description \\
     \midrule
     Bash, Zsh
@@ -80,7 +80,7 @@ examples of shells and \gls{cli} utilities are mentioned in Table\
     nmcli (NetworkManager)
     & Linux
     & Application for controlling network settings. \\
-  \end{tabular}
+  \end{tabularx}
 \end{table}
 
 \paragraph{\gls{tui}}
@@ -88,7 +88,7 @@ is a type of user interface that is a further extension of \glspl{cli}. They
 provide a more visually structured and intuitive way for users to interact with
 applications by using libraries such as ncurses, which use the \textbf{terminal
 capabilities} within emulators to create rich text-based
-interfaces\cite{linfo_terminal}.\\
+interfaces\cite{linfo_terminal}.
 
 \paragraph{Terminal capabilities}
 are a special functionality of the terminal, which gives the application more
@@ -97,11 +97,11 @@ the cursor, change text color, and rewrite or clean characters on the screen.
 This is achieved by sending specific control sequences to the terminal emulator,
 which then are interpreted to perform the desired actions. The examples of such
 sequences are ANSI escape codes\cite{terminfo,iso6429}. Some examples of
-applications using \gls{tui} are mentioned in Table\ \ref{t:utils2}.\\
+applications using \gls{tui} are mentioned in Table\ \ref{t:utils2}.
 
 \begin{table}
   \caption{Examples of \gls{tui} utilities and programs}\label{t:utils2}
-  \begin{tabular}{p{3cm}|p{5cm}|p{8cm}}
+    \begin{tabularx}{\textwidth}{lXX}
     Name & System & Description \\
     \midrule
     vi/vim/nvim
@@ -117,7 +117,7 @@ applications using \gls{tui} are mentioned in Table\ \ref{t:utils2}.\\
     nmtui (NetworkManager)
     & Linux
     & Application for controlling network settings. \\
-  \end{tabular}\\
+  \end{tabularx}
 \end{table}
 
 
@@ -135,13 +135,13 @@ architecture, characterized by having a large number of parameters, which are
 trained on massive text data, such as \gls{gpt}, \gls{bert}, \gls{lstm} or
 Mamba.\@ \glspl{llm} exhibit strong capacities to understand natural language
 and solve complex tasks (via text generation)
-\cite{radford2018improving,devlin2018bert,touvron2023llama}.\\
+\cite{radford2018improving,devlin2018bert,touvron2023llama}.
 
 \paragraph{Language models} are mathematical models designed to predict and generate
 sequences of text. They are crucial in artificial intelligence for performing
 various tasks like language translation, summarization, and content creation.
 Over time, they have evolved significantly, powered by advances in neural
-networks\cite{naveed2023}.\\
+networks\cite{naveed2023}.
 
 \subsubsection{\glspl{llm} Architecture Overview}
 
@@ -182,7 +182,7 @@ The architecture of \glspl{llm} can be divided into several main components:
 As mentioned above, \glspl{llm} are mainly built upon the transformer
 architecture~\cite{attention}, where \textbf{multi-head attention layers} are
 stacked in a very deep neural network. They are based on the transformer
-architecture.\\
+architecture.
 
 In the original article, previously mentioned transformers
 consist of two main parts~--- \textbf{Encoder} and \textbf{Decoder}.
@@ -194,13 +194,13 @@ model can only attend to a limited number of previous tokens (this limit is
 called \textbf{context length} or \textbf{window size}). Furthermore, the
 longer the prompt, the more computationally expensive it becomes to generate
 the output, as the model has to process all previous tokens for each new
-token\cite{attention}.\\
+token\cite{attention}.
 
 \textbf{Encoder}: The encoder maps an input sequence of symbols (tokens) to a
 sequence of continuous representations. The encoder is composed of a stack of a
 number of identical layers. Each layer has two sub-layers. The first is a
 multi-head self-attention mechanism, and the second is a simple, position-wise
-fully connected feed-forward network\cite{attention}.\\
+fully connected feed-forward network\cite{attention}.
 
 \textbf{Decoder}: The decoder then generates an output sequence of symbols
 (tokens) one element at a time. At each step the model is auto-regressive,
@@ -208,7 +208,7 @@ consuming the previously generated symbols as additional input when generating
 the next. The decoder is also composed of a stack of a number of identical
 layers. In addition to the two sub-layers in each encoder layer, the decoder
 inserts a third sub-layer, which performs multi-head attention over the output
-of the encoder stack\cite{attention}.\\
+of the encoder stack\cite{attention}.
 
 For the purpose of this thesis, it is enough to know that nowadays \glspl{llm}
 are mainly based on Decoder-only architecture, which means they only use the
@@ -217,13 +217,13 @@ Decoder-only models seem to be typically easier to train and fine-tune, as they
 require less complex training data and objectives compared to Encoder-Decoder
 models. That means that on the same numbers of training tokens, Decoder-only
 models can achieve better performance than Encoder-Decoder models
-\cite{zhao2023,wei2023chainofthoughtpromptingelicitsreasoning}.\\
+\cite{zhao2023,wei2023chainofthoughtpromptingelicitsreasoning}.
 
 \subsubsection{\gls{moe} Extension}
 
 While the architectures above define how information flows through the layers,
 the \gls{moe} is an important extension that changes how the feedforward layers
-operate, with the goal to increase scalability and efficiency.\\
+operate, with the goal to increase scalability and efficiency.
 
 In a traditional dense transformer, which is referred to as \textbf{Dense}, the
 whole decoder is a monolith, meaning that while processing, every neuron is
@@ -266,14 +266,14 @@ complex data (such as text, audio, video, or other types of data), mapping them
 to numerical representations (embeddings). These embeddings are much better for
 the machine to process it in comparison to the raw text, as they capture the
 semantic meaning of the text and can be used in various applications.
-\cite{nie2025textembeddingmeetslarge}.\\
+\cite{nie2025textembeddingmeetslarge}.
 
 \paragraph{Embedding \gls{llm}} 
 is a embedding model, based on the \textbf{transformer decoder architecture}
 that is specifically designed to generate dense vector representations of
 content. These embeddings capture the semantic meaning of the content, allowing
 for tasks such as semantic search, clustering, and other applications that
-require understanding of the content's meaning.\\
+require understanding of the content's meaning.
 
 The advantage of using embedding \gls{llm} in comparison to traditional
 embedding models is that they can capture more complex relationships between
@@ -282,7 +282,7 @@ is because embedding \gls{llm} are typically based on transformer architectures,
 which use attention mechanisms to weigh the importance of different tokens in
 the input text, allowing them to capture context and relationships between
 tokens more effectively than traditional embedding models
-\cite{zhang2024systematicsurveytextsummarization,khan2026retrieval}.\\
+\cite{zhang2024systematicsurveytextsummarization,khan2026retrieval}.
 
 \subsection{Advanced \gls{llm} Concepts}
 
@@ -296,11 +296,11 @@ The evolution of \glspl{llm} has progressed beyond simple text, and
 \glspl{llm} have been increasingly integrated into more complex systems and
 applications, often in context of \textbf{AI Agents}, which utilize \glspl{llm}
 with the capacity to plan, act, and interact with external
-environments\cite{naveed2023,zhao2023}.\\
+environments\cite{naveed2023,zhao2023}.
 
 \paragraph{AI agents} are autonomous entities, capable of planning,
 decision-making, and performing actions to achieve complex
-goals\cite{naveed2023,zhao2023}.\\
+goals\cite{naveed2023,zhao2023}.
 
 We can define the workflow of \gls{llm} Agents
 ~\cite{nvidia-llm-agent} as pseudocode in Listing\ \ref{lst:agent}.
@@ -396,7 +396,7 @@ this, we mean the set of techniques of indexing and searching documents based on
 their semantic representations. Therefore, there are two main components for the
 retrieval system: document representation generator (embedding model, mentioned
 in Section\ \ref{sec:embedding-models}) and storage with searching capabilities
-suited for the task (see \ref{sec:vector-db}).\\
+suited for the task (see \ref{sec:vector-db}).
 
 \paragraph{Different Granularities In Retrieval}
 
@@ -503,7 +503,7 @@ four main types, defined in the original article\
 \end{itemize}
 
 With such definition of query types, it is possible to map the responsibilities
-of the parts of the \gls{rag} system to the query types.\\
+of the parts of the \gls{rag} system to the query types.
 
 Level-1 queries can be mostly handled by the retrieval component, with the role
 of the \gls{llm} being to filter the relevant information from the retrieved
@@ -668,7 +668,7 @@ document or query with semantically related terms, allowing for better retrieval
 performance even when exact keywords are missing..} The thesis is not going to
 focus on the hybrid retrieval techniques, but it is important to acknowledge the
 existence of such techniques, as they can be used in the future research to
-further improve the retrieval performance of the system.\\
+further improve the retrieval performance of the system.
 
 For the purpose of this research, we will focus on dense retrieval, as it is
 more suitable for complex queries and can capture the semantic meaning of the
@@ -734,7 +734,7 @@ Milvus\cite{milvus2026}. Simplest way to use vector database is to store the
 vector representations of documents along with corresponding metadata (e.g.,
 document identifier, title), and then retrieve the most similar documents based
 on the similarity between the vector, generated from the user query, and the
-stored document vectors.\\
+stored document vectors.
 
 % TODO: more details on vector databases, how they work, how to use them, etc.
 
