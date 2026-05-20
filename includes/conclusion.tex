@@ -1,3 +1,7 @@
+% TODO: Split Conclusion to discussion
+% smooth text
+
+
 This thesis presented an exploratory investigation into building a Linux
 \gls{cli} assistant powered by local \glspl{llm}. The work evaluates multiple
 architectural approaches, identifying which are practical for offline,
@@ -24,8 +28,8 @@ Through implementation and evaluation, significant practical insights emerged:
 
 \paragraph{Smart Classifier Component --- Not Viable}
 LLM-based classification of commands vs.\ queries performs poorly with small local models
-(0.5B-4B parameters). Achieving acceptable accuracy requires either: (a) unacceptable query
-latencies (2-5+ seconds per input), or (b) extensive hardcoding of heuristics. Additionally,
+(0.5--4B parameters). Achieving acceptable accuracy requires either: (a) unacceptable query
+latencies (2--5+ seconds per input), or (b) extensive hardcoding of heuristics. Additionally,
 seamless shell integration requires shell-specific implementations that are difficult to
 maintain. This component remains a proof-of-concept only.
 
@@ -33,13 +37,13 @@ maintain. This component remains a proof-of-concept only.
 Agentic systems that attempt multi-step reasoning, tool use, and state management consistently
 fail with small local \glspl{llm}. Common failure modes include: reasoning chain breakdowns,
 incorrect tool invocation, hallucination under uncertainty, and unacceptable latencies
-(5-15 seconds per query). These approaches require significantly larger models (10B+ parameters)
+(5--15 seconds per query). These approaches require significantly larger models (10B+ parameters)
 or external services to function reliably.
 
 \paragraph{RAG System --- Practical and Effective}
 The Retrieval-Augmented Generation approach proved robust and practical. By constraining the
 \gls{llm} task to extracting and summarizing information from retrieved documents, the system
-achieves: reliable performance (minimal hallucination), acceptable latency (250-700ms per query),
+achieves: reliable performance (minimal hallucination), acceptable latency (250--700ms per query),
 and good user experience. This component forms the core working system.
 
 \subsection*{Implications for Local LLM Assistance}

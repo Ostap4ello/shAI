@@ -305,33 +305,32 @@ decision-making, and performing actions to achieve complex
 goals~\cite{naveed2023,zhao2023}.
 
 We can define the workflow of \gls{llm} Agents ~\cite{nvidia-llm-agent} as
-pseudocode in Listing~\ref{lst:agent}.
+pseudocode in Listing~\ref{alg:agent}.
 
-% TODO: to algorithmic/algpseudocode/algpseudocodex
-\begin{lstlisting}[,
-  caption={Pseudocode for \gls{llm} Agent workflow},
-  label={lst:agent},
-  language={},
-  style=code-listing,
-  float
-]
+\begin{algorithm}[t]
+\caption{Pseudocode for \gls{llm} Agent workflow}
+\label{alg:agent}
+\begin{algorithmic}[1]
+\STATE \textbf{function} \textsc{LLM\_Agent}(\textit{task}, \textit{context})
+    \STATE \quad $\textit{subtasks} \gets \textit{LLM}.\text{decompose\_task}(\textit{task})$ \COMMENT{Break down main task into sub-tasks}
 
-function LLM_Agent(task, context):
-    subtasks = LLM.decompose_task(task)  # Break down the main task into smaller sub-tasks
-    for subtask in subtasks:
-        switch subtask.type:
-            case "tool":
-                result = use_tool(subtask.tool, subtask.tool_input)
-            case "further_decomposition":
-                # Recursive call for further decomposition
-                result = AI_Agent(subtask.task, context)
-            case "generate":
-                result = LLM.generate_response(subtask.task)
-        results.append(result)
-    final_output = LLM.summarize_results(results)
-    return final_output
+    \FOR{\textbf{each} $\textit{subtask}$ \textbf{in} $\textit{subtasks}$}
+        \IF{$\textit{subtask}.\textit{type} = \text{"tool"}$}
+            \STATE $\textit{result} \gets \text{use\_tool}(\textit{subtask}.\textit{tool}, \textit{subtask}.\textit{tool\_input})$
+        \ELSIF{$\textit{subtask}.\textit{type} = \text{"further\_decomposition"}$}
+            \STATE \COMMENT{Recursive call for further decomposition}
+            \STATE $\textit{result} \gets \text{AI\_Agent}(\textit{subtask}.\textit{task}, \textit{context})$
+        \ELSIF{$\textit{subtask}.\textit{type} = \text{"generate"}$}
+            \STATE $\textit{result} \gets \textit{LLM}.\text{generate\_response}(\textit{subtask}.\textit{task})$
+        \ENDIF
+        \STATE $\text{results}.\text{append}(\textit{result})$
+    \ENDFOR
 
-\end{lstlisting}
+    \STATE \quad $\textit{final\_output} \gets \textit{LLM}.\text{summarize\_results}(\textit{results})$
+    \STATE \quad \textbf{return} $\textit{final\_output}$
+\STATE \textbf{end function}
+\end{algorithmic}
+\end{algorithm}
 
 AI Agent architecture brings major improvements, compared to traditional
 \glspl{llm}:
@@ -368,31 +367,27 @@ capabilities of \textbf{\gls{llm}} to retrieve information from external
 sources.
 
 We can define the workflow of \gls{rag} as follows as pseudocode in
-Listing~\ref{lst:rag}.
+Listing~\ref{alg:rag}.
 
-% TODO: to algorithmic/algpseudocode/algpseudocodex
-\begin{lstlisting}[,
-  caption={Pseudocode for \gls{rag} workflow},
-  label={lst:rag},
-  language={},
-  style=code-listing,
-  float
-]
+\begin{algorithm}[t]
+\caption{Pseudocode for \gls{rag} workflow}
+\label{alg:rag}
+\begin{algorithmic}[1]
+\STATE \textbf{function} \textsc{LLM\_RAG\_generate}(\textit{user\_query}, \textit{LLM}, \textit{document\_database})
+    \STATE \quad \COMMENT{Step 1: Retrieve relevant documents from the database}
+    \STATE \quad $\textit{relevant\_documents} \gets \text{retrieve\_documents}(\textit{document\_database}, \textit{user\_query})$
 
-function LLM_RAG_generate(user_query, LLM, document_database):
-    # Step 1: Retrieve relevant documents from the document database
-    relevant_documents = retrieve_documents(document_database, user_query)
+    \STATE \quad \COMMENT{Step 2: Inject retrieved documents into the input prompt}
+    \STATE \quad $\textit{augmented\_prompt} \gets \text{construct\_prompt}(\textit{user\_query}, \textit{relevant\_documents})$
 
-    # Step 2: Inject retrieved documents into the input prompt for the LLM
-    augmented_prompt = construct_prompt(user_query, relevant_documents)
+    \STATE \quad \COMMENT{Step 3: Pass the augmented prompt to the LLM}
+    \STATE \quad $\textit{llm\_response} \gets \textit{LLM}.\text{generate\_response}(\textit{augmented\_prompt})$
 
-    # Step 3: Pass the augmented prompt to the LLM to generate a response
-    llm_response = LLM.generate_response(augmented_prompt)
-
-    # Step 4: Return the final response
-    return llm_response
-
-\end{lstlisting}
+    \STATE \quad \COMMENT{Step 4: Return the final response}
+    \STATE \quad \textbf{return} $\textit{llm\_response}$
+\STATE \textbf{end function}
+\end{algorithmic}
+\end{algorithm}
 
 This technique involves document retrieval, the best general approach for which
 is to use \textbf{semantic document search and retrieval}
@@ -758,7 +753,6 @@ the name of a program, utility or function. The manual page associated with each
 of these arguments is then found and displayed. A section, if provided, will
 direct man to look only in that section of the manual~\cite{man_man}.
 
-% TODO: to attachments as not relevant info
 Conventionally, manual pages are divided into several groups, which are listed
 in\ Table \ref{t:man-groups}. A manual page consists of several sections.
 Conventional section names are listed in\ \ref{t:man-sections}. The most
@@ -766,36 +760,3 @@ important sections for the purpose of this thesis are \textbf{DESCRIPTION},
 which provides a detailed description of the program, its functionality and
 usage, and \textbf{OPTIONS}, which lists the flags and arguments that can be
 used with the program, along with their descriptions.
-
-\begin{enumerate}
-  \item Executable programs or shell commands
-  \item System calls (functions provided by the kernel)
-  \item Library calls (functions within program libraries)
-  \item Special files (usually found in /dev)
-  \item File formats and conventions, e.g. /etc/passwd
-  \item Games
-  \item Miscellaneous (including macro packages and conventions),
-    e.g. man(7), groff(7), man-pages(7)
-  \item System administration commands (usually only for root)
-  \item Kernel routines [Non standard]
-\end{enumerate}
-
-\begin{itemize}
-  \item NAME
-  \item SYNOPSIS (usage)
-  \item CONFIGURATION
-  \item DESCRIPTION
-  \item OPTIONS (flags)
-  \item EXIT STATUS
-  \item RETURN VALUE
-  \item ERRORS
-  \item ENVIRONMENT
-  \item FILES
-  \item VERSIONS
-  \item STANDARDS
-  \item NOTES
-  \item BUGS
-  \item EXAMPLE
-  \item AUTHORS
-  \item SEE ALSO
-\end{itemize}

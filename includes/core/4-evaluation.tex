@@ -187,7 +187,7 @@ top\_k\_extended=10.
 
 \paragraph{Key Findings}
 The document retriever component proved robust and practical. On
-\texttt{sample-10}, document-level Top-1 accuracy ranged from 83.6\% to 86.8\%
+\texttt{sample-10}, document-level Top-1 accuracy ranged from 83.6--86.8\%
 with Top-5 accuracy up to 100\%. On \texttt{sample-100}, Top-1 ranged from
 62.7\% to 72.7\% with Top-5 up to 92.0\%. The qwen3-embedding:0.6b model
 provided the best precision, but its index build time was substantially higher
@@ -257,8 +257,8 @@ collection:
 % The complete \gls{rag} system demonstrates practical performance for
 % \gls{cli} assistance:
 % \begin{itemize}
-%   \item Query latency: 250-700ms depending on model and document corpus size
-%   \item Memory footprint: 2-4 GB for 100+ documents with embedding indices
+%   \item Query latency: 250--700ms depending on model and document corpus size
+%   \item Memory footprint: 2--4 GB for 100+ documents with embedding indices
 %   \item Scalability: Tested with up to 200+ documents; performance
 %     remains acceptable
 %   \item User experience: The combination of fast retrieval + focused
@@ -295,7 +295,7 @@ These experiments revealed fundamental limitations of small local \glspl{llm}:
     diagnosing issues or requesting clarification.
   \item \textbf{Unacceptable Latency:} Achieving higher accuracy
     required extensive prompting, validation loops, and fallback
-    mechanisms, resulting in total latencies of 5-15 seconds per query.
+    mechanisms, resulting in total latencies of 5--15 seconds per query.
 \end{enumerate}
 
 \paragraph{Conclusion on Agent-Based Approaches}
