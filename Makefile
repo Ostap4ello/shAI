@@ -64,15 +64,11 @@ pdf.thesis:
 	cd ./.build/$(BUILDER_FOLDER_NAME); \
 		$(LOG_INFO) "Running LaTeX build. Output:"; \
 		sed -i "s/\\FEIdate{00}{00}{0000}/\\FEIdate$(shell date +{%d}{%m}{%Y})/g" thesis.tex ; \
-		mkdir -p .build/
-		tectonic thesis.tex -o .build/
+		tectonic --keep-intermediates thesis.tex
 		$(LOG_INFO) "Build finished."
 	
 	$(LOG_INFO) "Copying built PDF to build folder..."
-	cp ./.build/$(BUILDER_FOLDER_NAME)/thesis.log .build/thesis.log
 	cp ./.build/$(BUILDER_FOLDER_NAME)/thesis.pdf .build/thesis.pdf
-	cp ./.build/$(BUILDER_FOLDER_NAME)/thesis.acr .build/thesis.acr
-	cp ./.build/$(BUILDER_FOLDER_NAME)/thesis.bbl .build/thesis.bbl
 
 pdf.thesis-clean:
 	$(LOG_INFO) "Cleaning local build files..."

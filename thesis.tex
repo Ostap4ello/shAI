@@ -1,6 +1,26 @@
 \documentclass[bp,en]{FEIstyle}
 
-\usepackage{multicol}
+% Tectonic-specific fixes
+% Font
+\usepackage{fontspec}
+% Glossaries
+\renewcommand\FEIglossaries[1]{
+    \makenoidxglossaries
+    \loadglsentries{#1}
+
+    \AtBeginDocument{
+        \setglossarystyle{FEIlong}
+        \setlength\LTleft{8pt}
+    }
+}
+\renewcommand\FEIlistOfGlossaries{
+    \IfEqCase*{\FEIenglish}{
+        {0}{\def\@zoznamZn{Zoznam značiek a skratiek}}
+        {1}{\def\@zoznamZn{List of Symbols and Abbreviations}}
+    }[]
+    \printnoidxglossary[type=\acronymtype,title={\fontsize{20pt}{1.3}\selectfont \@zoznamZn}]
+    \newpage
+}
 
 \FEIauthor{Ostap Pelekh}
 \FEIregNr{FEI-16605-128102}
