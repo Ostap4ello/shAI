@@ -1,4 +1,3 @@
-
 \subsection{Terminal-based Interface Concepts}
 
 This section describes the interfaces as such, and defines two interfaces that
@@ -9,18 +8,18 @@ concepts. It also mentions the programs that leverage these interfaces.
 In computing, an interface is a shared boundary across which two or more
 separate components of a computer system exchange information. The exchange can
 be between software, computer hardware, peripheral devices, humans, and
-combinations of these\cite{hookway2014}.
+combinations of these~\cite{hookway2014}.
 
 \paragraph{Terminal}
-(later reffered to as \textbf{Hardware terminal})
+(later referred to as \textbf{Hardware terminal})
 is a an electronic or electromechanical hardware device that can be used for
 entering data into, and transcribing data from, a computer or a computing
 system. The main functionality of terminals is to provide an elementary
 text-based interface for user to interact with the computer
-system\cite{terminfo}.
+system~\cite{terminfo}.
 
 \paragraph{Terminal emulator}
-(later reffered to as \textbf{Terminal})
+(later referred to as \textbf{Terminal})
 is a software application that replicates the functionality of a traditional
 hardware terminal as a software program. Here are some examples of terminal
 emulators:
@@ -39,8 +38,8 @@ The communication between terminal applications and the terminal emulator is
 typically done through standard input and output streams, which use file
 descriptors as the underlying mechanism for data exchange. This restricts the
 interaction to text-based commands and responses. Terminal applications can vary
-from simple \gls{cli} utilities to complex \gls{tui} programs
-\cite{man_man,linfo_terminal}.
+from simple \gls{cli} utilities to complex \gls{tui}
+programs~\cite{man_man,linfo_terminal}.
 
 \paragraph{\gls{cli}}
 The definition of \gls{cli} extends previous definition to the specific case of
@@ -53,16 +52,16 @@ form.
 is special program (with \gls{cli}, \gls{tui}, as well as
 \gls{gui} interfaces) that provides relatively wide and direct access on system
 on which it runs.\ \gls{cli} shells are \gls{cli} programs that allow users to
-execute commands and other \gls{cli} utilities\cite{man_man,linfo_terminal}.
+execute commands and other \gls{cli} utilities~\cite{man_man,linfo_terminal}.
 
 \paragraph{\gls{cli} utility}
 is program executed from within the \gls{cli} environments. Some popular
-examples of shells and \gls{cli} utilities are mentioned in Table\
-\ref{t:utils}.
+examples of shells and \gls{cli} utilities are mentioned in Table~\ref{t:utils}.
 
 \begin{table}
   \caption{Examples of shells and \gls{cli} utilities}\label{t:utils}
     \begin{tabularx}{\textwidth}{lXX}
+    \toprule
     Name & System & Description \\
     \midrule
     Bash, Zsh
@@ -80,6 +79,7 @@ examples of shells and \gls{cli} utilities are mentioned in Table\
     nmcli (NetworkManager)
     & Linux
     & Application for controlling network settings. \\
+    \bottomrule
   \end{tabularx}
 \end{table}
 
@@ -88,7 +88,7 @@ is a type of user interface that is a further extension of \glspl{cli}. They
 provide a more visually structured and intuitive way for users to interact with
 applications by using libraries such as ncurses, which use the \textbf{terminal
 capabilities} within emulators to create rich text-based
-interfaces\cite{linfo_terminal}.
+interfaces~\cite{linfo_terminal}.
 
 \paragraph{Terminal capabilities}
 are a special functionality of the terminal, which gives the application more
@@ -96,12 +96,13 @@ control over it's output. Such capabilities usually include the ability to move
 the cursor, change text color, and rewrite or clean characters on the screen.
 This is achieved by sending specific control sequences to the terminal emulator,
 which then are interpreted to perform the desired actions. The examples of such
-sequences are ANSI escape codes\cite{terminfo,iso6429}. Some examples of
-applications using \gls{tui} are mentioned in Table\ \ref{t:utils2}.
+sequences are ANSI escape codes~\cite{terminfo,iso6429}. Some examples of
+applications using \gls{tui} are mentioned in Table~\ref{t:utils2}.
 
 \begin{table}
   \caption{Examples of \gls{tui} utilities and programs}\label{t:utils2}
     \begin{tabularx}{\textwidth}{lXX}
+    \toprule
     Name & System & Description \\
     \midrule
     vi/vim/nvim
@@ -117,6 +118,7 @@ applications using \gls{tui} are mentioned in Table\ \ref{t:utils2}.
     nmtui (NetworkManager)
     & Linux
     & Application for controlling network settings. \\
+    \bottomrule
   \end{tabularx}
 \end{table}
 
@@ -133,15 +135,15 @@ as the advanced concepts.
 \paragraph{\glspl{llm}} refer to language models, typically based on transformer
 architecture, characterized by having a large number of parameters, which are
 trained on massive text data, such as \gls{gpt}, \gls{bert}, \gls{lstm} or
-Mamba.\@ \glspl{llm} exhibit strong capacities to understand natural language
-and solve complex tasks (via text generation)
-\cite{radford2018improving,devlin2018bert,touvron2023llama}.
+Mamba. \glspl{llm} exhibit strong capacities to understand natural language
+and solve complex tasks (via text
+generation)~\cite{radford2018improving,devlin2018bert,touvron2023llama}.
 
 \paragraph{Language models} are mathematical models designed to predict and generate
 sequences of text. They are crucial in artificial intelligence for performing
 various tasks like language translation, summarization, and content creation.
 Over time, they have evolved significantly, powered by advances in neural
-networks\cite{naveed2023}.
+networks~\cite{naveed2023}.
 
 \subsubsection{\glspl{llm} Architecture Overview}
 
@@ -165,7 +167,7 @@ The architecture of \glspl{llm} can be divided into several main components:
     it appears. Positional embeddings, on the other hand, generate
     different vectors for the same token based on its context in the
     input text, allowing for a more nuanced understanding of
-    language\cite{mikolov2013distributed,pennington2014glove,zhao2023}.
+    language~\cite{mikolov2013distributed,pennington2014glove,zhao2023}.
   \item \textbf{Transformer Layers}: These layers are the core of the \gls{llm}
     architecture, responsible for processing the input and generating the
     output. They consist of multiple attention~\cite{attention} heads and
@@ -194,13 +196,13 @@ model can only attend to a limited number of previous tokens (this limit is
 called \textbf{context length} or \textbf{window size}). Furthermore, the
 longer the prompt, the more computationally expensive it becomes to generate
 the output, as the model has to process all previous tokens for each new
-token\cite{attention}.
+token~\cite{attention}.
 
 \textbf{Encoder}: The encoder maps an input sequence of symbols (tokens) to a
 sequence of continuous representations. The encoder is composed of a stack of a
 number of identical layers. Each layer has two sub-layers. The first is a
 multi-head self-attention mechanism, and the second is a simple, position-wise
-fully connected feed-forward network\cite{attention}.
+fully connected feed-forward network~\cite{attention}.
 
 \textbf{Decoder}: The decoder then generates an output sequence of symbols
 (tokens) one element at a time. At each step the model is auto-regressive,
@@ -208,7 +210,7 @@ consuming the previously generated symbols as additional input when generating
 the next. The decoder is also composed of a stack of a number of identical
 layers. In addition to the two sub-layers in each encoder layer, the decoder
 inserts a third sub-layer, which performs multi-head attention over the output
-of the encoder stack\cite{attention}.
+of the encoder stack~\cite{attention}.
 
 For the purpose of this thesis, it is enough to know that nowadays \glspl{llm}
 are mainly based on Decoder-only architecture, which means they only use the
@@ -217,7 +219,7 @@ Decoder-only models seem to be typically easier to train and fine-tune, as they
 require less complex training data and objectives compared to Encoder-Decoder
 models. That means that on the same numbers of training tokens, Decoder-only
 models can achieve better performance than Encoder-Decoder models
-\cite{zhao2023,wei2023chainofthoughtpromptingelicitsreasoning}.
+~\cite{zhao2023,wei2023chainofthoughtpromptingelicitsreasoning}.
 
 \subsubsection{\gls{moe} Extension}
 
@@ -231,7 +233,7 @@ used. The \gls{moe} architecture splits the massive, singular feedforward
 network into multiple smaller, quasi-specialized (as everything is learned)
 \textsl{expert} subnetworks and introduces a \textsl{router} (or gating network)
 to orchestrate them. The router acts as a traffic controller, dynamically
-selecting only a tiny subset of experts~--- typically one or two~---to process
+selecting only a tiny subset of experts~--- typically one or two~--- to process
 it.
 
 When it comes to comparing \gls{moe} and dense models in scope of smaller
@@ -265,8 +267,8 @@ is a type of neural network architecture that aims to extract features from
 complex data (such as text, audio, video, or other types of data), mapping them
 to numerical representations (embeddings). These embeddings are much better for
 the machine to process it in comparison to the raw text, as they capture the
-semantic meaning of the text and can be used in various applications.
-\cite{nie2025textembeddingmeetslarge}.
+semantic meaning of the text and can be used in various
+applications~\cite{nie2025textembeddingmeetslarge}.
 
 \paragraph{Embedding \gls{llm}} 
 is a embedding model, based on the \textbf{transformer decoder architecture}
@@ -281,8 +283,8 @@ tokens and provide a more accurate representation of the content's meaning. This
 is because embedding \gls{llm} are typically based on transformer architectures,
 which use attention mechanisms to weigh the importance of different tokens in
 the input text, allowing them to capture context and relationships between
-tokens more effectively than traditional embedding models
-\cite{zhang2024systematicsurveytextsummarization,khan2026retrieval}.
+tokens more effectively than traditional embedding
+models~\cite{zhang2024systematicsurveytextsummarization,khan2026retrieval}.
 
 \subsection{Advanced \gls{llm} Concepts}
 
@@ -296,15 +298,16 @@ The evolution of \glspl{llm} has progressed beyond simple text, and
 \glspl{llm} have been increasingly integrated into more complex systems and
 applications, often in context of \textbf{AI Agents}, which utilize \glspl{llm}
 with the capacity to plan, act, and interact with external
-environments\cite{naveed2023,zhao2023}.
+environments~\cite{naveed2023,zhao2023}.
 
 \paragraph{AI agents} are autonomous entities, capable of planning,
 decision-making, and performing actions to achieve complex
-goals\cite{naveed2023,zhao2023}.
+goals~\cite{naveed2023,zhao2023}.
 
-We can define the workflow of \gls{llm} Agents
-~\cite{nvidia-llm-agent} as pseudocode in Listing\ \ref{lst:agent}.
+We can define the workflow of \gls{llm} Agents ~\cite{nvidia-llm-agent} as
+pseudocode in Listing~\ref{lst:agent}.
 
+% TODO: to algorithmic/algpseudocode/algpseudocodex
 \begin{lstlisting}[,
   caption={Pseudocode for \gls{llm} Agent workflow},
   label={lst:agent},
@@ -351,22 +354,23 @@ these steps using various tools.
 
 \gls{mcp} protocol is a protocol, that standartizes the interaction between
 agent and tools, allowing simpler software integration and development for AI
-agents\cite{mcp}. While not used in this thesis, it is important to mention it
-as a relevant concept\cite{zhao2023}.
+agents~\cite{mcp}. While not used in this thesis, it is important to mention it
+as a relevant concept~\cite{zhao2023}.
 
 
 \subsubsection{Retrieval-Augmented Generation (RAG)}
 
 \textbf{\gls{rag}} is a technique that allows \glspl{llm} to utilize external
 knowledge bases, significantly reducing hallucinations and increasing
-accuracy\cite{zhao2023}. It reuses the semantic meaning extraction capabilities
+accuracy~\cite{zhao2023}. It reuses the semantic meaning extraction capabilities
 of \textbf{embedding \gls{llm}} and the text generation and summarization
 capabilities of \textbf{\gls{llm}} to retrieve information from external
 sources.
 
-We can define the workflow of \gls{rag} as follows as pseudocode in Listing\
-\ref{lst:rag}.
+We can define the workflow of \gls{rag} as follows as pseudocode in
+Listing~\ref{lst:rag}.
 
+% TODO: to algorithmic/algpseudocode/algpseudocodex
 \begin{lstlisting}[,
   caption={Pseudocode for \gls{rag} workflow},
   label={lst:rag},
@@ -391,12 +395,13 @@ function LLM_RAG_generate(user_query, LLM, document_database):
 \end{lstlisting}
 
 This technique involves document retrieval, the best general approach for which
-is to use \textbf{semantic document search and retrieval}\ref{emb:semvec}. By
-this, we mean the set of techniques of indexing and searching documents based on
-their semantic representations. Therefore, there are two main components for the
-retrieval system: document representation generator (embedding model, mentioned
-in Section\ \ref{sec:embedding-models}) and storage with searching capabilities
-suited for the task (see \ref{sec:vector-db}).
+is to use \textbf{semantic document search and retrieval}
+(see~\ref{emb:semvec}). By this, we mean the set of techniques of indexing and
+searching documents based on their semantic representations. Therefore, there
+are two main components for the retrieval system: document representation
+generator (embedding model, mentioned in Section~\ref{sec:embedding-models}) and
+storage with searching capabilities suited for the task
+(see~\ref{sec:vector-db}).
 
 \paragraph{Different Granularities In Retrieval}
 
@@ -480,8 +485,8 @@ be fit into \gls{llm} context window or answer size.
 
 \paragraph{Query Types}
 We can generally classify queries that user can ask to the \gls{rag} system into
-four main types, defined in the original article\
-\cite{zhao2024retrievalaugmentedgenerationrag}:
+four main types, defined in the original
+article~\cite{zhao2024retrievalaugmentedgenerationrag}:
 
 \begin{itemize}
   \item \textbf{Level-1: Explicit Facts:} These queries are asking
@@ -525,7 +530,7 @@ than the deduction of hidden rationales.
 \paragraph{Common RAG Testing Techniques}\label{sec:rag-eval}
 
 This part describes most common RAG Testing Techniques, essential for the
-evaluation of the performance of \gls{rag} systems\cite{rag-evaluation}.
+evaluation of the performance of \gls{rag} systems~\cite{rag-evaluation}.
 
 \paragraph{Precision@k}
 
@@ -609,8 +614,8 @@ generate text with large datasets, which involves creating a model from scratch.
 \paragraph{Fine-tuning} is the process of taking a pre-trained \gls{llm} and
 adapting it to a specific task by training it on a smaller, task-specific
 dataset. This allows the model to learn task-specific patterns and improve its
-performance on the target task while keeping low training effort and costs.
-\cite{zhao2023}.
+performance on the target task while keeping low training effort and
+costs~\cite{zhao2023}.
 
 While not used in this thesis, it is important to mention these techniques as
 relevant concepts.
@@ -630,7 +635,7 @@ documents into a format that captures their meaning. In scope of this thesis, we
 are interested in the techniques that create numerical representations of
 documents, which are much better for the machine to process. Currently, the
 semantic representation of documents is generally categorized into two primary
-groups\cite{khan2026retrieval}:
+groups~\cite{khan2026retrieval}:
 
 \begin{itemize}
   \item \textbf{Sparse vector representations (sparse retrieval):} This
@@ -694,7 +699,7 @@ collection.
     but not the context.
   \item \textbf{Neural Network-based Approaches:} These techniques involve
     training a neural network, such as a transformer (embedding
-    model, mentioned in\ \ref{sec:embedding-models}) or recurrent
+    model, mentioned in~\ref{sec:embedding-models}) or recurrent
     neural network, to generate a single vector representation for
     the entire document. The possible approaches are:
     \begin{itemize}
@@ -705,14 +710,14 @@ collection.
         embeddings into a single vector using these weights. This
         approach can capture complex relationships between tokens and
         provide a more accurate representation of the document's
-        meaning\cite{sharma2024unmacapsumtunifiedmultiheadattentiondriven}.
+        meaning~\cite{sharma2024unmacapsumtunifiedmultiheadattentiondriven}.
       \item \textbf{[CLS] token-based summarization:} This method uses a
         special token (e.g., [CLS] in \gls{bert}) that is added to the
         beginning of the document. The transformer is trained to update
         the values of this token based on the context of the entire
         document, and the final value of this token is used as the
         summary vector for the
-        document\cite{behrendt2025maxpoolbertenhancingbertclassification,devlin2018bert}.
+        document~\cite{behrendt2025maxpoolbertenhancingbertclassification,devlin2018bert}.
     \end{itemize}
     \textsl{It is important to note that to increase the accuracy of the
     summarization, it is often necessary to have single-topic documents}
@@ -729,8 +734,8 @@ purpose, \textbf{vector databases} are used.
 designed to store and manage high-dimensional vector data and perform efficient
 similarity search based on different metrics (e.g., cosine similarity, L2 or
 Euclidean distance). Examples of vector databases include
-\gls{faiss}\cite{faiss2026}, \gls{annoy}\cite{annoy2026}, and
-Milvus\cite{milvus2026}. Simplest way to use vector database is to store the
+\gls{faiss}~\cite{faiss2026}, \gls{annoy}~\cite{annoy2026}, and
+Milvus~\cite{milvus2026}. Simplest way to use vector database is to store the
 vector representations of documents along with corresponding metadata (e.g.,
 document identifier, title), and then retrieve the most similar documents based
 on the similarity between the vector, generated from the user query, and the
@@ -751,8 +756,9 @@ which are relevant for the solution.
 man is the system's manual pager. Each page argument given to man is normally
 the name of a program, utility or function. The manual page associated with each
 of these arguments is then found and displayed. A section, if provided, will
-direct man to look only in that section of the manual\cite{man_man}.
+direct man to look only in that section of the manual~\cite{man_man}.
 
+% TODO: to attachments as not relevant info
 Conventionally, manual pages are divided into several groups, which are listed
 in\ Table \ref{t:man-groups}. A manual page consists of several sections.
 Conventional section names are listed in\ \ref{t:man-sections}. The most
@@ -761,47 +767,35 @@ which provides a detailed description of the program, its functionality and
 usage, and \textbf{OPTIONS}, which lists the flags and arguments that can be
 used with the program, along with their descriptions.
 
-\begin{table}
-  \caption{Conventional man page groups}\label{t:man-groups}
-  \small
-  \begin{multicols}{2}
-    \begin{enumerate}
-      \item Executable programs or shell commands
-      \item System calls (functions provided by the kernel)
-      \item Library calls (functions within program libraries)
-      \item Special files (usually found in /dev)
-      \item File formats and conventions, e.g. /etc/passwd
-      \item Games
-      \item Miscellaneous (including macro packages and conventions),
-        e.g. man(7), groff(7), man-pages(7)
-      \item System administration commands (usually only for root)
-      \item Kernel routines [Non standard]
-    \end{enumerate}
-  \end{multicols}
-\end{table}
+\begin{enumerate}
+  \item Executable programs or shell commands
+  \item System calls (functions provided by the kernel)
+  \item Library calls (functions within program libraries)
+  \item Special files (usually found in /dev)
+  \item File formats and conventions, e.g. /etc/passwd
+  \item Games
+  \item Miscellaneous (including macro packages and conventions),
+    e.g. man(7), groff(7), man-pages(7)
+  \item System administration commands (usually only for root)
+  \item Kernel routines [Non standard]
+\end{enumerate}
 
-\begin{table}
-  \caption{Conventional section names in man pages}\label{t:man-sections}
-  \small
-  \begin{multicols}{2}
-    \begin{itemize}
-      \item NAME
-      \item SYNOPSIS (usage)
-      \item CONFIGURATION
-      \item DESCRIPTION
-      \item OPTIONS (flags)
-      \item EXIT STATUS
-      \item RETURN VALUE
-      \item ERRORS
-      \item ENVIRONMENT
-      \item FILES
-      \item VERSIONS
-      \item STANDARDS
-      \item NOTES
-      \item BUGS
-      \item EXAMPLE
-      \item AUTHORS
-      \item SEE ALSO
-    \end{itemize}
-  \end{multicols}
-\end{table}
+\begin{itemize}
+  \item NAME
+  \item SYNOPSIS (usage)
+  \item CONFIGURATION
+  \item DESCRIPTION
+  \item OPTIONS (flags)
+  \item EXIT STATUS
+  \item RETURN VALUE
+  \item ERRORS
+  \item ENVIRONMENT
+  \item FILES
+  \item VERSIONS
+  \item STANDARDS
+  \item NOTES
+  \item BUGS
+  \item EXAMPLE
+  \item AUTHORS
+  \item SEE ALSO
+\end{itemize}

@@ -3,7 +3,7 @@
 
 This section serves as listing of existing solutions relevant to the
 evolution and formation of the thesis.
-In Section\ \ref{sec:design-evolution} we will be referring to the
+In Section~\ref{sec:design-evolution} we will be referring to the
 solutions described
 here, as well as to the key insights gained from their analysis.
 
@@ -28,7 +28,7 @@ and lacks support for offline, local model execution.
 
 \paragraph{Zsh Shell Integration (Kruger approach)}
 
-Another solution was proposed in article by Kruger\cite{kruger-web}, which
+Another solution was proposed in article by Kruger~\cite{kruger-web}, which
 describes a setup for zsh shell with \gls{llm} features, such as command
 suggestions, autocompletion, and in-terminal assistance. It uses OpenAI API to
 access remote \glspl{llm}. This approach demonstrates how shell hooks can be
@@ -47,7 +47,7 @@ graphical terminal emulator.
 This solution is popular and comercially successful, but it does not
 completely fit into the scope of our work, as it is not designed to work with
 local \glspl{llm}. However, it is worth mentioning, as it provides good AI-based
-services for terminal users\cite{warp-web,warp-docs}.
+services for terminal users~\cite{warp-web,warp-docs}.
 
 \paragraph{gptme}
 
@@ -58,8 +58,8 @@ architecture and implements \gls{mcp} protocol. This enables it to
 use various tools (terminal, browser, code execution, etc.). It is
 also context-aware, which means it can read and understand the files
 in the current working directory and acknowledge host
-\gls{os}\cite{gptme-web,gptme-docs}. Example of the interaction with
-gptme is provided in Listing\ \ref{lst:gptme}.
+\gls{os}~\cite{gptme-web,gptme-docs}. Example of the interaction with
+gptme is provided in Listing~\ref{lst:gptme}.
 
 \begin{lstlisting}[,
   caption={Example of gptme interaction with browser tool},
@@ -81,9 +81,9 @@ User: How many calories are there in one spoon of sugar?
 Assistant: Short answer: about 16 calories per level teaspoon.
 
 Details:
-- Level teaspoon (≈4 g sugar): ~15–16 kcal
+- Level teaspoon (4 g sugar): ~15–16 kcal
 - Heaped/rounded teaspoon (≈5–7 g): ~20–28 kcal
-- Tablespoon (≈12–15 g): ~48–60 kcal
+- Tablespoon (12–15 g): ~48–60 kcal
 
 Sugar has ~4 kcal per gram (sucrose ~3.87 kcal/g), so you can estimate by weight if needed.
 \end{lstlisting}
@@ -97,12 +97,12 @@ Key capabilities:
   \item Implements MCP protocol
 \end{itemize}
 
-When tested manually with local \glspl{llm} (Gemma3 4b
-\ \cite{gemma-web}, Qwen2.5 0.5B/1.5B\ \cite{qwen-web}), it performed poorly.
-The models struggled with task complexity due to long prompts, which caused \glspl{llm}
-to hallucinate on too many details. This indicates the solution is not
-fully adapted for local \glspl{llm}, highlighting a key consideration for our design:
-use fine-grained prompts for local \glspl{llm} and optimize architecture accordingly.
+When tested manually with local \glspl{llm} (Gemma3 4b~\cite{gemma-web}, Qwen2.5
+0.5B/1.5B~\cite{qwen-web}), it performed poorly. The models struggled with task
+complexity due to long prompts, which caused \glspl{llm} to hallucinate on too
+many details. This indicates the solution is not fully adapted for local
+\glspl{llm}, highlighting a key consideration for our design: use fine-grained
+prompts for local \glspl{llm} and optimize architecture accordingly.
 
 \paragraph{gemini-cli}
 
@@ -112,7 +112,7 @@ capabilities in terminal. It is useful for various tasks, including
 code generation, data analysis, and general Q\&A. It also supports
 \gls{mcp} protocol and custom tool integration. Hovewer, it is
 dependable on remote \glspl{llm} and cannot be used with local
-\glspl{llm}\cite{gemini-web,gemini-docs}.
+\glspl{llm}~\cite{gemini-web,gemini-docs}.
 
 \paragraph{Yai (Your \gls{ai} Assistent)}
 
@@ -123,7 +123,7 @@ tools interaction
 and basic agentic architecture. In current form, it is not able to use local
 \glspl{llm}. Hovewer, it is possible to adapt it for local \gls{llm}s
 with some modifications
-in its source code.\cite{yai-web,yai-docs}.
+in its source code~\cite{yai-web,yai-docs}.
 
 \paragraph{Aider}
 
@@ -131,7 +131,7 @@ This is an \gls{llm}-powered code agent with focus on software
 development tasks and
 terminal integration. It supports various tools and is context- and
 project-aware. It is able to use both remote and local \glspl{llm}. It is also
-open-source.\cite{aider-web,aider-docs}.
+open-source~\cite{aider-web,aider-docs}.
 
 \paragraph{termai}
 
@@ -140,7 +140,7 @@ written in Rust. It
 supports various \gls{llm} providers, but it is not able to use local
 \glspl{llm} in its
 current form. It is open-source and has basic agentic
-architecture\cite{termai-web}.
+architecture~\cite{termai-web}.
 
 \paragraph{AiTerm}
 
@@ -155,14 +155,14 @@ We can draw inspiration from its approach to Bash integration using
 tmux sessions to provide seamless interaction between \gls{llm} and
 terminal. Hovewer, this approach turned out to be somewhat clunky in
 practice, as it couldn't handle well the ~\gls{tui} applications, but
-only get bash's responses\cite{aiterm-web}.
+only get bash's responses~\cite{aiterm-web}.
 
 \paragraph{OpenClaw}
 While not strictly a terminal assistant, OpenClaw is an open-source project that
 runs locally on user machines and provides various \gls{ai} capabilities through
 a \gls{gui} or chat interface. It's focus is on general-purpose machine
 maintenance and system management tasks, but it is not focused on small local
-\glspl{llm} and terminal integration\cite{openclaw-web}. It demonstrates the
+\glspl{llm} and terminal integration~\cite{openclaw-web}. It demonstrates the
 possible alternative approach to interation with local \gls{ai}-enabled system.
 
 \paragraph{Other solutions}
@@ -358,7 +358,7 @@ necessary given the constraints of local \gls{llm} execution:
     languages have different performance characteristics and ecosystem support.
 \end{itemize}
 
-Table\ \ref{tab:solutions-summary} compares existing solutions across
+Table~\ref{tab:solutions-summary} compares existing solutions across
 the evaluation criteria
 described above. Note that this comparison informed architectural decisions in
 designing our solution, particularly regarding which capabilities are feasible

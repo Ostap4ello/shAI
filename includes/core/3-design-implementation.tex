@@ -37,10 +37,12 @@ component's responsibility and enables thorough testing of individual modules.
 Figure~\ref{fig:use-cases} presents the system's use cases and user
 interactions.
 
+% TODO: as vector format
+% add puml code to AIS attachments, same for Fig.2, INCREASE FIG2 (READIBILITY)
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\textwidth]{./img/shAI_Use_Cases.png}
-  \caption{Use-case diagram for ShAI}\label{fig:use-cases}
+  \caption{Use case diagram for ShAI}\label{fig:use-cases}
 \end{figure}
 
 The application is structured around three main components, each designed to
@@ -238,7 +240,7 @@ learning, and devise integration. smong such libraries, we use:
 
 \subsubsection{Ollama}
 
-Ollama\cite{ollama-web} is a local LLM service that enables running large
+Ollama~\cite{ollama-web} is a local LLM service that enables running large
 language models on consumer hardware without requiring cloud API calls. For this
 thesis, Ollama was chosen as the primary LLM runtime over in-code alternatives
 for several reasons:
@@ -267,7 +269,7 @@ for several reasons:
 
 \subsubsection{\gls{faiss}}
 
-For the RAG retrieval component, \gls{faiss}\cite{faiss2026} was
+For the RAG retrieval component, \gls{faiss}~\cite{faiss2026} was
 selected as the vector database for storing and retrieving document
 embeddings. This choice was motivated by:
 
@@ -285,8 +287,9 @@ embeddings. This choice was motivated by:
 
 The thesis testing and development primarily utilized several small, publicly
 available \glspl{llm} and embedding models, summarized in
-Tables\ \ref{tab:llm-summary} and\ \ref{tab:embedding-summary}.
+Table~\ref{tab:llm-summary} and Table~\ref{tab:embedding-summary}.
 
+% TODO: fix column widths, do we really need last 2 cols? same for emb
 \begin{table}
   \centering
   \scriptsize
