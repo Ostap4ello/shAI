@@ -8,7 +8,7 @@ and a summarizer that generates concise answers from retrieved passages. The
 implementation uses Ollama for local inference and \gls{faiss} for vector
 indexing.
 
-Evaluation is component-focused. The classifier was tested on a balanced
+Evaluation is component-focused. The classifier was tested on a balanced\linebreak
 \texttt{classifier-100} dataset; the best model achieved 88\% accuracy but
 required 2.9s per query, while smaller models remained near chance-level. The
 retriever was evaluated on \texttt{sample-10} (14 documents, 250 queries) and
