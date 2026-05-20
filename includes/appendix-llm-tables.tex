@@ -1,0 +1,53 @@
+
+\begin{table}
+  \centering
+  \scriptsize
+  \caption{Summary of \glspl{llm} used in experiments (parameters,
+  context, and licensing).}\label{tab:llm-summary}
+    \begin{tabularx}{\textwidth}{XXXXX}
+    \toprule
+    \textbf{Model} & \textbf{Params} & \textbf{Context} &
+    \textbf{License} & \textbf{Training data (public disclosure)} \\
+    \midrule
+    Qwen2.5-0.5B-Instruct & 0.5B & 32K \newline (up to 128K;\ 8K gen) & Apache 2.0 &
+    Up to 18T tokens (family-level disclosure). \\
+    Qwen2.5-1.5B-Instruct & 1.5B & 32K \newline (up to 128K;\ 8K gen) & Apache 2.0 &
+    Up to 18T tokens (family-level disclosure). \\
+    Qwen3-0.6B & 0.6B & 32K & Apache 2.0 &
+    \textasciitilde{}36T tokens; web + doc-like corpora + synthetic
+    math/code (family-level disclosure). \\
+    Qwen3-1.7B & 1.7B & 32K & Apache 2.0 &
+    \textasciitilde{}36T tokens; web + doc-like corpora + synthetic
+    math/code (family-level disclosure). \\
+    Granite-3.1-1B-A400M-Instruct (\gls{moe}) & 1.3B \newline (400M active) & 128K &
+    Apache 2.0 & 10T tokens (\gls{moe}); SFT mix as above (high-level disclosure). \\
+    Gemma 3 (Google) & 4B & 32K & Gemma Terms of Use &
+    Token counts disclosed; broad web/code/math/image sources
+    (high-level disclosure). \\
+    \bottomrule
+    % TODO: review on HuggingFace + connect with ollama namings
+  \end{tabularx}
+\end{table}
+
+\begin{table}
+  \centering
+  \scriptsize
+  \caption{Summary of embedding models used in experiments
+  (dimension, context, and licensing).}\label{tab:embedding-summary}
+  \begin{tabularx}{\textwidth}{XlllX}
+    \toprule
+    \textbf{Model} & \textbf{Params} & \textbf{Context} &
+    \textbf{Dim} & \textbf{Notes} \\
+    \midrule
+    Qwen3-Embedding-0.6B & 0.6B & 32K & up to 1024 & Apache 2.0;
+    supports user-defined dimensions (MRL). \\
+    EmbeddingGemma-300M (Google) & 300M & 2048 & 768 & Gemma Terms of
+    Use; can be truncated to smaller dims via MRL. \\
+    granite-embedding-30m-english & 30M & 512 & 384 & Apache 2.0;
+    English-only embedding model. \\
+    granite-embedding-278m-multilingual & 278M & 512 & 768 & Apache
+    2.0; multilingual embedding model (12 languages listed by IBM). \\
+    % TODO: review on HuggingFace + connect with ollama namings
+    \bottomrule
+  \end{tabularx}
+\end{table}
