@@ -366,59 +366,45 @@ to implement with local \glspl{llm}.
 
 \begin{table}
   \centering
-  \caption{Summary of existing solutions across key evaluation criteria.}
+  \caption{Summary of existing solutions across key evaluation criteria}
   \small
-  \begin{tabularx}{\textwidth}{lXXX}
+  ~\\
+  Part 1\\
+  ~\\
+  \begin{tabularx}{\textwidth}{XXXX}
     \toprule
-    \textbf{Solution} & \textbf{Warp Terminal} & \textbf{gptme} &
-    \textbf{gemini-cli} \\
+    \textbf{Solution} & \textbf{Open Source} & \textbf{Local \gls{llm}\newline{}Support} & \textbf{Context\newline{}Awareness} \\
     \midrule
-    \textbf{Open Source} & No & Yes & No \\
-    \textbf{Local \gls{llm} Support} & No & Yes (Limited) & No \\
-    \textbf{Context Awareness} & Partial (Display) & Yes & Yes \\
-    \textbf{Agentic Architecture} & Yes & Yes & Yes \\
-    \textbf{Type} & Terminal Emulator & \gls{cli} Utility & \gls{cli} Chat \\
-    \textbf{Tool Integration} & Limited & \gls{mcp} Protocol &
-    \gls{mcp} Protocol \\
-    \textbf{Language} & Proprietary & Python & Go \\
+    Warp Terminal & No & No & Partial (Display) \\
+    gptme & Yes & Yes (Limited) & Yes \\
+    gemini-cli & No & No & Yes \\
+    Aider & Yes & Yes & Yes \\
+    Yai & Yes & Limited & No \\
+    termai & Yes & No & No \\
+    AiTerm & Yes & Yes & Partial \\
+    Butterfish & Yes & No & Limited \\
+    llm-zsh-plugin & Yes & No & Limited \\
+    Zsh Integration\newline(Kruger) & Yes & No & Limited \\
     \bottomrule
   \end{tabularx}
-
-  \medskip
-
-  \begin{tabularx}{\textwidth}{lXXXX}
+  ~\\
+  ~\\
+  Part 2\\
+  ~\\
+  \begin{tabularx}{\textwidth}{XXllX}
     \toprule
-    \textbf{Solution} & \textbf{Aider} & \textbf{Yai} &
-    \textbf{termai} & \textbf{AiTerm} \\
+    \textbf{Solution} & \textbf{Agentic\newline{}Architecture} & \textbf{Type} & \textbf{Tool\newline{}Integration} & \textbf{Language} \\
     \midrule
-    \textbf{Open Source} & Yes & Yes & Yes & Yes \\
-    \textbf{Local \gls{llm} Support} & Yes & Limited & No & Yes \\
-    \textbf{Context Awareness} & Yes & No & No & Partial \\
-    \textbf{Agentic Architecture} & Yes & Partial & Yes & Yes \\
-    \textbf{Type} & Code Agent & \gls{tui} Chat & \gls{cli} Chat &
-    Terminal Wrapper \\
-    \textbf{Tool Integration} & Code Execution & Limited & Basic &
-    Bash Integration \\
-    \textbf{Language} & Python & Go & Rust & Python \\
+    Warp\newline{}Terminal & Yes & Terminal Emulator & Limited & Proprietary \\
+    gptme & Yes & \gls{cli} Utility & \gls{mcp} Protocol & Python \\
+    gemini-cli & Yes & \gls{cli} Chat & \gls{mcp} Protocol & Go \\
+    Aider & Yes & Code Agent & Code Execution & Python \\
+    Yai & Partial & \gls{tui} Chat & Limited & Go \\
+    termai & Yes & \gls{cli} Chat & Basic & Rust \\
+    AiTerm & Yes & Terminal Wrapper & Bash Integration & Python \\
+    Butterfish & No & Shell Companion & Limited & Python \\
+    llm-zsh-plugin & No & Zsh Plugin & Limited & Python \\
+    Zsh\newline{}Integration\newline(Kruger) & No & Shell Integration & Shell Hooks & Zsh/Shell \\
     \bottomrule
   \end{tabularx}
-
-  \medskip
-
-  \begin{tabularx}{\textwidth}{lXXX}
-    \toprule
-    \textbf{Solution} & \textbf{Butterfish} & \textbf{llm-zsh-plugin} &
-    \textbf{Zsh Integration (Kruger)} \\
-    \midrule
-    \textbf{Open Source} & Yes & Yes & Yes \\
-    \textbf{Local \gls{llm} Support} & No & No & No \\
-    \textbf{Context Awareness} & Limited & Limited & Limited \\
-    \textbf{Agentic Architecture} & No & No & No \\
-    \textbf{Type} & Shell Companion & Zsh Plugin & Shell Integration \\
-    \textbf{Tool Integration} & Limited & Limited & Shell Hooks \\
-    \textbf{Language} & Python & Python & Zsh/Shell \\
-    \bottomrule
-  \end{tabularx}
-
 \end{table}\label{tab:solutions-summary}
-
