@@ -17,10 +17,14 @@ diagrams:
 	mkdir -p diagrams/out
 	cd diagrams && plantuml -png *.puml -o out/
 	cd diagrams && plantuml -svg *.puml -o out/
+	cd diagrams && for i in *.puml; do \
+		$(LOG_INFO) "Generating PDF for $$i..."; \
+		plantuml -tsvg -pipe < $$i | inkscape --pipe --export-filename=out/$$i.pdf; \
+	done
 	$(LOG_INFO) "Diagrams generated in diagrams/out/"
 	$(LOG_INFO) "Copying png diagrams to img/."
 	mkdir -p img/
-	cp diagrams/out/*.png img/.
+	cp diagrams/out/*.pdf img/.
 
 clean-diagrams:
 	$(LOG_INFO) "Cleaning generated diagrams..."
