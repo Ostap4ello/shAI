@@ -353,8 +353,8 @@ these steps using various tools.
 
 \gls{mcp} protocol is a protocol, that standartizes the interaction between
 agent and tools, allowing simpler software integration and development for AI
-agents~\cite{mcp}. While not used in this thesis, it is important to mention it
-as a relevant concept~\cite{zhao2023}.
+agents~\cite{anthropic2024mcp}. While not used in this thesis, it is important
+to mention it as a relevant concept~\cite{zhao2023}.
 
 
 \subsubsection{Retrieval-Augmented Generation (RAG)}
@@ -525,7 +525,8 @@ than the deduction of hidden rationales.
 \paragraph{Common RAG Testing Techniques}\label{sec:rag-eval}
 
 This part describes most common RAG Testing Techniques, essential for the
-evaluation of the performance of \gls{rag} systems~\cite{rag-evaluation}.
+evaluation of the performance of \gls{rag} systems~\cite{rag-evaluation,
+langsmith2026rag}.
 
 \paragraph{Precision@k}
 
@@ -572,34 +573,34 @@ document for query i, and |Q| is the total number of queries. MRR rewards
 systems that find relevant documents early in the ranking and is particularly
 useful when users typically only examine the top few results.
 
-\paragraph{Normalized Discounted Cumulative Gain (NDCG)}
-
-\textbf{\gls{ndcg}} combines relevance judgments with
-ranking position to account for the fact that lower-ranked relevant documents
-are less valuable than higher-ranked ones:
-
-\[
-  \text{DCG} = \sum_{i=1}^{k} \frac{\text{rel}_i}{\log_2(i+1)}
-\]
-
-where \textsl{rel\textsubscript{i}} is the relevance score of the document at
-position i.\ \gls{ndcg} normalizes this by the ideal ranking (IDCG) to produce a
-score between 0 and 1. NDCG is valuable for assessing ranking quality when there
-are multiple levels of relevance (e.g., highly relevant, partially relevant, not
-relevant).
-
-\paragraph{F1 Score for Retrieval}
-
-For binary relevance judgments (relevant or not relevant), the \textbf{F1 score}
-combines precision and recall:
-
-\[
-  \text{F1} = 2 \times \frac{\text{Precision} \times
-  \text{Recall}}{\text{Precision} + \text{Recall}}
-\]
-
-The F1 score is useful for balancing the trade-off between precision and recall
-when a single metric is needed to optimize system performance.
+% \paragraph{Normalized Discounted Cumulative Gain (NDCG)}
+%
+% \textbf{\gls{ndcg}} combines relevance judgments with
+% ranking position to account for the fact that lower-ranked relevant documents
+% are less valuable than higher-ranked ones:
+%
+% \[
+%   \text{DCG} = \sum_{i=1}^{k} \frac{\text{rel}_i}{\log_2(i+1)}
+% \]
+%
+% where \textsl{rel\textsubscript{i}} is the relevance score of the document at
+% position i.\ \gls{ndcg} normalizes this by the ideal ranking (IDCG) to produce a
+% score between 0 and 1. NDCG is valuable for assessing ranking quality when there
+% are multiple levels of relevance (e.g., highly relevant, partially relevant, not
+% relevant).
+%
+% \paragraph{F1 Score for Retrieval}
+%
+% For binary relevance judgments (relevant or not relevant), the \textbf{F1 score}
+% combines precision and recall:
+%
+% \[
+%   \text{F1} = 2 \times \frac{\text{Precision} \times
+%   \text{Recall}}{\text{Precision} + \text{Recall}}
+% \]
+%
+% The F1 score is useful for balancing the trade-off between precision and recall
+% when a single metric is needed to optimize system performance.
 
 \subsubsection{LLM Fine-tuning and Training}
 
