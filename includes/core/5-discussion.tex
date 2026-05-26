@@ -15,7 +15,7 @@ The work investigated three main architectural patterns for
   \item \textbf{Agent-Based Reasoning} --- Enabling iterative
     reasoning, tool use, and decision-making for complex tasks
   \item \textbf{Retrieval-Augmented Generation (RAG)} --- Combining
-    document retrieval with focused \gls{llm} summarization
+    document retrieval with further \gls{llm} summarization
 \end{enumerate}
 
 \subsection{Key Findings}
@@ -97,8 +97,12 @@ terminal environments:
 
 \begin{itemize}
   \item Empirical evidence of which architectures work with small local \glspl{llm}
+  \item The software for evaluating the approaches for \gls{rag} and
+      classification, that can be used for further research in this area, in
+        scope of accuracy, latency, and user experience of \gls{llm}-based
+        systems.
   \item Identification of key failure modes in applying local models to structured tasks
-  \item An open-source reference implementation of a working \gls{rag}-based assistant
+  \item An open-source reference implementation of a working \gls{rag}-based assistant, which can also be used as a base framework for further improvements and automations in scope of local \gls{llm} assistance in terminal environments.
   \item Guidance for future research: local model assistance is viable within constrained,
     well-scoped tasks, not as general-purpose reasoning
 \end{itemize}

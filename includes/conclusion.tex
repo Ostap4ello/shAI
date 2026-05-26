@@ -1,2 +1,24 @@
-% TODO: smooth text
-
+In this thesis, we have explored various use cases of \glspl{llm} in the context
+of local \gls{cli} assistants, with constraings on computational resources.
+The first use case was the usage of \glspl{llm} in a role of command versus
+natural language classificator, to make the integration of the assistant into
+the system shell seamless, but this approach was not successful. Additionally,
+there are much better approaches to this problem, that use other \glspl{ml}
+models, that are much more efficient and accurate for this task.
+The second use case was the usage of embedding \glspl{llm} for retrieval of
+relevant information from a database, to make the search for relevant in local
+documents (in scope of this thesis --- man manual pages) more efficient and
+accurate. We have explored three approaches to this problem: Document-level,
+Passage-level, and Document-level with Passage-level reranking. Overall, for the
+specific use case ot this theis, the best approach is Document-level with
+Passage-level reranking for biger document collections, and passage-level for
+smaller ones, as it provides the best balance between latency and accuracy. The
+use of Document-level approach is not recommended, as it generates much more
+output, and it is much more difficult to control the size of the generated
+output, as it depends on the size of the documents.
+The third use case was the usage of \glspl{llm} for generation of natural
+language responses to user queries, based on the retrieved information from the
+previous use case. This approach is very effective, as it allows to generate
+more natural and concise responses in short time, but it showed to be very
+sensitive to the quality and size of the retrieved information, which affected
+the choice of the best approach for the previous use case.
