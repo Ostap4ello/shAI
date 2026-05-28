@@ -1,113 +1,313 @@
-\selectlanguage{slovak}
-Táto bakalárska práca skúma, či je možné zostaviť praktického linuxového
-asistenta príkazového riadka (\gls{cli}) na báze malých lokálnych \glspl{llm}
-bez závislosti od siete. Motiváciou je skombinovať výhody použiteľnosti
-asistencie založenej na prirodzenom jazyku s výhodami súkromia a latencie pri
-offline spustení. Práca sa preto zameriava na hardvér s obmedzenými zdrojmi a
-explicitne vyhodnocuje, ktoré architektonické prístupy zostávajú pri týchto
-obmedzeniach spoľahlivé.
-
-\paragraph{Teoretické východiská}
-Teoretické východiská predstavujú rozhrania terminálu (\gls{cli} a \gls{tui}),
-poskytujú prehľad moderných \glspl{llm} založených na architektúre Transformer,
-spolu s pokročilými konceptmi ako \gls{moe}, agenti a \gls{rag}. Vysvetľujú sa v
-nich modely na vytváranie vektorových reprezentácií (embeddingy), sémantické
-vyhľadávanie, nuansy \gls{rag} a testovanie. Ďalej sú definované manuálové
-stránky Linuxu (man pages), spolu s príslušnými konvenciami potrebnými na
-spracovanie dokumentov.
-
-\paragraph{Analýza existujúcich riešení a technológií}
-Nasledujúca časť práce poskytuje analýzu existujúcich asistentov (napr.
-spoločníkov do shellu, agentných \gls{cli} nástrojov a terminálových emulátorov)
-a poukazuje na silnú závislosť od vzdialených API alebo veľkých modelov, pričom
-zdôrazňuje nízku spoľahlivosť agentných pracovných postupov pri lokálnom
-spustení. Na základe tejto analýzy práca dokumentuje vývoj rozsahu od
-ambicióznej automatizácie shellu až po užší dizajn zameraný na \gls{rag}, ktorý
-minimalizuje halucinácie a znižuje veľkosť promptov.
-
-\paragraph{Návrh a implementácia}
-Finálny systém, shAI, je modulárna monolitická aplikácia s tromi komponentmi:
-klasifikátorom, ktorý rozlišuje príkazy od otázok, vyhľadávačom dokumentov,
-ktorý indexuje lokálne manuálové stránky, a sumarizátorom, ktorý generuje
-stručné odpovede z vyhľadaných pasáží. Implementačné detaily zahŕňajú prevod
-manuálových stránok na čistý text, budovanie vektorových indexov pomocou
-\gls{faiss} a spúšťanie modelov prostredníctvom API kompatibilného s OpenAI v
-rámci Ollama. Dizajn uprednostňuje malé prompty, kontrolované okná kontextu a
-konfigurovateľné parametre vyhľadávania, aby sa udržala nízka latencia.
-
-\paragraph{Vyhodnotenie a kľúčové zistenia}
-Vyhodnotenie je zamerané na jednotlivé komponenty. Klasifikátor bol testovaný na
-vyváženej množine údajov \texttt{classifier-100} naprieč viacerými lokálnymi
-modelmi; najlepšia presnosť bola 88 %, avšak vyžadovala 2,9 s na dotaz, zatiaľ
-čo menšie modely zostali na úrovni náhody, čo robí klasifikáciu v reálnom čase
-nepraktickou. Vyhľadávač bol vyhodnotený na \texttt{sample-10} (14 dokumentov,
-250 dotazov) a \texttt{sample-100} (101 dokumentov, 300 dotazov). Vyhľadávanie
-na úrovni dokumentov dosiahlo presnosť Top-5 až 100 %, resp. 92 %; modely
-Granite na embeddingy poskytli najnižšiu latenciu dotazov, zatiaľ čo
-qwen3-embedding produkoval dlhšie časy budovania indexu pri väčších korpusoch.
-Preusporiadanie pasáží (re-ranking) zvýšilo latenciu bez zlepšenia presnosti
-Top-1 a vyhľadávanie na úrovni pasáží dosiahlo rovnakú presnosť ako vyhľadávanie
-na úrovni dokumentov.
-
-\paragraph{Záver a diskusia}
-Práca dospieva k záveru, že lokálni asistenti na báze \gls{llm} sú
-životaschopní, ak sa obmedzia na vyhľadávanie a sumarizáciu, zatiaľ čo návrhy
-založené na intenzívnej klasifikácii a agentnom správaní zostávajú na malých
-modeloch nespoľahlivé. Práca prináša open-source prototyp a empirické
-benchmarky, ktoré usmerňujú budúcu prácu smerom k optimalizácii modelov,
-vylepšeniam používateľského rozhrania a ďalším obmedzeným úlohám, spolu s
-budúcim komplexným vyhodnotením kvality sumarizácie.
-
 \selectlanguage{english}
-% This thesis explores whether a practical Linux \gls{cli} assistant can be built
-% on small local \glspl{llm} without network dependency. The motivation is to
-% combine the usability benefits of natural-language assistance with the privacy
-% and latency advantages of offline execution. The work therefore targets
-% resource-constrained hardware and explicitly evaluates which architectural
-% approaches remain reliable under these constraints.
-%
-% \paragraph{Theoretical Background}
-% The theoretical background introduces terminal interfaces (\gls{cli} and
-% \gls{tui}), provides an overview of modern \glspl{llm} based on transformers,
-% along with advanced concepts like \gls{moe}, agents, \gls{rag}. It explains
-% embedding models, semantic search, \gls{rag} nuances and testing. Then, Linux
-% man pages are also defined, along with relevant conventions needed for document
-% processing.
-%
-% \paragraph{Analysis of Existing Solutions And Technologies}
-% Next part of thesis provides an analysis of existing assistants (e.g., shell
-% companions, agentic \gls{cli} tools, and terminal emulators) and shows heavy
-% reliance on remote APIs or large models and highlights poor reliability of
-% agentic workflows when run locally. Based on this analysis, the thesis documents
-% a scope evolution from ambitious shell automation to a narrower, testable
-% \gls{rag}-centered design that minimizes hallucination and reduces prompt size.
-%
-% \paragraph{Design and Implementation}
-% The final system, shAI, is a modular monolithic application with three
-% components: a classifier that distinguishes commands from questions, a document
-% retriever that indexes local man pages, and a summarizer that generates concise
-% answers from retrieved passages. Implementation details include converting man
-% pages to plain text, building vector indices with \gls{faiss}, and running models
-% via Ollama's OpenAI-compatible API. The design favors small prompts, controlled
-% context windows, and configurable retrieval parameters to keep latency low.
-%
-% \paragraph{Evaluation and Key Findings}
-% Evaluation is component-focused. The classifier was tested on a balanced
-% \texttt{classifier-100} dataset across multiple local models; the best accuracy
-% was 88\% but required 2.9s per query, while smaller models stayed near chance,
-% making real-time classification impractical. The retriever was evaluated on
-% \texttt{sample-10} (14 documents, 250 queries) and \texttt{sample-100} (101
-% documents, 300 queries). Document-level retrieval achieved Top-5 accuracy up to
-% 100\% and 92\% respectively; Granite embeddings provided the lowest query
-% latencies, while qwen3-embedding produced longer index build times on larger
-% corpora. Passage re-ranking increased latency without improving Top-1 accuracy,
-% and passage-level retrieval matched document-level precision.
-%
-% \paragraph{Conclusion And Discussion}
-% The thesis concludes that local \gls{llm} assistants are viable when constrained
-% to retrieval and summarization, while classification-heavy and agentic designs
-% remain unreliable on small models. It delivers an open-source prototype and
-% empirical benchmarks that guide future work toward model optimization,
-% UI improvements, and additional constrained tasks, along with future end-to-end
-% evaluation of summarization quality.
 
+\subsection*{Introduction}
+This bachelor thesis examines whether a practical Linux \gls{cli} assistant can
+be built on small local \glspl{llm} without relying on cloud services. The
+motivation is to combine the usability of natural-language assistance with the
+privacy, offline availability, and low-latency benefits of local execution. The
+work targets resource-constrained hardware and explicitly evaluates which
+architectural approaches remain reliable under such constraints.
+
+The thesis sets three primary goals: (1) to analyze the landscape of existing
+terminal assistants and identify their limitations for local use, (2) to design
+and implement a prototype system that operates entirely on local models, and (3)
+to evaluate the feasibility of key components using objective metrics. The
+resulting prototype, shAI, is open source and serves as a reference for future
+research on constrained \gls{llm} systems.
+
+The document is organized to mirror this workflow. It begins with theoretical
+background, proceeds to a systematic review of existing solutions, then presents
+the design and implementation of shAI, and finally evaluates each component with
+measured results. The resume below follows the same per-section structure and
+condenses each chapter into its core contributions and findings.
+
+Two research questions guide the work: which \gls{llm}-based tasks remain feasible
+on small local models, and how should system architecture be adapted to avoid
+hallucination and latency spikes. The thesis treats these questions as empirical
+problems and emphasizes repeatable evaluation. This focus on measurement leads to
+the creation of datasets and test configurations that allow direct comparison
+between models, retrieval strategies, and latency trade-offs.
+
+\subsection*{Theoretical Background}
+The theoretical section begins with terminal interaction concepts. It defines
+terminal emulators, \glspl{cli}, and \glspl{tui}, and describes how shells and
+command-line utilities form a text-based interface for user interaction. These
+concepts establish the environment in which the assistant must operate and the
+constraints imposed by standard input/output streams.
+
+The thesis then summarizes \gls{llm} architecture, including tokenization,
+embedding layers, and transformer blocks. It distinguishes dense models from
+\gls{moe} variants and highlights their trade-offs in memory usage, computational
+efficiency, and output consistency. Key limitations of local models are
+emphasized: smaller parameter counts reduce reasoning ability, and long prompts
+increase latency and hallucination risk.
+
+Additional considerations include tokenizer limitations for shell syntax and
+flags, which can confuse small models even on short prompts. The section also
+discusses how context window size affects prompt engineering and why iterative
+processing can be necessary when documents exceed practical limits. This theory
+provides a basis for later design decisions around passage selection, query
+reformulation, and output length control.
+
+Embedding models and document representation are introduced as the foundation
+for retrieval. The text explains dense vs.\ sparse retrieval, semantic vector
+representations, and vector databases, with \gls{faiss} selected for its
+lightweight file-oriented indexing. The \gls{rag} pipeline is described as a
+two-stage process of retrieval followed by summarization, and retrieval
+granularity is compared (document-level vs.\ passage-level). Finally, the
+evaluation metrics used in the thesis are defined, including Precision@k,
+Recall@k, Mean Reciprocal Rank (MRR), and \gls{ndcg}, along with query type
+taxonomy for \gls{rag} evaluation.
+
+Additional background covers practical \gls{rag} concerns: prompt size overhead,
+iterative prompt processing, and document relevance filtering. The thesis adopts
+the query-type framework (levels 1--4) to distinguish explicit fact retrieval
+from tasks that require hidden rationales or advanced reasoning. The focus is on
+level-1 and level-2 queries, which align with man page assistance and can be
+supported by retrieval and lightweight summarization.
+
+The evaluation subsection elaborates on how retrieval metrics map to user
+experience. Precision@k and Recall@k capture the breadth of relevant results,
+while MRR emphasizes early ranking for quick responses. \gls{ndcg} is introduced
+as a graded relevance metric even though it is not used in the final tests,
+helping position the chosen metrics among standard information-retrieval
+benchmarks. This theoretical framing sets the stage for the empirical evaluation
+chapters.
+
+The section also describes Linux man pages as structured documents, including
+their conventional sections (NAME, SYNOPSIS, DESCRIPTION, OPTIONS, and others)
+and the organization of pages into manual groups. This context informs the
+document processing pipeline and defines what constitutes a document or passage
+in later experiments.
+
+Document representation and storage are discussed in more detail, including dense
+and sparse retrieval approaches and the role of vector databases. The thesis
+explains why a lightweight, file-based vector index is suitable for a prototype
+and outlines common embedding aggregation methods (pooling, attention-based
+summaries, and special-token representations). These foundations justify the use
+of embedding \glspl{llm} for semantic search in the later implementation.
+
+The thesis also summarizes the model families used in experiments and their
+relevant characteristics. Qwen2.5 and Qwen3 models provide small parameter
+variants with long context windows, Granite offers dense and \gls{moe} variants
+optimized for efficiency, and Gemma models serve as a lightweight baseline. The
+embedding models mirror this diversity, ranging from small Granite embeddings to
+Qwen3 embeddings that support larger dimensional outputs. These choices reflect
+the requirement to test performance on realistic local hardware.
+
+The retrieval evaluation metrics are also linked to practical user behavior. For
+example, Precision@1 captures whether the first result is immediately useful,
+while Precision@5 approximates the ability to find a relevant answer in a small
+set of results. MRR rewards early correct hits and is especially relevant for
+interactive assistants that should not require extensive browsing. These
+connections justify the choice of metrics for the experimental section.
+
+\subsection*{Analysis of Existing Solutions and Technologies}
+The thesis surveys existing \gls{cli} and terminal assistants, including shell
+companions, terminal emulators with AI features, and agentic \gls{cli} tools.
+Solutions such as Butterfish, llm-zsh-plugin, Warp Terminal, gptme, gemini-cli,
+AiTerm, and others are compared using criteria that matter for local use:
+open-source availability, local \gls{llm} support, context awareness, agentic
+architecture, tool integration, and implementation language.
+
+The analysis finds that most mature tools depend on remote APIs or proprietary
+services, while those that support local models struggle with long prompts,
+hallucinations, and tool reliability. Local tests with small models show that
+agentic workflows are fragile and often fail due to incorrect tool invocation or
+multi-step reasoning breakdowns. These findings motivate a scope shift away from
+autonomous shell execution and toward a constrained information-retrieval task
+that is more compatible with local model capabilities.
+
+Specific observations include weak local performance of agentic tools when
+running Gemma and Qwen models, where long prompts lead to hallucinated steps and
+incorrect tool usage. In contrast, tools that focus on retrieval or short-form
+generation provide more stable results. The analysis also notes that terminal
+emulators with AI features, such as Warp, provide a rich user experience but are
+closed source and not aligned with local privacy constraints, making them
+unsuitable as a foundation for this work.
+
+The survey also yields a structured comparison table across criteria such as
+open-source availability, local model support, context awareness, and tool
+integration. This comparison highlights that remote services dominate the space,
+and local-capable tools tend to trade reliability for broad functionality. The
+thesis documents a three-step scope evolution: an initial vision of a broad
+shell wrapper, a local-first design with many features, and a final, focused
+\gls{rag} architecture that was empirically testable within the thesis timeline.
+
+Several features were explicitly deprioritized after this analysis. Seamless
+shell integration would require shell-specific hooks (Bash, Zsh, Fish), and even
+basic command execution complicates testing and validation. Dangerous command
+detection was also dropped because it depends on user-specific context and would
+require a dedicated labeled dataset. These constraints reinforced the decision to
+prioritize retrieval and summarization over open-ended automation.
+
+\subsection*{Design and Implementation}
+The design requirements emphasize offline operation, minimal external
+dependencies, and a predictable \gls{cli} user experience. Linux man pages are
+chosen as the primary knowledge source because they are structured, locally
+available, and relevant for command-line assistance. To reduce noise and improve
+retrieval quality, man pages are converted to plain text before indexing.
+
+The shAI system is implemented as a modular monolithic application with three
+components: (1) a command-vs.-query classifier, (2) a document retriever that
+builds and searches embedding indices, and (3) a summarizer that produces concise
+responses from retrieved content. The classifier explores two approaches: an
+\gls{llm}-only classifier and a hybrid method that combines syntax checking with
+\gls{llm} validation. The retriever builds vector indices using local embedding
+models via Ollama and \gls{faiss}, and it exposes three retrieval variants:
+document-level retrieval, document retrieval with passage-level re-ranking, and
+passage-level retrieval based on fixed-size line windows.
+
+The retrieval pipeline includes explicit configuration parameters for top-k
+results, passage size, and index storage location, enabling controlled
+experiments. Indexing is performed on preprocessed man pages stored as text files
+and cached in a local database directory. Search returns both metadata and
+content segments, which are then merged or filtered before being passed to the
+summarizer.
+
+Beyond the core components, the implementation includes user-facing workflows
+for system initialization, index building, query execution, and configuration
+changes. The documented use cases include starting the Ollama runtime, building
+the embedding index, running search queries, and generating answers. These steps
+are reflected in sequence diagrams that describe how the system transitions from
+raw query input to final response generation.
+
+The classifier component is designed as a proof of concept. It can be invoked on
+the current user input buffer and return a binary decision, but integrating this
+into a general-purpose shell requires different hooks for Bash, Zsh, and Fish.
+The thesis documents a Bash-oriented approach with readline hooks and explains
+why full multi-shell support is out of scope. This discussion complements the
+evaluation results, which already show insufficient accuracy for reliable
+deployment.
+
+The retriever component is the most mature part of the system. It handles
+document ingestion, embedding generation, and vector index storage, and it
+supports both document-level and passage-level search. For passage-level search,
+documents are split into fixed line windows to control context size. The
+re-ranking variant performs a second-stage search within top-k documents, which
+helps isolate relevant passages but increases latency.
+
+The summarizer component provides the final user-facing response. It receives a
+query and a set of retrieved passages, formats a prompt with explicit structure,
+and generates a concise answer focused on the user question. This keeps the
+generation task narrow and reduces hallucination compared to open-ended
+conversational assistants.
+
+The summarizer orchestrates the \gls{rag} flow: it sends the user query to the
+retriever, selects relevant passages, and constructs a compact prompt for the
+generative model. The implementation prioritizes small prompts and explicit
+structure to reduce hallucination risk. Deployment uses a Dockerized Ollama
+runtime with OpenAI-compatible APIs, enabling model swaps and configuration via
+simple config files. Service-check logic ensures the local \gls{llm} endpoint is
+available before processing requests.
+
+Design decisions are supported by architecture and use-case diagrams: the
+component model highlights the separation between retrieval, classification, and
+summarization, while the use-case diagram outlines system initialization, index
+building, querying, and configuration. The retriever includes two performance
+optimizations: document relevance filtering based on short descriptions and
+iterative prompt processing that evaluates documents in smaller chunks rather
+than injecting entire manuals into a single prompt.
+
+The technology stack centers on Python with the OpenAI-compatible client library
+for model access, \gls{faiss} for similarity search, and standard system
+libraries for filesystem and subprocess management. Ollama provides local model
+runtime with configurable context length and GPU support. The test suite is
+config-driven, enabling reproducible runs across model variants and retrieval
+strategies.
+
+Implementation also includes a CLI entry point that exposes configuration loading
+and test execution. Configuration files specify which model to use for embedding
+and generation, and the system is designed to reuse the same interfaces for both
+local and remote backends if needed. This modular structure allows the retrieval
+and summarization components to be tested independently.
+
+\subsection*{Evaluation and Key Findings}
+Evaluation is component-focused and implemented in the test-ctf suite. The
+classifier is tested on \texttt{classifier-100}, a balanced dataset of 100 inputs
+split equally between natural language questions and shell commands. Retrieval is
+tested on \texttt{sample-10} (14 documents, 250 queries) and \texttt{sample-100}
+(101 documents, 300 queries), using Precision@k and MRR to evaluate accuracy and
+per-query latency for performance.
+
+The classifier results show a clear trade-off between accuracy and latency. The
+best model achieved 88\% accuracy but required 2.9s per query, while smaller
+models stayed near chance-level (50--65\%) with lower latency. This makes
+real-time command classification impractical for local \glspl{llm} in the tested
+range.
+
+Per-model results reinforce this conclusion. Granite 1b reached 53\% accuracy,
+Granite 3b achieved 60\%, Qwen3 0.6b reached 79\%, Qwen3 1.7b reached 88\%, Qwen2.5
+0.5b achieved 50\%, Qwen2.5 1.5b achieved 78\%, and Gemma3 1b achieved 65\%. The
+best accuracy coincided with the highest latency, confirming that the
+classification approach is not competitive for interactive use.
+
+Models used in classifier testing include Granite (1b and 3b), Qwen2.5
+(0.5b/1.5b), Qwen3 (0.6b/1.7b), and Gemma3 1b, with accuracies spanning 50--88\%
+and average latencies ranging from 0.10s to 2.9s per query. These results
+consistently favor retrieval-based workflows over classification-heavy designs.
+
+Document-level retrieval achieved strong performance. On \texttt{sample-10},
+Top-1 accuracy ranged from 83.6\% to 86.8\% with Top-5 up to 100\% and MRR up to
+0.916. On \texttt{sample-100}, Top-1 ranged from 62.7\% to 72.7\% with Top-5 up to
+92.0 and MRR up to 0.806. Granite embeddings produced the lowest per-query
+latencies (about 0.04--0.10s), while qwen3-embedding increased index build time
+dramatically on larger corpora (128--134s vs.\ 1.6--2.3s for Granite models).
+
+Document retrieval with passage-level re-ranking increased latency (0.6--3.8s per
+query) and reduced Top-1 accuracy (39.2--55.2\% on \texttt{sample-10} and
+42.7--45.7\% on \texttt{sample-100}) without improving Top-5 results. Passage-level
+retrieval matched document-level precision while keeping low latency for Granite
+embeddings (0.03--0.10s). These results indicate that passage-level retrieval can
+deliver similar accuracy without the overhead of re-ranking.
+
+Across embedding models, Granite variants offered the best latency and stable
+accuracy, while qwen3-embedding provided strong accuracy but with high index
+build time on larger corpora. MRR values ranged from 0.861 to 0.916 on
+\texttt{sample-10} and from 0.724 to 0.806 on \texttt{sample-100}. These numbers
+confirm that top-ranked results are usually relevant but that broader corpora
+reduce precision, reinforcing the need for focused retrieval strategies.
+
+The evaluation also highlights the effect of retrieval strategy on index build
+time. Granite embeddings built indices in roughly 1.0--2.3s for the tested
+datasets, while qwen3-embedding required 10.3s on \texttt{sample-10} and
+128--134s on \texttt{sample-100}. These costs are significant for iterative
+development and suggest that smaller embeddings are preferable when frequent
+re-indexing is expected.
+
+All retrieval tests used top\_k=5, with re-ranking configured to top\_k\_extended=10
+and passage\_size=20 lines. These parameters reflect a balance between accuracy
+and latency and were kept constant across datasets to enable fair comparisons.
+
+Summarization was evaluated qualitatively rather than with a dedicated benchmark.
+The summarizer produced concise and useful answers when retrieval was accurate,
+but its output quality degraded when retrieved passages were noisy or incomplete.
+
+The evaluation artifacts are stored as structured JSON outputs, enabling
+inspection of per-query ranks, latencies, and match statistics. This approach
+supports reproducibility and makes it possible to compare retrieval strategies
+under the same configuration. However, the thesis does not yet include an
+end-to-end benchmark that combines retrieval and summarization into a single
+quality metric, leaving full-system evaluation as future work.
+
+\subsection*{Conclusion and Future Work}
+The thesis concludes that local \gls{llm} assistants are viable when constrained
+to retrieval and summarization tasks, while classification-heavy or agentic
+architectures remain unreliable on small models. The evidence shows that
+classification accuracy peaks at 88\% with high latency, whereas retrieval
+achieves strong Top-5 accuracy (92--100\%) with low latency when using smaller
+embedding models.
+
+The work contributes an open-source prototype, a reproducible evaluation suite,
+and empirical findings that guide future development. Future work should focus
+on model optimization (quantization and distillation), richer yet lightweight
+user interfaces, and a dedicated summarization-quality benchmark. Additional
+constrained tasks, such as structured error explanation or template-based command
+generation, are promising directions that align with the strengths of small local
+\glspl{llm}.
+
+The thesis also identifies clear limitations: the absence of end-to-end
+summarization benchmarks, the lack of automated evaluation for agentic behaviors,
+and the dependence of answer quality on retrieval precision. Addressing these
+limitations will require new datasets, more rigorous evaluation protocols, and
+careful balancing between latency and accuracy for local deployment.

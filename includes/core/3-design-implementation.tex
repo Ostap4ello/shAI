@@ -113,7 +113,7 @@ directly in the shell; if natural language, it engages the \gls{rag} pipeline fo
 % \paragraph{Shell Integration Architecture}{}
 % To capture user input without disrupting the shell environment, the implementation uses Bash
 % Readline hooks. The \texttt{get\_current\_user\_input} function is registered as a configurable
-% callback that extracts the current input buffer. Example hook for bash is shown
+% callback that extracts the current input buffer. Example hook for Bash is shown
 % in Listing~\ref{lst:readline-hook}.
 %
 % \begin{lstlisting}[,
@@ -346,7 +346,7 @@ Table~\ref{tab:llm-summary} and Table~\ref{tab:embedding-summary}.
 %
 % \subsubsection{Tokenizer Limitations}
 %
-% Small \glspl{llm} often struggle to handle complex, non-human structures such as bash
+% Small \glspl{llm} often struggle to handle complex, non-human structures such as Bash
 % commands and flags (for example, confusing -m with -M) commonly found in CLI
 % commands and man pages. This limits their applicability when dealing with such
 % structured data, leading to challenges in understanding and generating relevant

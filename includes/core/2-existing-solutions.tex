@@ -1,22 +1,18 @@
 
 \subsection{Existing Solutions Overview}
 
-This section serves as listing of existing solutions relevant to the
-evolution and formation of the thesis.
-In Section~\ref{sec:design-evolution} we will be referring to the
-solutions described
-here, as well as to the key insights gained from their analysis.
+This section serves as listing of existing solutions relevant to the evolution
+and formation of the thesis. In Section~\ref{sec:design-evolution} we will be
+referring to the solutions described here, as well as to the key insights gained
+from their analysis.
 
 \paragraph{Butterfish}
 
-Butterfish is a shell companion that integrates \gls{llm}
-capabilities directly into
-interactive shell environments. It provides features such as command
-suggestions,
-error explanation, and context-aware assistance by streaming \gls{llm} responses
-into the terminal. It relies on remote \glspl{llm} via the OpenAI API
-and does not
-support local \glspl{llm} execution.
+Butterfish is a shell companion that integrates \gls{llm} capabilities directly
+into interactive shell environments. It provides features such as command
+suggestions, error explanation, and context-aware assistance by streaming
+\gls{llm} responses into the terminal. It relies on remote \glspl{llm} via the
+OpenAI API and does not support local \glspl{llm} execution~\cite{butterfish}.
 
 \paragraph{llm-zsh-plugin}
 
@@ -24,7 +20,7 @@ The llm-zsh-plugin is a Zsh plugin that extends shell functionality
 with \gls{llm}
 integration for command generation and suggestions. It provides shell completion
 and command assistance features but is dependent on remote \glspl{llm} services
-and lacks support for offline, local model execution.
+and lacks support for offline, local model execution~\cite{llmzsh}.
 
 \paragraph{Zsh Shell Integration (Kruger approach)}
 
@@ -154,23 +150,23 @@ OpenAI \gls{api}, thus and it can be used with local \glspl{llm} as well.
 We can draw inspiration from its approach to Bash integration using
 tmux sessions to provide seamless interaction between \gls{llm} and
 terminal. Hovewer, this approach turned out to be somewhat clunky in
-practice, as it couldn't handle well the ~\gls{tui} applications, but
-only get bash's responses~\cite{aiterm-web}.
+practice, as it couldn't handle well the \gls{tui} applications, but
+only get Bash's responses~\cite{aiterm-web}.
 
 \paragraph{OpenClaw}
 While not strictly a terminal assistant, OpenClaw is an open-source project that
 runs locally on user machines and provides various \gls{ai} capabilities through
 a \gls{gui} or chat interface. It's focus is on general-purpose machine
 maintenance and system management tasks, but it is not focused on small local
-\glspl{llm} and terminal integration~\cite{openclaw-web}. It demonstrates the
+\glspl{llm} and terminal integration~\cite{openclaw_website}. It demonstrates the
 possible alternative approach to interation with local \gls{ai}-enabled system.
 
 \paragraph{Other solutions}
 
-There are also such solutions, like \textsl{ai-terminal-assistent (github)}{}
-or \textsl{cmd-ai (github)}, which are just wrappers for Rest \gls{api} calls to
-remote \glspl{llm}. They provide basic \gls{ai} capabilities in terminal, but
-have no significant features.
+There are also such solutions, like \textsl{ai-terminal-assistent
+(github)}~\cite{aiterminala} or \textsl{cmd-ai (github)}~\cite{cmdai}, which are
+just wrappers for Rest \gls{api} calls to remote \glspl{llm}. They provide basic
+\gls{ai} capabilities in terminal, but have no significant features.
 
 \paragraph{Analysis of Existing Solutions}
 
@@ -218,65 +214,54 @@ We had to significantly narrow the scope of features to those that could be
 reliably implemented with local \glspl{llm} and empirically tested. This meant
 dropping features like:
 \begin{itemize}
-  \item \textbf{Seamless integration with \texttt{bash} or other shells} ---
+  \item \textbf{Seamless integration with \texttt{Bash} or other shells} ---
     While shell integration through tools like tmux (as demonstrated by AiTerm)
-    and zsh plugins appeared promising, this approach proved
-    difficult to implement
-    reliably. Testing showed three main challenges: (1) basic command execution
-    and user interaction were hard to verify systematically, (2) distinguishing
-    between natural language queries and bash commands showed low
-    persistence and
-    reliability without a dedicated classification module, and (3) handling I/O
-    streams and terminal state significantly increased system complexity. These
-    challenges suggest shell integration requires more sophisticated
-    architecture
-    than initially apparent.
+        and zsh plugins appeared promising, this approach proved difficult to
+        implement reliably. Testing showed three main challenges: (1) basic
+        command execution and user interaction were hard to verify
+        systematically, (2) distinguishing between natural language queries and
+        Bash commands showed low persistence and reliability without a dedicated
+        classification module, and (3) handling I/O streams and terminal state
+        significantly increased system complexity. These challenges suggest
+        shell integration requires more sophisticated architecture than
+        initially apparent.
 
   \item \textbf{Dangerous command detection} --- While conceptually appealing,
     empirical validation of dangerous command detection proved infeasible within
-    the thesis scope. The primary challenge was creating a
-    comprehensive verification
-    system and dataset to test the classifier reliably. Additionally,
-    defining what
-    constitutes a "dangerous" command depends heavily on user context and system
-    configuration, making formal evaluation difficult. This feature
-    was deprioritized
-    in favor of more objectively measurable functionality.
+        the thesis scope. The primary challenge was creating a comprehensive
+        verification system and dataset to test the classifier reliably.
+        Additionally, defining what constitutes a ``dangerous'' command depends
+        heavily on user context and system configuration, making formal
+        evaluation difficult. This feature was deprioritized in favor of more
+        objectively measurable functionality.
 
   \item \textbf{Agentic systems with autonomous execution} --- AI agents capable
-    of planning and executing complex tasks seemed attractive but
-    posed significant
-    testing challenges. Verifying agent behavior requires extensive
-    integration testing
-    and careful evaluation of edge cases. Within the thesis timeline and without
-    a production deployment scenario, creating reliable tests for
-    autonomous execution
-    was not practical. This direction was deferred to future
-    research, with potential
-    connection to reinforcement learning and multi-step reasoning techniques.
+    of planning and executing complex tasks seemed attractive but posed
+        significant testing challenges. Verifying agent behavior requires
+        extensive integration testing and careful evaluation of edge cases.
+        Within the thesis timeline and without a production deployment scenario,
+        creating reliable tests for autonomous execution was not practical. This
+        direction was deferred to future research, with potential connection to
+        reinforcement learning and multi-step reasoning techniques.
 \end{itemize}
 
 \paragraph{Limitation:} local \glspl{llm} have limited capabilities for complex
 reasoning and long context handling.
-\paragraph{Gained Knowledge}: Through extensive testing with small local models
-(Gemma 3 4B and Qwen2.5 0.5B/1.5B), we identified key constraints that shaped the
-architecture. Local \glspl{llm} exhibited poor performance on:
+
+\paragraph{Gained Knowledge:} Through extensive testing with small local models
+(Gemma 3 4B and Qwen2.5 0.5B/1.5B), we identified key constraints that shaped
+the architecture. Local \glspl{llm} exhibited poor performance on:
 \begin{itemize}
-  \item Long prompts and multi-turn conversations (hallucination
-      increases significantly
-    with context length)
-  \item Abstract reasoning and classification tasks (models lack
-      sufficient training
-    on narrow tasks like security classification)
+  \item Long prompts and multi-turn conversations (hallucination increases
+      significantly with context length)
+  \item Abstract reasoning and classification tasks (models lack sufficient
+      training on narrow tasks like security classification)
   \item Complex chained reasoning requiring multiple logic steps
 \end{itemize}
-This led to discovering techniques for enhancing local \gls{llm}
-performance within
-these constraints: Retrieval-Augmented Generation (RAG) to reduce
-reliance on model
-knowledge, embedding models for efficient semantic search, and task
-decomposition
-to avoid complex reasoning chains.
+This led to discovering techniques for enhancing local \gls{llm} performance
+within these constraints: Retrieval-Augmented Generation (RAG) to reduce
+reliance on model knowledge, embedding models for efficient semantic search, and
+task decomposition to avoid complex reasoning chains.
 
 \subsubsection{Iteration 3: Focused RAG System}
 
@@ -350,7 +335,7 @@ necessary given the constraints of local \gls{llm} execution:
 
   \item \textbf{Tool Integration} --- Extensibility through external
     tools and protocols. Support for standards like \gls{mcp} (Model
-    Context Protocol), bash integration, code execution, and other
+    Context Protocol), Bash integration, code execution, and other
     interfaces affects the solution's versatility.
 
   \item \textbf{Language} --- Implementation language relevant to

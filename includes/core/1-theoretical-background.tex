@@ -10,8 +10,7 @@ separate components of a computer system exchange information. The exchange can
 be between software, computer hardware, peripheral devices, humans, and
 combinations of these~\cite{hookway2014}.
 
-\paragraph{Terminal}
-(later referred to as \textbf{Hardware terminal})
+\paragraph{Hardware terminal}
 is a an electronic or electromechanical hardware device that can be used for
 entering data into, and transcribing data from, a computer or a computing
 system. The main functionality of terminals is to provide an elementary
@@ -134,10 +133,10 @@ as the advanced concepts.
 
 \paragraph{\glspl{llm}} refer to language models, typically based on transformer
 architecture, characterized by having a large number of parameters, which are
-trained on massive text data, such as \gls{gpt}, \gls{bert}, \gls{lstm} or
-Mamba. \glspl{llm} exhibit strong capacities to understand natural language
-and solve complex tasks (via text
-generation)~\cite{radford2018improving,devlin2018bert,touvron2023llama}.
+trained on massive text data, such as \gls{gpt}~\cite{radford2018improving},
+\gls{bert}~\cite{devlin2018bert}, \gls{lstm}~\cite{hochreiter1997lstm} or
+Mamba~\cite{gu2023mamba}. \glspl{llm} exhibit strong capacities to understand
+natural language and solve complex tasks (via text generation).
 
 \paragraph{Language models} are mathematical models designed to predict and generate
 sequences of text. They are crucial in artificial intelligence for performing
@@ -180,11 +179,6 @@ The architecture of \glspl{llm} can be divided into several main components:
     a softmax activation function to produce a probability distribution over the
     vocabulary for text generation tasks.
 \end{itemize}
-
-As mentioned above, \glspl{llm} are mainly built upon the transformer
-architecture~\cite{attention}, where \textbf{multi-head attention layers} are
-stacked in a very deep neural network. They are based on the transformer
-architecture.
 
 In the original article, previously mentioned transformers
 consist of two main parts~--- \textbf{Encoder} and \textbf{Decoder}.
@@ -312,22 +306,22 @@ pseudocode in Listing~\ref{alg:agent}.
 \label{alg:agent}
 \begin{algorithmic}[1]
 \STATE \textbf{function} \textsc{LLM\_Agent}(\textit{task}, \textit{context})
+    \STATE \quad $\text{results} \gets \text{empty list}$ \COMMENT{Initialize results list}
     \STATE \quad $\textit{subtasks} \gets \textit{LLM}.\text{decompose\_task}(\textit{task})$ \COMMENT{Break down main task into sub-tasks}
 
     \FOR{\textbf{each} $\textit{subtask}$ \textbf{in} $\textit{subtasks}$}
-        \IF{$\textit{subtask}.\textit{type} = \text{"tool"}$}
+        \IF{$\textit{subtask}.\textit{type} = \text{tool}$}
             \STATE $\textit{result} \gets \text{use\_tool}(\textit{subtask}.\textit{tool}, \textit{subtask}.\textit{tool\_input})$
-        \ELSIF{$\textit{subtask}.\textit{type} = \text{"further\_decomposition"}$}
+        \ELSIF{$\textit{subtask}.\textit{type} = \text{further\_decomposition}$}
             \STATE \COMMENT{Recursive call for further decomposition}
             \STATE $\textit{result} \gets \text{AI\_Agent}(\textit{subtask}.\textit{task}, \textit{context})$
-        \ELSIF{$\textit{subtask}.\textit{type} = \text{"generate"}$}
+        \ELSIF{$\textit{subtask}.\textit{type} = \text{generate}$}
             \STATE $\textit{result} \gets \textit{LLM}.\text{generate\_response}(\textit{subtask}.\textit{task})$
         \ENDIF
         \STATE $\text{results}.\text{append}(\textit{result})$
     \ENDFOR
 
-    \STATE \quad $\textit{final\_output} \gets \textit{LLM}.\text{summarize\_results}(\textit{results})$
-    \STATE \quad \textbf{return} $\textit{final\_output}$
+    \STATE \quad \textbf{return} \textit{LLM}.\text{summarize\_results}(\textit{results})
 \STATE \textbf{end function}
 \end{algorithmic}
 \end{algorithm}
@@ -353,8 +347,8 @@ these steps using various tools.
 
 \gls{mcp} protocol is a protocol, that standartizes the interaction between
 agent and tools, allowing simpler software integration and development for AI
-agents~\cite{anthropic2024mcp}. While not used in this thesis, it is important
-to mention it as a relevant concept~\cite{zhao2023}.
+agents~\cite{anthropic2024mcp}. While not used in this thesis, it is a relevant
+and important concept in the field of \glspl{llm}.
 
 
 \subsubsection{Retrieval-Augmented Generation (RAG)}
@@ -364,10 +358,7 @@ knowledge bases, significantly reducing hallucinations and increasing
 accuracy~\cite{zhao2023}. It reuses the semantic meaning extraction capabilities
 of \textbf{embedding \gls{llm}} and the text generation and summarization
 capabilities of \textbf{\gls{llm}} to retrieve information from external
-sources.
-
-We can define the workflow of \gls{rag} as follows as pseudocode in
-Listing~\ref{alg:rag}.
+sources. We define the workflow of \gls{rag} in Listing~\ref{alg:rag}.
 
 \begin{algorithm}[t]
 \caption{Pseudocode for \gls{rag} workflow}
@@ -569,7 +560,7 @@ result across all queries:
 \]
 
 where \textsl{rank\textsubscript{i}} is the position of the first relevant
-document for query i, and |Q| is the total number of queries. MRR rewards
+document for query $i$, and |Q| is the total number of queries. MRR rewards
 systems that find relevant documents early in the ranking and is particularly
 useful when users typically only examine the top few results.
 
@@ -584,7 +575,7 @@ useful when users typically only examine the top few results.
 % \]
 %
 % where \textsl{rel\textsubscript{i}} is the relevance score of the document at
-% position i.\ \gls{ndcg} normalizes this by the ideal ranking (IDCG) to produce a
+% position $i$.\ \gls{ndcg} normalizes this by the ideal ranking (IDCG) to produce a
 % score between 0 and 1. NDCG is valuable for assessing ranking quality when there
 % are multiple levels of relevance (e.g., highly relevant, partially relevant, not
 % relevant).
@@ -620,7 +611,7 @@ relevant concepts.
 
 This section provides the background on the techniques for representing
 documents in a way that allows for accurate retrieval. It also describes the
-techniques for generating the semantic vector representations of documents,as
+techniques for generating the semantic vector representations of documents, as
 well as the storage and retrieval of these representations using vector
 databases.
 
@@ -633,30 +624,31 @@ documents, which are much better for the machine to process. Currently, the
 semantic representation of documents is generally categorized into two primary
 groups~\cite{khan2026retrieval}:
 
+% TODO: citations
 \begin{itemize}
-  \item \textbf{Sparse vector representations (sparse retrieval):} This
-    method mostly relies on traditional keyword-based approaches,
-    such as \gls{bow}, one-hot encoding, \gls{lsindexing} or
-    \gls{tfidf} to retrieve documents based on the presence or
-    quantity of specific terms. It is computationally efficient and
-    works well for simple queries, but it may struggle with complex
-    queries or those that require understanding of context and
-    semantics.\\ \textsl{The common example of sparse retrieval is
-      \gls{bow} model, which represents documents as vectors of word
-      counts. It needs the dictionary of all possible words (or subset
-      of them) to be defined. Then, the size of the vector is equal to
-      the size of the dictionary, and each element position corresponds
-    to the word in the dictionary.}
+  \item \textbf{Sparse vector representations (sparse retrieval):} This method
+      mostly relies on traditional keyword-based approaches, such as \gls{bow},
+        one-hot encoding, \gls{lsindexing} or \gls{tfidf} to retrieve documents
+        based on the presence or quantity of specific terms. It is
+        computationally efficient and works well for simple queries, but it may
+        struggle with complex queries or those that require understanding of
+        context and semantics~\cite{khan2026retrieval}.
+
+        \textsl{The common example of sparse retrieval is \gls{bow} model, which
+        represents documents as vectors of word counts. It needs the dictionary
+        of all possible words (or subset of them) to be defined. Then, the size
+        of the vector is equal to the size of the dictionary, and each element
+        position corresponds to the word in the dictionary.}
 
   \item \textbf{Dense vector representations (dense retrieval):} This method
-    uses dense vector representations of documents and queries
-    to calculate similarity. It typically involves training a neural
-    network to generate embeddings that capture the semantic meaning of the
-    text. The similarity between the query and documents is then calculated
-    using cosine similarity or other distance metrics. Dense retrieval can
-    be more effective for complex queries and can capture nuances in
-    language, but it may require more computational resources compared to
-    traditional sparse retrieval.
+      uses dense vector representations of documents and queries to calculate
+        similarity. It typically involves training a neural network to generate
+        embeddings that capture the semantic meaning of the text. The similarity
+        between the query and documents is then calculated using cosine
+        similarity or other distance metrics. Dense retrieval can be more
+        effective for complex queries and can capture nuances in language, but
+        it may require more computational resources compared to traditional
+        sparse retrieval~\cite{khan2026retrieval}.
 \end{itemize}
 
 The original article also mentions \textbf{hybrid retrieval techniques}, that
@@ -666,10 +658,10 @@ in the article. These techniques typically utilize \textbf{document expansion}
 to bridge the gap between exact lexical matches and semantic meaning.
 \textsl{For example, the SPLADE model expands the sparse representation of a
 document or query with semantically related terms, allowing for better retrieval
-performance even when exact keywords are missing..} The thesis is not going to
+performance even when exact keywords are missing.} The thesis is not going to
 focus on the hybrid retrieval techniques, but it is important to acknowledge the
 existence of such techniques, as they can be used in the future research to
-further improve the retrieval performance of the system.
+further improve the retrieval performance of the system~\cite{khan2026retrieval}.
 
 For the purpose of this research, we will focus on dense retrieval, as it is
 more suitable for complex queries and can capture the semantic meaning of the
@@ -685,7 +677,7 @@ the techniques to generate the single vector that represents this whole
 collection.
 
 \begin{itemize}
-  \item \textbf{Classical Approaches:} Theese techniques include
+  \item \textbf{Classical Approaches:} These techniques include
     methods like averaging, max pooling and other simple
     aggregation methods to combine the token embeddings into a
     single vector. These methods are computationally efficient
@@ -716,7 +708,7 @@ collection.
         document~\cite{behrendt2025maxpoolbertenhancingbertclassification,devlin2018bert}.
     \end{itemize}
     \textsl{It is important to note that to increase the accuracy of the
-    summarization, it is often necessary to have single-topic documents}
+    summarization, it is often necessary to have single-topic documents.}
 \end{itemize}
 
 \subsubsection{Document Storage and Retrieval}
@@ -742,22 +734,22 @@ stored document vectors.
 
 \subsection{Linux Manual Pages}
 
-In this thesis and implementation, we focus on processing linux man manual pages
-as data for testing and validation and by the term \textbf{document} we will
-mean a man manual page.
+In this thesis and implementation, we focus on processing \textbf{Linux man
+manual pages} (shortened \textbf{man pages} or \textbf{manual pages}) as data
+for testing and validation and by the term \textbf{document} we will mean a man
+page. In this part we provide the description of the main conventions for man
+pages, which are relevant for the solution.
 
-In this part we provide the description of the main conventions for man pages,
-which are relevant for the solution.
+\texttt{man} (software application) is the system's manual pager. Each page
+argument given to man is normally the name of a program, utility or function.
+The manual page associated with each of these arguments is then found and
+displayed. A section, if provided, will direct man to look only in that section
+of the manual~\cite{man_man}.
 
-man is the system's manual pager. Each page argument given to man is normally
-the name of a program, utility or function. The manual page associated with each
-of these arguments is then found and displayed. A section, if provided, will
-direct man to look only in that section of the manual~\cite{man_man}.
-
-Conventionally, manual pages are divided into several groups, which are listed
-in Appendix~\ref{a:man}. A manual page consists of several sections.
-Conventional section names are listed in Appendix~\ref{a:man}. The most
-important sections for the purpose of this thesis are \textbf{DESCRIPTION},
-which provides a detailed description of the program, its functionality and
-usage, and \textbf{OPTIONS}, which lists the flags and arguments that can be
-used with the program, along with their descriptions.
+Conventionally, manual pages are divided into several groups, and each manual
+page consists of several sections. Conventional groups and section names are
+listed in Appendix~\ref{a:man}.
+The most important sections for the purpose of this thesis are
+\textbf{DESCRIPTION}, which provides a detailed description of the program, its
+functionality and usage, and \textbf{OPTIONS}, which lists the flags and
+arguments that can be used with the program, along with their descriptions.

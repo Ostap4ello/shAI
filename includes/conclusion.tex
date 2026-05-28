@@ -1,24 +1,28 @@
-In this thesis, we have explored various use cases of \glspl{llm} in the context
-of local \gls{cli} assistants, with constraings on computational resources.
-The first use case was the usage of \glspl{llm} in a role of command versus
-natural language classificator, to make the integration of the assistant into
-the system shell seamless, but this approach was not successful. Additionally,
-there are much better approaches to this problem, that use other \glspl{ml}
-models, that are much more efficient and accurate for this task.
-The second use case was the usage of embedding \glspl{llm} for retrieval of
-relevant information from a database, to make the search for relevant in local
-documents (in scope of this thesis --- man manual pages) more efficient and
-accurate. We have explored three approaches to this problem: Document-level,
-Passage-level, and Document-level with Passage-level reranking. Overall, for the
-specific use case ot this theis, the best approach is Document-level with
-Passage-level reranking for biger document collections, and passage-level for
-smaller ones, as it provides the best balance between latency and accuracy. The
-use of Document-level approach is not recommended, as it generates much more
-output, and it is much more difficult to control the size of the generated
-output, as it depends on the size of the documents.
-The third use case was the usage of \glspl{llm} for generation of natural
-language responses to user queries, based on the retrieved information from the
-previous use case. This approach is very effective, as it allows to generate
-more natural and concise responses in short time, but it showed to be very
-sensitive to the quality and size of the retrieved information, which affected
-the choice of the best approach for the previous use case.
+In this thesis, we explored multiple use cases of \glspl{llm} for local
+\gls{cli} assistance under tight resource constraints. The first use case was
+command vs.\ natural language classification for seamless shell integration.
+Across a balanced \texttt{classifier-100} dataset, accuracy ranged from 50\% to
+88\%, with the best model requiring 2.9s per query and smaller models operating
+near chance-level. These results show that local \glspl{llm} are not reliable
+enough for real-time classification.
+
+The second use case was document retrieval with embedding \glspl{llm} over local
+man pages. Three approaches were evaluated: document-level retrieval, document
+retrieval with passage-level re-ranking, and passage-level retrieval. On
+\texttt{sample-10} (14 documents, 250 queries), document-level Top-1 accuracy
+was 83.6--86.8\% with Top-5 up to 100\% and MRR up to 0.916. On
+\texttt{sample-100} (101 documents, 300 queries), Top-1 was 62.7--72.7\% with
+Top-5 up to 92.0\% and MRR up to 0.806. Granite embeddings delivered the lowest
+per-query latency (about 0.04--0.10s) and fast index builds (1.6--2.3s), while
+qwen3-embedding required 128--134s to build indices on the larger corpus.
+Passage-level re-ranking increased latency to 0.6--3.8s and reduced Top-1
+accuracy (39.2--55.2\% on \texttt{sample-10}, 42.7--45.7\% on
+\texttt{sample-100}) without improving Top-5. Passage-level retrieval matched
+document-level precision with low latency (0.03--0.10s), making it a practical
+alternative without re-ranking overhead.
+
+The third use case was \gls{llm}-based summarization of retrieved content.
+Summarization produced concise responses when retrieval was accurate, but it was
+sensitive to retrieval quality and context size. Overall, the results show that a
+retrieval-first architecture is viable for local \gls{cli} assistance, while
+classification-heavy and agentic approaches remain impractical on small models.
