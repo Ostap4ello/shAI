@@ -26,3 +26,10 @@ Summarization produced concise responses when retrieval was accurate, but it was
 sensitive to retrieval quality and context size. Overall, the results show that a
 retrieval-first architecture is viable for local \gls{cli} assistance, while
 classification-heavy and agentic approaches remain impractical on small models.
+
+In most use cases, the embedding model of size under 0.6b parameters is
+sufficient for retrieval in such a constrained environment, the generation model
+of size under 2b proved to be sufficient for summarization, while for
+classification, chosen approach proved to be inefficient, and other, more
+efficient approaches exist.
+

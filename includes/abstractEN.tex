@@ -1,23 +1,26 @@
 This thesis examines whether a practical Linux \gls{cli} assistant can be built
-with small local \glspl{llm} under strict offline and privacy constraints. A
-survey of existing assistants shows strong dependence on remote APIs and poor
-reliability of agentic workflows on local models. In response, the thesis
-proposes shAI, a modular \gls{rag}-based prototype composed of a command-vs.-query
-classifier, a document retriever that indexes Linux man pages, and a summarizer
-that generates concise answers from retrieved passages. The implementation uses
-Ollama for local inference and \gls{faiss} for vector indexing.
+with small local \glspl{llm} under offline and hardware constraints. A survey of
+existing assistants was conducted and it shows strong dependence on remote APIs
+and poor reliability of agentic workflows on local models. In response, the
+thesis proposes shAI, a modular \gls{rag}-based prototype composed of a
+command-vs.-query classifier, a document retriever that indexes Linux man pages,
+and a summarizer that generates concise answers from retrieved passages. The
+implementation uses Ollama for local inference and \gls{faiss} for vector
+indexing.
 
 Evaluation is component-focused. The classifier was tested on the balanced
-\texttt{classifier-100} dataset; accuracy ranged from 50\% to 88\%, with the best
-model requiring 2.9s per query. The retriever was evaluated on \texttt{sample-10}
-(14 documents, 250 queries) and \texttt{sample-100} (101 documents, 300 queries).
-Document-level retrieval achieved Top-5 accuracy up to 100\% and 92\%
-respectively, with low per-query latency for Granite embeddings. Passage-level
-re-ranking increased latency (0.6--3.8s) and reduced Top-1 accuracy, while
-passage-level retrieval matched document-level precision with low latency.
+\texttt{classifier-100} dataset; accuracy and latency of this approach hass
+proved inefficient, as ranged from 50\% to 88\%, with the best model requiring
+2.9s per query. The retriever was evaluated on \texttt{sample-10} (14 documents,
+250 queries) and \texttt{sample-100} (101 documents, 300 queries) with three
+different approaches, each with different accuracy and latency trade-offs,
+overall reaching up to 90\% Top-1 accuracy while keeping latency under 1.5s. The
+end-to-end system latencies were measured with the lightest and the heaviest
+models, showing that the system can provide answers in under 2s and 10s
+respectively. % TODO: fill in with actual numbers after evaluation
 
-The results demonstrate that retrieval-first architectures are practical for
-local \gls{cli} assistance, whereas classification-heavy and agentic approaches
-remain unreliable on small models. The thesis provides an open-source prototype
-and empirical benchmarks that guide future work on model optimization and
-constrained task design.
+The results demonstrate that strictly defined (for example, retrieval
+architectures) are practical for local \gls{cli} assistance, whereas agentic
+open-ended approaches remain unreliable on small models. The thesis provides an
+open-source prototype and empirical benchmarks that guide future work on model
+optimization and constrained task design.
