@@ -285,6 +285,16 @@ embeddings. This choice was motivated by:
 
 \subsubsection{\glspl{llm} and Embedding Models}
 
+\paragraph{Model Selection Criteria}
+The main criteria for model selection was the ability to run efficiently on consumer
+hardware. We have chosen the upper limit of 2.0 billion parameters for
+generation models and 1.0 billion parameters for embedding models, as larger
+models typically require more memory and computational resources than what is
+available on consumer hardware. This means that the models can be run on devices
+with under 8GB of RAM (along with the operating system), which is a common
+specification for consumer-grade devices. We have chosen the newest models
+available at the time of development.
+
 The thesis testing and development primarily utilized several small, publicly
 available \glspl{llm} and embedding models, summarized in
 Table~\ref{tab:llm-summary} and Table~\ref{tab:embedding-summary}.
