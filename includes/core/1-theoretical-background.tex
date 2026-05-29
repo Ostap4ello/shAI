@@ -180,31 +180,39 @@ The architecture of \glspl{llm} can be divided into several main components:
     vocabulary for text generation tasks.
 \end{itemize}
 
-In the original article, previously mentioned transformers
-consist of two main parts~--- \textbf{Encoder} and \textbf{Decoder}.
-The usage of the architecture based on attention implies that the
-model generates the
-output text sequentially, one token at a time, while attending to all
-previously generated tokens. This can be a limitation for long prompts, as the
-model can only attend to a limited number of previous tokens (this limit is
-called \textbf{context length} or \textbf{window size}). Furthermore, the
-longer the prompt, the more computationally expensive it becomes to generate
-the output, as the model has to process all previous tokens for each new
-token~\cite{attention}.
+In the original article, previously mentioned transformers consist of two main
+parts~--- \textbf{Encoder} and \textbf{Decoder}. The usage of the architecture
+based on attention implies that the model generates the output text
+sequentially, one token at a time, while attending to all previously generated
+tokens. This can be a limitation for long prompts, as the model can only attend
+to a limited number of previous tokens (this limit is called \textbf{context
+length} or \textbf{window size}, and it is described more in detail in
+Paragraph~\ref{p:context-window}).
 
-\textbf{Encoder}: The encoder maps an input sequence of symbols (tokens) to a
+\paragraph{Encoder} The encoder maps an input sequence of symbols (tokens) to a
 sequence of continuous representations. The encoder is composed of a stack of a
 number of identical layers. Each layer has two sub-layers. The first is a
 multi-head self-attention mechanism, and the second is a simple, position-wise
 fully connected feed-forward network~\cite{attention}.
 
-\textbf{Decoder}: The decoder then generates an output sequence of symbols
+\paragraph{Decoder} The decoder generates an output sequence of symbols
 (tokens) one element at a time. At each step the model is auto-regressive,
 consuming the previously generated symbols as additional input when generating
 the next. The decoder is also composed of a stack of a number of identical
 layers. In addition to the two sub-layers in each encoder layer, the decoder
 inserts a third sub-layer, which performs multi-head attention over the output
 of the encoder stack~\cite{attention}.
+
+\paragraph{Context Window}\label{p:context-window} The context window is the
+maximum number of tokens that a Transformer-based model can process at once,
+meaning that only the tokens within the context window can affect the next token
+prediction. As mentioned before, the smaller is the prompt, the faster is the
+processing and the more impact has each individual token, as all empty tokens
+are practically ignored. In contrast, the larger is the prompt, the slower is
+the processing and the less impact has each individual token, meaning that some
+information can be lost. In case of a prompt larger than the context window, the
+tokens that exceed the context window are ignored, and the information is
+definitely lost.
 
 For the purpose of this thesis, it is enough to know that nowadays \glspl{llm}
 are mainly based on Decoder-only architecture, which means they only use the
@@ -403,7 +411,8 @@ example:
 The choice of granularity defines the smallest unit, for which the (vector)
 representation is generated. This affects the computational load for the
 \gls{rag} system for the creation and retrieval, or how much different units can
-be fit into \gls{llm} context window or answer size.
+be fit into \gls{llm} context window (see Paragraph~\ref{p:context-window}) or
+answer size.
 
 %  Level-1
 %
