@@ -1,94 +1,138 @@
+\subsection{Discussion on Evaluation and Development}
+
 This thesis presented an exploratory investigation into building a Linux
 \gls{cli} assistant powered by local \glspl{llm}. The work evaluates multiple
 architectural approaches, identifying which are practical for offline,
 resource-constrained environments and which prove unsuitable for reliable
-real-world use.
-
-\subsection{Research Approach and Scope}
-
-The work investigated three main architectural patterns for
-\gls{llm}-based \gls{cli} assistance:
-\begin{enumerate}
-  \item \textbf{Natural Language Classification} --- Using
-    \glspl{llm} to distinguish between shell commands and natural
-    language queries
-  \item \textbf{Agent-Based Reasoning} --- Enabling iterative
-    reasoning, tool use, and decision-making for complex tasks
-  \item \textbf{Retrieval-Augmented Generation (RAG)} --- Combining
-    document retrieval with further \gls{llm} summarization
-\end{enumerate}
-
-\subsection{Key Findings}
-
-Through implementation and evaluation, significant practical insights emerged:
+real-world use. Through implementation and evaluation, significant practical insights emerged:
 
 \paragraph{Smart Classifier Component --- Not Viable}
-LLM-based classification of commands vs.\ queries performs poorly with small local models
-(0.5--4B parameters). Achieving acceptable accuracy requires either: (a) unacceptable query
-latencies (2--5+ seconds per input), or (b) extensive hardcoding of heuristics. Additionally,
-seamless shell integration requires shell-specific implementations that are difficult to
-maintain. This component remains a proof-of-concept only.
+LLM-based classification of commands vs.\ queries performs poorly with small
+local models (0.5--4B parameters). Achieving acceptable accuracy requires
+either: unacceptable query latencies (2--5+ seconds per input, caused by relying
+on bigger models), or extensive hardcoding the rules for classification. This
+task is better handled by traditional methods and specialized models, rather
+than general-purpose \glspl{llm}.
 
-\paragraph{Agent-Based Approaches --- Unreliable If Not Impractical}
+\paragraph{Agent-Based Approaches --- Unreliable In Current State}
 Agentic systems that attempt multi-step reasoning, tool use, and state management consistently
-fail with small local \glspl{llm}. Common failure modes include: reasoning chain breakdowns,
-incorrect tool invocation, hallucination under uncertainty, and unacceptable latencies
-(5--15 seconds per query). These approaches require significantly larger models (10B+ parameters)
-or external services to function reliably.
+fail with small local \glspl{llm}. In current state, the approach is totaly
+relying on decision-making capabilities of the model, giving it full freedom to
+choose. The better approach, which could be explored in future work, is to give
+agent more narrow, guided and defined set of actions, or to use model
+fine-tuning to do the task.
 
 \paragraph{RAG System --- Practical and Effective}
-The Retrieval-Augmented Generation approach proved robust and practical. By constraining the
-\gls{llm} task to extracting and summarizing information from retrieved documents, the system
-achieves: reliable performance (minimal hallucination), acceptable latency (250--700ms per query),
-and good user experience. This component forms the core working system.
+The Retrieval-Augmented Generation approach proved robust and practical. By
+constraining the \gls{llm} task to extracting and summarizing information from
+retrieved documents, the system achieves: reliable accuracy (ranging from 80\%
+to 94\% Top-5 accuracy depending on the approach), acceptable latency (under 3s
+per query), and good user experience. Being the most accurate approach,
+Document-level retrieval has introduced the highest output size, which would
+negatively affect other parts of the system, ranging around 60-100K characters
+(about 50-80K tokens). To address this, passage-level retrieval and re-ranking
+approaches were explored, which reduced output size to about 6K characters
+(about 5K tokens) while maintaining near similar accuracy, making it more
+practical for summarization and overall user experience.
 
-\subsection*{Implications for Local LLM Assistance}
+\paragraph{End-to-End Latency Trade-offs}
+End-to-end measurements on an NVIDIA RTX 4060 8GB GPU show that retrieval
+strategy strongly affects total latency. Document-level retrieval kept search
+latency around 1.58--1.60s but produced the highest RAG latency (12.39--17.21s
+for the light configuration and 39.78--56.57s for the heavy configuration).
+Re-ranking increased search latency (2.03--2.22s for Granite embeddings;
+6.92--8.18s for qwen3-embedding) while reducing RAG latency to 5.69--7.47s
+(light) and 9.57--10.77s (heavy). Passage-level retrieval kept search latency
+close to document-level values (1.47--1.61s and 1.58--1.60s) while providing the
+lowest RAG latency overall (5.34--6.47s light; 8.66--8.86s heavy), making it the
+most practical for interactive use.
 
-The findings suggest that local \gls{llm} assistance on consumer hardware is best achieved
-through \textbf{constrained, task-specific architectures} rather than general-purpose reasoning:
+\paragraph{Practical Value}
+ShAI provides practical offline assistance for \gls{cli} users, delivering fast,
+help on user document datatbase without network dependency, or privacy concerns.
+The current implementation demonstrates that the \gls{rag} approach is viable
+and useful, despite being less ambitious than original goals of general-purpose
+command-line reasoning.
 
+The thesis demonstrates that while ambitious visions of local \gls{llm}
+assistants handling arbitrary tasks remain impractical, specialized, constrained
+systems can provide real value to users with various limitations. This work lays
+the groundwork for further exploration \gls{llm}-enabled information processing
+and manipulation.
+
+
+\subsection{Discussion of Future Directions}
+
+\paragraph{Implications}
+The findings imply that local (transformer-based) \gls{llm} assistance on
+consumer hardware is best achieved through \textbf{constrained, task-specific
+architectures} rather than general-purpose reasoning:
 \begin{itemize}
   \item Limit task scope to information retrieval and summarization
   \item Avoid open-ended classification, reasoning, or tool-use tasks
   \item Provide focused context (via retrieval) to ground model outputs
-  \item Accept trade-offs: helpful within constraints beats unreliable when pushed beyond them
+  \item Accept trade-offs: helpful within constraints beats unreliable when
+      pushed beyond them
 \end{itemize}
 
-\subsection{Practical Value}
-
-ShAI provides practical offline assistance for \gls{cli} users, delivering fast,
-help on user document datatbase without network dependency, latency, or privacy
-concerns. The system excels at: explaining commands, providing usage examples,
-and retrieving documentation. The current implementation demonstrates that the
-\gls{rag} approach is viable and useful, despite being less ambitious than
-original goals of general-purpose command-line reasoning. This opens the door
-for further development, and, in focus of local \gls{llm} assistance, suggests
-shift to embedding-based features rather and simpler \gls{llm}-based
-applications rather than open-ended and agentic ones.
-
-\subsection{Future Work and Extensions}
-
-Future research can explore several avenues to build on these findings:
+\paragraph{Future Directions}
+Future work arount this topic can explore various avenues to build on the
+findings of this thesis:
 \begin{itemize}
-  \item \textbf{Model Optimization:} Explore model distillation, quantization,
-    or fine-tuning to further improve performance and reduce latency on local
-    hardware.
-  \item \textbf{User Interface Improvements:} Develop richer interfaces (e.g.,
-    interactive query refinement, multi-turn conversations) while maintaining
-    low latency and simplicity.
   \item \textbf{Broader Task Support:} Investigate additional constrained tasks
     that can be reliably handled by local models (e.g., code generation from
     templates, error message explanations).
-  \item \textbf{Usage of RNNs:} Explore the actively researched area of
-    \gls{rnn}-augmented \gls{llm} architectures.
-  \item \textbf{Program-Aided Language Models (PAL) / Program-of-Thought (PoT):}
-    Explore the novel approach of programmatic approach for \gls{llm} agentic
-    workflows.
   \item \textbf{Application to Other Domains:} While exploring other approaches
-      for small \gls{llm}-guided assistance, the focus can be shifted to other
-      domains, like transport assistants, personal information management,
-      mobile \gls{gui} apps, etc.
+    for small \gls{llm}-guided assistance, the focus can be shifted to other
+    domains, like transport assistants, personal information management,
+    mobile \gls{gui} apps, etc.
+  \item \textbf{User Interface Improvements:} Develop richer interfaces (e.g.,
+    interactive query refinement, multi-turn conversations) while maintaining
+    low latency and simplicity.
+  \item \textbf{Software Optimization/Refactoring:} Explore the possibilities of
+    usage of LangChain, or other similar frameworks, adapt existing software
+    for better performance (models caching), implement MCP-based architecture,
+    tools, optimize architecture for being a framework for building small
+    automations for everyday \gls{cli} usage.
+  \item \textbf{Experimenting with top\_k and section size for passage-level
+      retrieval:} The thesis did not describe the exploration of different
+        parameters for passage-level retrieval, as the goal of achieving the
+        acceptable accuracy with the lowest latency was achieved, but further
+        exploration of different parameters for passage-level retrieval can be
+        done, with the software already implemented.
 \end{itemize}
+Additionally, if we look at the future directions from the perspective not
+limited to the scope of the developed application, but more generally, we can
+define further research directionsin the field:
+\begin{itemize}
+  \item \textbf{Comparing Different Model Testing Approaches and Frameworks:}
+    The thesis does not go deep into the comparison of different approaches for
+    testing and evaluating \gls{llm}-based systems, but this is very
+    important area for the research, as it provides necessary empirical
+    evidence that proves the results of any research.
+  \item \textbf{Model Optimization and Architectures Exploration} Explore model
+    distillation, quantization, or fine-tuning to further improve performance
+    and reduce latency on local hardware. With the rapid evolution of
+    \gls{llm}, new architectures like \gls{rnn}-augmented \glspl{llm},
+    Mamba, \gls{lstm}-based models, etc. can be explored for their potential
+    in constrained tasks. Future work can focus around testing and
+    evaluating these models for constrained environments, but also be more
+    focused on the development of new architectures that are optimized for
+    constrained environments and tasks.
+  \item \textbf{Caching and Context Management:} A lot of tools nowadays support
+    as-called "context snapshots", which are basically a way to save the state
+    of the system at a given point in time. This is useful when working with
+    repeating situations that need previous setup. Caching can potentially
+    have huge impact on the performance of the system, saving time and
+    resources.
+\item \textbf{Exploring Different Harnessing Approaches:} Apart from \gls{rag}
+    approach, there are various other ways to use the \gls{llm} capabilities in
+    different ways, including but not limited to: different agentic
+    approaches (for example, Program-Aided Language Models (PAL) /
+    Program-of-Thought (PoT)), different classification approaches (e.g.,
+    small specialized models, not limited to \gls{llm}).
+\end{itemize}
+
 
 \subsection{Contributions}
 
@@ -99,16 +143,13 @@ terminal environments:
   \item Empirical evidence of which architectures work with small local \glspl{llm}
   \item The software for evaluating the approaches for \gls{rag} and
       classification, that can be used for further research in this area, in
-        scope of accuracy, latency, and user experience of \gls{llm}-based
-        systems.
+      scope of accuracy, latency, and user experience of \gls{llm}-based
+      systems.
   \item Identification of key failure modes in applying local models to structured tasks
-  \item An open-source reference implementation of a working \gls{rag}-based assistant, which can also be used as a base framework for further improvements and automations in scope of local \gls{llm} assistance in terminal environments.
+  \item An open-source reference implementation of a working \gls{rag}-based
+      assistant, which can also be used as a base framework for further
+      improvements and automations in scope of local \gls{llm} assistance in
+      terminal environments.
   \item Guidance for future research: local model assistance is viable within constrained,
-    well-scoped tasks, not as general-purpose reasoning
+      well-scoped tasks, not as general-purpose reasoning
 \end{itemize}
-
-The thesis demonstrates that while ambitious visions of local \gls{llm}
-assistants handling arbitrary tasks remain impractical, specialized, constrained
-systems can provide real value to users with various limitations. This work lays
-the groundwork for further exploration \gls{llm}-enabled information processing
-and manipulation.

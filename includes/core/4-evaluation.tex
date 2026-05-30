@@ -1,5 +1,5 @@
 
-\subsection{Component 1: Natural Language vs. Shell Command Classifier}
+\subsection{Natural Language vs. Shell Command Classifier}
 
 \paragraph{Evaluation Approach}{}
 The testing for this component focuses on evaluating the accuracy of input
@@ -25,7 +25,7 @@ and average per-query latency for each model:
   \centering
   \scriptsize
   \caption{Binary classification results on \texttt{classifier-100}.}
-  \begin{tabular}{lcc}
+    \begin{tabular}{lcc}
     \toprule
     \textbf{Model} & \textbf{Accuracy} & \textbf{Avg Latency (s)} \\
     \midrule
@@ -57,7 +57,7 @@ prevented deployment:
     CLI workflows.
 \end{enumerate}
 
-\paragraph{Conclusion on Component 1}
+\paragraph{Conclusion on Classifier}
 This component remains a \textbf{proof-of-concept} and was not
 pursued further. The fundamental limitation is that small local
 \glspl{llm} cannot reliably classify ambiguous inputs in real-time
@@ -67,7 +67,7 @@ generalizability, (c) the shell wrapper itself becomes a bottleneck
 and maintenance nightmare. The project focus was therefore shifted to
 the \gls{rag} component, which proved more practical and effective.
 
-\subsection{Component 2: Document Retriever}
+\subsection{Document Retriever}
 
 \paragraph{Evaluation Approach}
 The retriever is evaluated on its ability to return relevant documents within
@@ -100,96 +100,96 @@ top\_k\_extended=10.
   \centering
   \scriptsize
   \caption{Document-level retrieval on \texttt{sample-10} (test1).}
-  \begin{tabular}{lccccc}
+    \begin{tabularx}{\textwidth}{lXXXXXX}
     \toprule
-    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg Latency (s)} & \textbf{Index Build (s)} \\
+    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg\newline{}Latency (s)} & \textbf{Index\newline{}Build (s)} & \textbf{Avg Responce\newline{}Size (chars)} \\
     \midrule
-    ibm/granite-embedding:30m & 83.6\% & 95.2\% & 0.881 & 0.071 & 0.348 \\
-    ibm/granite-embedding:125m & 85.2\% & 92.4\% & 0.880 & 0.075 & 16.603 \\
-    ibm/granite-embedding:278m & 84.8\% & 87.6\% & 0.861 & 0.099 & 2.292 \\
-    qwen3-embedding:0.6b & 86.8\% & 100.0\% & 0.916 & 0.074 & 17.503 \\
+    ibm/granite-embedding:30m  & 83.6\% & 95.2\%  & 0.881 & 0.071 & 0.348  & 76791 \\
+    ibm/granite-embedding:125m & 85.2\% & 92.4\%  & 0.880 & 0.075 & 16.603 & 79930 \\
+    ibm/granite-embedding:278m & 84.8\% & 87.6\%  & 0.861 & 0.099 & 2.292  & 77693 \\
+    qwen3-embedding:0.6b       & 86.8\% & 100.0\% & 0.916 & 0.074 & 17.503 & 102673 \\
     \bottomrule
-  \end{tabular}\label{tab:eval-retriever-sample10-doc}
+  \end{tabularx}\label{tab:eval-retriever-sample10-doc}
 \end{table}
 
 \begin{table}[h]
   \centering
   \scriptsize
   \caption{Document retrieval with passage re-ranking on \texttt{sample-10} (test2).}
-  \begin{tabular}{lccccc}
+    \begin{tabularx}{\textwidth}{lXXXXXX}
     \toprule
-    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg Latency (s)} & \textbf{Index Build (s)} \\
+    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg\newline{}Latency (s)} & \textbf{Index\newline{}Build (s)} & \textbf{Avg Responce\newline{}Size (chars)} \\
     \midrule
-    ibm/granite-embedding:30m & 48.4\% & 87.2\% & 0.628 & 0.817 & 1.138 \\
-    ibm/granite-embedding:125m & 39.2\% & 87.6\% & 0.557 & 1.264 & 1.044 \\
-    ibm/granite-embedding:278m & 46.4\% & 81.6\% & 0.594 & 1.514 & 1.900 \\
-    qwen3-embedding:0.6b & 55.2\% & 94.0\% & 0.685 & 3.777 & 10.322 \\
+    ibm/granite-embedding:30m  & 48.4\% & 87.2\% & 0.628 & 0.817 & 1.138  &  5304 \\
+    ibm/granite-embedding:125m & 39.2\% & 87.6\% & 0.557 & 1.264 & 1.044  &  5092 \\
+    ibm/granite-embedding:278m & 46.4\% & 81.6\% & 0.594 & 1.514 & 1.900  &  5322 \\
+    qwen3-embedding:0.6b       & 55.2\% & 94.0\% & 0.685 & 3.777 & 10.322 &  4820 \\
     \bottomrule
-  \end{tabular}\label{tab:eval-retriever-sample10-rerank}
+  \end{tabularx}\label{tab:eval-retriever-sample10-rerank}
 \end{table}
 
 \begin{table}[h]
   \centering
   \scriptsize
   \caption{Passage-level retrieval on \texttt{sample-10} (test3).}
-  \begin{tabular}{lccccc}
+    \begin{tabularx}{\textwidth}{lXXXXXX}
     \toprule
-    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg Latency (s)} & \textbf{Index Build (s)} \\
+    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg\newline{}Latency (s)} & \textbf{Index\newline{}Build (s)} & \textbf{Avg Responce\newline{}Size (chars)} \\
     \midrule
-    ibm/granite-embedding:30m &  76.0\% & 98.4\% & 0.863 & 0.045 & 1.7505 \\
-    ibm/granite-embedding:125m & 84.0\% & 97.2\% & 0.894 & 0.056 & 3.4254 \\
-    ibm/granite-embedding:278m & 82.0\% & 97.6\% & 0.888 & 0.100 & 5.2866 \\
-    qwen3-embedding:0.6b &       86.4\% & 96.8\% & 0.903 & 0.081 & 15.6794 \\
+    ibm/granite-embedding:30m &  76.0\% & 98.4\% & 0.863 & 0.045 & 1.7505  & 2589 \\
+    ibm/granite-embedding:125m & 84.0\% & 97.2\% & 0.894 & 0.056 & 3.4254  & 2588 \\
+    ibm/granite-embedding:278m & 82.0\% & 97.6\% & 0.888 & 0.100 & 5.2866  & 2669 \\
+    qwen3-embedding:0.6b &       86.4\% & 96.8\% & 0.903 & 0.081 & 15.6794 & 2493 \\
     \bottomrule
-  \end{tabular}\label{tab:eval-retriever-sample10-passage}
+  \end{tabularx}\label{tab:eval-retriever-sample10-passage}
 \end{table}
 
 \begin{table}[h]
   \centering
   \scriptsize
   \caption{Document-level retrieval on \texttt{sample-100} (test1).}
-  \begin{tabular}{lccccc}
+    \begin{tabularx}{\textwidth}{lXXXXXX}
     \toprule
-    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg Latency (s)} & \textbf{Index Build (s)} \\
+    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg\newline{}Latency (s)} & \textbf{Index\newline{}Build (s)} & \textbf{Avg Responce\newline{}Size (chars)} \\
     \midrule
-    ibm/granite-embedding:30m &  62.7\% & 86.3\% & 0.724 & 0.043 & 2.270 \\
-    ibm/granite-embedding:125m & 69.7\% & 88.7\% & 0.768 & 0.036 & 1.706 \\
-    ibm/granite-embedding:278m & 65.7\% & 84.0\% & 0.734 & 0.098 & 1.652 \\
-    qwen3-embedding:0.6b &       72.7\% & 92.0\% & 0.806 & 0.074 & 128.222 \\
+    ibm/granite-embedding:30m &  62.7\% & 86.3\% & 0.724 & 0.043 & 2.270   & 70590  \\
+    ibm/granite-embedding:125m & 69.7\% & 88.7\% & 0.768 & 0.036 & 1.706   & 62318  \\
+    ibm/granite-embedding:278m & 65.7\% & 84.0\% & 0.734 & 0.098 & 1.652   & 81213  \\
+    qwen3-embedding:0.6b &       72.7\% & 92.0\% & 0.806 & 0.074 & 128.222 & 127590 \\
     \bottomrule
-  \end{tabular}\label{tab:eval-retriever-sample100-doc}
+  \end{tabularx}\label{tab:eval-retriever-sample100-doc}
 \end{table}
 
 \begin{table}[h]
   \centering
   \scriptsize
   \caption{Document retrieval with passage re-ranking on \texttt{sample-100} (test2).}
-  \begin{tabular}{lccccc}
+    \begin{tabularx}{\textwidth}{lXXXXXX}
     \toprule
-    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg Latency (s)} & \textbf{Index Build (s)} \\
+    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg\newline{}Latency (s)} & \textbf{Index\newline{}Build (s)} & \textbf{Avg Responce\newline{}Size (chars)} \\
     \midrule
-    ibm/granite-embedding:30m &  42.7\% & 72.7\% & 0.530 & 0.595 & 2.132 \\
-    ibm/granite-embedding:125m & 43.0\% & 77.0\% & 0.539 & 0.802 & 2.451 \\
-    ibm/granite-embedding:278m & 45.7\% & 72.7\% & 0.549 & 1.192 & 3.219 \\
-    qwen3-embedding:0.6b &       45.7\% & 79.7\% & 0.571 & 3.745 & 128.563 \\
+    ibm/granite-embedding:30m &  42.7\% & 72.7\% & 0.530 & 0.595 & 2.132   & 6544 \\
+    ibm/granite-embedding:125m & 43.0\% & 77.0\% & 0.539 & 0.802 & 2.451   & 6462 \\
+    ibm/granite-embedding:278m & 45.7\% & 72.7\% & 0.549 & 1.192 & 3.219   & 6438 \\
+    qwen3-embedding:0.6b &       45.7\% & 79.7\% & 0.571 & 3.745 & 128.563 & 6584 \\
     \bottomrule
-  \end{tabular}\label{tab:eval-retriever-sample100-rerank}
+  \end{tabularx}\label{tab:eval-retriever-sample100-rerank}
 \end{table}
 
 \begin{table}[h]
   \centering
   \scriptsize
   \caption{Passage-level retrieval on \texttt{sample-100} (test3).}
-  \begin{tabular}{lccccc}
+    \begin{tabularx}{\textwidth}{lXXXXXX}
     \toprule
-    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg Latency (s)} & \textbf{Index Build (s)} \\
+    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg\newline{}Latency (s)} & \textbf{Index\newline{}Build (s)} & \textbf{Avg Responce\newline{}Size (chars)} \\
     \midrule
-    ibm/granite-embedding:30m &     67.3\% & 91.0\% & 0.771 & 0.045 & 10.879 \\
-    ibm/granite-embedding:125m &    68.7\% & 89.3\% & 0.765 & 0.040 & 17.602 \\
-    ibm/granite-embedding:278m &    69.0\% & 88.3\% & 0.762 & 0.109 & 19.135 \\
-    qwen3-embedding:0.6b &          67.7\% & 87.0\% & 0.746 & 0.089 & 44.709 \\
+    ibm/granite-embedding:30m &     67.3\% & 91.0\% & 0.771 & 0.045 & 10.879 & 3429 \\
+    ibm/granite-embedding:125m &    68.7\% & 89.3\% & 0.765 & 0.040 & 17.602 & 3337 \\
+    ibm/granite-embedding:278m &    69.0\% & 88.3\% & 0.762 & 0.109 & 19.135 & 3410 \\
+    qwen3-embedding:0.6b &          67.7\% & 87.0\% & 0.746 & 0.089 & 44.709 & 3281 \\
     \bottomrule
-  \end{tabular}\label{tab:eval-retriever-sample100-passage}
+  \end{tabularx}\label{tab:eval-retriever-sample100-passage}
 \end{table}
 
 \paragraph{Key Findings}
@@ -200,40 +200,10 @@ ranged from 83.6--86.8\% with Top-5 accuracy up to 100\%. On
 The qwen3-embedding:0.6b model provided the best precision, but its index build
 time was substantially higher on the larger corpus (128--134s vs.\ 1.6--2.3s for
 Granite embeddings). Though, it is important to note that secound and third
-approaches have much smaller output size, which is critical for the
+approaches have much smaller output size (avg. 5K characters, which is about 4K
+tokens\ vs. avg 80K chars in first approach), which is critical for the
 summarization component, as it significantly reduces the latency and increases
 the accuracy of the generated answer.
-
-% \subsection{Component 3: Information Summarizer}
-%
-% \paragraph{Evaluation Approach}
-% The summarizer is evaluated on answer quality and relevance using
-% queries with reference answers.
-% % TODO: more details on evaluation metrics
-%
-% \paragraph{Test Collection}
-% \texttt{summarize-30}: 30 queries with reference answers, derived from user
-% queries, from \texttt{sample-10} and \texttt{sample-100} document collections.
-%
-% \paragraph{Testing Results}{}
-% Table~\ref{tab:eval-1-results} presents results from evaluation for each
-% collection:
-%
-% \begin{table}[h]
-%   \centering
-%   \scriptsize
-%   \caption{Evaluation results on \ldots} % TODO
-%   \begin{tabular}{lccc}
-%     \toprule
-%     \textbf{Test} & \textbf{Metric} & \textbf{Result} & \textbf{Avg Latency} \\
-%     \midrule
-%     Test 1 & Metric 1 & Result 1 & Number \\
-%     \bottomrule
-%   \end{tabular}\label{tab:eval-1-results}
-% \end{table}
-% \ldots
-%
-% \paragraph{Key Findings}
 
 \subsection{End-to-end testing}
 
@@ -246,88 +216,126 @@ corpus sizes. The evaluation focuses on practical usability for \gls{cli}
 assistance.
 
 \paragraph{Testing Collection}{}
-For end-to-end testing, we will reuse the \texttt{summarizer-150} collection of
-queries, which will be executed on a set of devices with varying hardware
+For end-to-end testing, we reuse the \texttt{tests/end-to-end/test\_cases.json}
+query set (10 queries) and run it against the \texttt{sample-10},
+\texttt{sample-100}, and \texttt{sample-1000} corpora.
 
 \paragraph{Testing Results}{}
-Table~\ref{tab:eval-1-results} presents results from evaluation for each
-collection:
+Table~\ref{tab:eval-21-results}--\ref{tab:eval-32-results} presents sample results from evaluation
+for each collection. Values are average per-query latencies in seconds. The
+evaluation was conducted on a system with an NVIDIA RTX 4060 8GB GPU. The testing
+is conducted for the lightest (qwen2.5:0.5b for generation and
+ibm/granite-embedding:30m for retrieval) and the heaviest (qwen3:1.7b for
+generation and qwen3-embedding:0.6b for retrieval) models, to provide a range of
+expected performance across different hardware configurations.
+
+% \begin{table}[h]
+%   \centering
+%   \caption{Evaluation results on different corpus sizes text generation on qwen2.5:0.5b}
+%   \scriptsize
+%   \begin{tabularx}{llll}
+%     \toprule
+%       \textbf{Name} & \textbf{Approx. input\newline text size (char/tok)} &  \textbf{Avg. Latency (s)} \\
+%     \midrule
+%     generate-s & <250/180     & None \\
+%     generate-m & ~5000/4000   & None \\
+%     generate-l & ~60000/50000 & None \\
+%     \bottomrule
+%   \end{tabularx}\label{tab:eval-11-results}
+% \end{table}
+%
+% \begin{table}[h]
+%   \centering
+%   \caption{Evaluation results on different corpus sizes text generation on qwen3:1.7b }
+%   \scriptsize
+%   \begin{tabularx}{lccc}
+%     \toprule
+%       \textbf{Name} & \textbf{Approx. input\newline text size (char/tok)} & \textbf{Avg. Latency (s)} \\
+%     \midrule
+%     generate-s & <250/180     & None \\
+%     generate-m & ~5000/4000   & None \\
+%     generate-l & ~60000/50000 & None \\
+%     \bottomrule
+%   \end{tabularx}\label{tab:eval-12-results}
+% \end{table}
 
 \begin{table}[h]
   \centering
-  \caption{Evaluation results on different corpus sizes text generation with GPU / on CPU only}
+  \caption{Evaluation results on search for different DB approaches on ibm/granite-embedding:30m}
   \scriptsize
-  \begin{tabular}{lccc}
+    \begin{tabularx}{\textwidth}{lXXX}
     \toprule
-      \textbf{Name} & \textbf{Approx. input\newline text size (char/tok)} & \textbf{Avg. Latency (s)\newline with GPU} & \textbf{Avg. Latency (s)\newline without GPU} \\
+    \textbf{DB Collection} & \textbf{Document-level} &
+    \textbf{Document-level with passage-level re-ranking} & \textbf{Passage-level} \\
     \midrule
-    generate-s & <250/180   & 1.61 & None \\
-    generate-m & ~2500/1800 & 1.60 & None \\
-    generate-l & >5000/4000 & 4.73 & None \\
+    sample-10   & 1.59 & 2.22 & 1.61 \\
+    sample-100  & 1.58 & 2.03 & 1.58 \\
+    sample-1000 & 1.58 & 1.96 & 1.47 \\
     \bottomrule
-  \end{tabular}\label{tab:eval-1-results}
+  \end{tabularx}\label{tab:eval-21-results}
 \end{table}
 
 \begin{table}[h]
   \centering
-  \caption{Evaluation results on build latencies for different DB approaches}
+  \caption{Evaluation results on search for different DB approaches on qwen3-embedding:0.6b}
   \scriptsize
-  \begin{tabular}{lccc}
+    \begin{tabularx}{\textwidth}{lXXX}
     \toprule
-      \textbf{DB Collection} & \textbf{Document-level(s)} & \textbf{Document-level With Passage-level reranking} & \textbf{Passage-level} \\
+    \textbf{DB Collection} & \textbf{Document-level} &
+    \textbf{Document-level with passage-level re-ranking} & \textbf{Passage-level} \\
     \midrule
-    sample-10   & 1.40 & 1.48  & 18.44 \\
-    sample-100  & 1.45 & 1.58  & 18.44 \\
-    sample-1000 & 1.76 & 10.99 & 167,3 \\
+    sample-10   & 1.60 & 6.92 & 1.60 \\
+    sample-100  & 1.59 & 8.18 & 1.58 \\
+    sample-1000 & None & None & None \\
     \bottomrule
-  \end{tabular}\label{tab:eval-1-results}
+  \end{tabularx}\label{tab:eval-22-results}
 \end{table}
 
 \begin{table}[h]
   \centering
-  \caption{Evaluation results on search for different DB approaches}
+    \caption{Evaluation results on RAG-search (retrieval + summarization) for different DB approaches on ibm/granite-embedding:30m}
   \scriptsize
-  \begin{tabular}{lccc}
+    \begin{tabularx}{\textwidth}{lXXX}
     \toprule
-    \textbf{DB Collection} & \textbf{Document-level} & \textbf{Document-level With Passage-level reranking} & \textbf{Passage-level} \\
+    \textbf{DB Collection} & \textbf{Document-level} &
+    \textbf{Document-level with passage-level re-ranking} & \textbf{Passage-level} \\
     \midrule
-    sample-10   & 0.43 & None & 0.87 \\
-    sample-100  & 0.53 & None & 0.70 \\
-    sample-1000 & 0.49 & None & 18.77 \\
+    sample-10   & 17.21 & 6.38 & 6.47 \\
+    sample-100  & 12.39 & 7.47 & 5.72 \\
+    sample-1000 & None  & None & None \\
     \bottomrule
-  \end{tabular}\label{tab:eval-1-results}
+  \end{tabularx}\label{tab:eval-31-results}
 \end{table}
 
 \begin{table}[h]
   \centering
-  \caption{Evaluation results on RAG-search (retrieval + summarization) for different DB approaches}
+    \caption{Evaluation results on RAG-search (retrieval + summarization) for different DB approaches on qwen3-embedding:0.6b and qwen3:1.7b}
   \scriptsize
-  \begin{tabular}{lccc}
+    \begin{tabularx}{\textwidth}{lXXX}
     \toprule
-    \textbf{DB Collection} & \textbf{Document-level} & \textbf{Document-level With Passage-level reranking} & \textbf{Passage-level} \\
+    \textbf{DB Collection} & \textbf{Document-level} &
+    \textbf{Document-level with passage-level re-ranking} & \textbf{Passage-level} \\
     \midrule
-    sample-10   & 0.99 & None & 1.43 \\
-    sample-100  & 0.98 & None & 1.13 \\
-    sample-1000 & 1.40 & None & 4.71 \\
+    sample-10   & 39.78 & 9.57 & 8.66 \\
+    sample-100  & 56.57 & 10.77 & 8.86 \\
+    sample-1000 & None & None & None \\
     \bottomrule
-  \end{tabular}\label{tab:eval-1-results}
+  \end{tabularx}\label{tab:eval-32-results}
 \end{table}
 
 \paragraph{Key Findings}
-It is clearly visible from data, that Document-level approach is the fastest
-one, but from the point of generated corpus it is much more inefficien then
-other two approaches, as it generates up to ten times more output, which
-negetively affects the application latency and accuracy. Two latter approaches
-have much smaller generation footprints, but Document-level with passage-level
-reranking requires more time to process the query (retrieval latency), which can
-affect the user experience. On the other hand, passage-level approach is much
-faster in retrieval, but it requires much more time to build the index, which is 
-another important factor to consider. To address this, the section size can be
-increased, which will either reduce the output size for this approach, but this
-leads to the same problem as Document-level approach.
+Document-level retrieval yields the lowest search latency (1.58--1.60s for
+Granite; 1.59--1.60s for Qwen3 embeddings), but produces the highest RAG latency
+due to large context sizes (12.39--17.21s for the light configuration and
+39.78--56.57s for the heavy configuration). Document-level retrieval with
+passage-level re-ranking increases search latency (2.03--2.22s for Granite;
+6.92--8.18s for Qwen3 embeddings) while reducing RAG latency to 5.69--7.47s
+(light) and 9.57--10.77s (heavy). Passage-level retrieval keeps search latency
+close to document-level values (1.47--1.61s and 1.58--1.60s) while providing the
+lowest RAG latency overall (5.34--6.47s light; 8.66--8.86s heavy).
 
-\subsection{Regress tests}
-This section describes the software regression tests that were implemented to
+\subsection{Regression tests}
+The software regression tests that were implemented to
 ensure the stability and reliability of the ShAI system during development and
 future maintenance. The tests cover key paths of the application, including
 document retrieval, summarization, and end-to-end query processing.
@@ -336,42 +344,3 @@ suite, which ensures that with any change of the system, none of the tests are
 broken (especially statistical tests, which usually need a lot of time to run).
 This allows us to maintain the stability of the system with ease, and to quickly
 identify any issues that may arise during development.
-
-% \paragraph{Limitations}
-% The \gls{rag} system is constrained to document-based assistance and cannot
-% handle task-specific guidance or dynamic system introspection. It works well
-% for: explaining commands, providing usage examples, and retrieving
-% documentation. It is less suitable for: system diagnostics, real-time
-% monitoring, or complex decision-making tasks that require agent-like
-% capabilities.
-%
-% \subsection{Why Agent-Based Approaches Failed}
-%
-% During exploration, agentic approaches (where the \gls{llm} could iteratively
-% reason, use tools, and take actions) were tested to handle more complex tasks.
-% These experiments revealed fundamental limitations of small local \glspl{llm}:
-%
-% \begin{enumerate}
-%   \item \textbf{Reasoning Chain Breakdown:} Multi-step reasoning
-%     required to plan and execute agent actions frequently broke down
-%     in small models, with incorrect intermediate conclusions
-%     cascading into failures.
-%   \item \textbf{Tool Use Unreliability:} Even with explicit tool
-%     definitions, small models struggled with proper tool invocation
-%     syntax and parameter selection, requiring heavy prompt
-%     engineering and validation logic.
-%   \item \textbf{Hallucination Under Uncertainty:} When agents faced
-%     unexpected states or error conditions, models tended to
-%     hallucinate plausible-sounding responses rather than correctly
-%     diagnosing issues or requesting clarification.
-%   \item \textbf{Unacceptable Latency:} Achieving higher accuracy
-%     required extensive prompting, validation loops, and fallback
-%     mechanisms, resulting in total latencies of 5--15 seconds per query.
-% \end{enumerate}
-%
-% \paragraph{Conclusion on Agent-Based Approaches}
-% Agent-based and classification-focused approaches require significantly larger
-% models (10B+ parameters) or external \gls{llm} services to function reliably.
-% For local, privacy-preserving assistance on consumer hardware, the program paths
-% should rather be programmatically constrained and suited for specific tasks
-% (e.g., retrieval + summarization) rather than open-ended reasoning or tool use.
