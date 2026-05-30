@@ -70,7 +70,8 @@ More detailed system architecture is visualized in
 Figure~\ref{fig:component-arch}, which shows the module structure of the
 application and the interactions between them. The architecture is designed to
 be modular and extensible, allowing for future enhancements and easy software
-reuse.
+reuse. Per-module and per-file documentation is provided in
+Appendix~\ref{a-shai-architecture}.
 
 \begin{figure}[ht]
   \centering
@@ -138,18 +139,18 @@ The main limiting factor is that each CLI requires separate hook registration an
 management. In this thesis, Bash is the primary implementation target for demonstration
 purposes only.
 
-\paragraph{Classification Approaches Tested}{}
-
-Two versions were explored to improve classifier performance:\label{sec:classifier-approaches}
-\begin{enumerate}
-  \item \textbf{LLM-Only Approach} uses the LLM alone for zero-shot classification.
-    This tests language understanding on command vs.\ query distinction but struggles
-    with ambiguous inputs and requires multiple calls for validation.
-
-  \item \textbf{Syntax Checker + LLM Hybrid} combines deterministic Bash syntax validation
-    with LLM classification. While more efficient for well-formed commands, it remains
-    limited by the underlying LLM classification accuracy on edge cases.
-\end{enumerate}
+% \paragraph{Classification Approaches Tested}{}
+%
+% Two versions were explored to improve classifier performance:\label{sec:classifier-approaches}
+% \begin{enumerate}
+%   \item \textbf{LLM-Only Approach} uses the LLM alone for zero-shot classification.
+%     This tests language understanding on command vs.\ query distinction but struggles
+%     with ambiguous inputs and requires multiple calls for validation.
+%
+%   \item \textbf{Syntax Checker + LLM Hybrid} combines deterministic Bash syntax validation
+%     with LLM classification. While more efficient for well-formed commands, it remains
+%     limited by the underlying LLM classification accuracy on edge cases.
+% \end{enumerate}
 
 Despite these approaches, the fundamental limitation remains: \textbf{small local \glspl{llm}
 lack sufficient classification accuracy for reliable real-world usage without significant
@@ -181,10 +182,16 @@ following two-step approach has been adopted:
     names and short descriptions in manual pages). This is designed
     to optimize the initial retrieval process and ensure minimal
     context is sent to the \gls{llm}.
-  \item \textbf{Iterative Prompt Processing:} To further optimize,
-    the RAG system processes documents in small, manageable parts
-    rather than in full. The results are aggregated after processing,
-    reducing latency and improving precision.
+    During the development and early manual testing with multiple queries, it
+    was observed that the model performed poorly, as it was usually to
+    difficult to choose the most relevant document based only on the initial
+    part of the document. This approach was left as a proof-of-concept, and
+    the focus was shifted to the next approach.
+  \item \textbf{Document-level Retrieval with Passage-level Re-ranking:} The
+    system retrieves top-k documents based on relevance to the query, then
+    re-ranks these documents at the passage level to identify the most
+    relevant sections for summarization. This approach reduces the amount of
+    information passed to the \gls{llm} while maintaining high relevance.
   \item \textbf{Passage-level Retrieval:} Instead of passing entire documents to
     the \gls{llm}, the system retrieves and processes smaller passages from
     retrieved top-k documents.
