@@ -9,15 +9,16 @@ implementation uses Ollama for local inference and \gls{faiss} for vector
 indexing.
 
 Evaluation is component-focused. The classifier was tested on the balanced
-\texttt{classifier-100} dataset; accuracy and latency of this approach hass
-proved inefficient, as ranged from 50\% to 88\%, with the best model requiring
-2.9s per query. The retriever was evaluated on \texttt{sample-10} (14 documents,
-250 queries) and \texttt{sample-100} (101 documents, 300 queries) with three
-different approaches, each with different accuracy and latency trade-offs,
-overall reaching up to 90\% Top-1 accuracy while keeping latency under 1.5s. The
-end-to-end system latencies were measured with the lightest and the heaviest
-models, showing that the system can provide answers in under 2s and 10s
-respectively. % TODO: fill in with actual numbers after evaluation
+\texttt{classifier-100} dataset; accuracy ranged from 50\% to 88\%, with the best
+model requiring 2.9s per query. The retriever was evaluated on \texttt{sample-10}
+(14 documents, 250 queries) and \texttt{sample-100} (101 documents, 300 queries):
+document-level retrieval achieved Top-5 accuracy up to 100\% and 92\% with
+per-query latency of 0.04--0.10s for Granite embeddings, while passage re-ranking
+increased latency to 0.6--3.8s without improving Top-1 accuracy. End-to-end
+latencies measured on an RTX 4060 8GB GPU show RAG response times of 5.34--6.47s
+(light configuration) and 8.66--10.77s (heavy configuration) for passage-level
+retrieval, while document-level RAG reached 12.39--17.21s and 39.78--56.57s,
+respectively.
 
 The results demonstrate that strictly defined (for example, retrieval
 architectures) are practical for local \gls{cli} assistance, whereas agentic
