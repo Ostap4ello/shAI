@@ -1,1 +1,28 @@
-Will be filled in later when abstractEN is ready.
+Táto práca skúma, či je možné vytvoriť praktického Linux \gls{cli} asistenta
+pomocou malých lokálnych \glspl{llm} pri offline a hardvérových obmedzeniach.
+Prehľad existujúcich asistentov ukázal silnú závislosť od vzdialených API a
+nízku spoľahlivosť agentových workflowov na lokálnych modeloch. V reakcii na to
+práca navrhuje shAI, modulárny prototyp založený na \gls{rag}, ktorý pozostáva z
+klasifikátora typu príkaz-vs.-otázka, vyhľadávača dokumentov indexujúceho man
+stránky Linuxu a sumarizátora, ktorý generuje stručné odpovede zo získaných
+pasáží. Implementácia využíva Ollama na lokálnu inferenciu a \gls{faiss} na
+vektorové indexovanie.
+
+Hodnotenie je zamerané na jednotlivé komponenty. Klasifikátor bol testovaný na
+vyváženom datasete \texttt{classifier-100}; presnosť sa pohybovala od 50\% do
+88\%, pričom najlepší model vyžadoval 2.9s na jeden dopyt. Vyhľadávač bol
+vyhodnotený na \texttt{sample-10} (14 dokumentov, 250 dopytov) a
+\texttt{sample-100} (101 dokumentov, 300 dopytov): vyhľadávanie na úrovni
+dokumentov dosiahlo Top-5 presnosť až do 100\% a 92\% s latenciou 0.04--0.10s na
+dopyt pre embeddingy Granite, zatiaľ čo preusporiadanie pasáží (passage
+re-ranking) zvýšilo latenciu na 0.6--3.8s bez zlepšenia Top-1 presnosti. Celková
+(end-to-end) latencia meraná na GPU RTX 4060 8GB ukazuje časy odozvy RAG v
+rozmedzí 5.34--6.47s (ľahká konfigurácia) a 8.66--10.77s (ťažká konfigurácia)
+pre vyhľadávanie na úrovni pasáží, zatiaľ čo RAG na úrovni dokumentov dosiahol
+12.39--17.21s, respektíve 39.78--56.57s.
+
+Výsledky ukazujú, že striktne definované prístupy (napríklad vyhľadávacie
+architektúry) sú praktické pre lokálnu \gls{cli} asistenciu, zatiaľ čo agentové
+prístupy s otvoreným koncom zostávajú na malých modeloch nespoľahlivé. Práca
+poskytuje open-source prototyp a empirické benchmarky, ktoré usmerňujú budúci
+výskum v oblasti optimalizácie modelov a návrhu úloh v obmedzených podmienkach.
