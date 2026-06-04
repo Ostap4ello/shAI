@@ -215,9 +215,7 @@ corpus sizes. The evaluation focuses on practical usability for \gls{cli}
 assistance.
 
 \paragraph{Testing Collection}{}
-For end-to-end testing, we reuse the\\ \texttt{tests/end-to-end/test\_cases.json}
-query set (10 queries) and run it against the \texttt{sample-10} and \texttt{sample-100} corpora.
-% TODO: sample-1000
+For end-to-end testing, we use query set (10 queries) and run it against the \texttt{sample-10}, \texttt{sample-100}, and \texttt{sample-1000} corpora.
 
 \paragraph{Testing Results}{}
 Table~\ref{tab:eval-21-results}--\ref{tab:eval-32-results} presents sample results from evaluation
@@ -267,9 +265,9 @@ expected performance across different hardware configurations.
     \textbf{DB Collection} & \textbf{Document-level} &
     \textbf{Document-level with passage-level re-ranking} & \textbf{Passage-level} \\
     \midrule
-    sample-10   & 1.59 & 2.22 & 1.61 \\
-    sample-100  & 1.58 & 2.03 & 1.58 \\
-    % sample-1000 & None & None & None \\
+    sample-10   & 1.22 & 1.66 & 1.27 \\
+    sample-100  & 1.27 & 1.53 & 1.31 \\
+    sample-1000 & 1.37 & 1.64 & 1.27 \\
     \bottomrule
   \end{tabularx}\label{tab:eval-21-results}
 \end{table}
@@ -283,9 +281,9 @@ expected performance across different hardware configurations.
     \textbf{DB Collection} & \textbf{Document-level} &
     \textbf{Document-level with passage-level re-ranking} & \textbf{Passage-level} \\
     \midrule
-    sample-10   & 1.60 & 6.92 & 1.60 \\
-    sample-100  & 1.59 & 8.18 & 1.58 \\
-    % sample-1000 & None & None & None \\
+    sample-10   & 1.31 & 5.17 & 1.37 \\
+    sample-100  & 1.39 & 6.98 & 1.35 \\
+    sample-1000 & 0.67 & 16.19 & 0.84 \\
     \bottomrule
   \end{tabularx}\label{tab:eval-22-results}
 \end{table}
@@ -299,9 +297,9 @@ expected performance across different hardware configurations.
     \textbf{DB Collection} & \textbf{Document-level} &
     \textbf{Document-level with passage-level re-ranking} & \textbf{Passage-level} \\
     \midrule
-    sample-10   & 17.21 & 6.38 & 6.47 \\
-    sample-100  & 12.39 & 7.47 & 5.72 \\
-    % sample-1000 & None  & None & None \\
+    sample-10   & 3.59 & 2.46 & 1.82 \\
+    sample-100  & 3.18 & 1.94 & 1.88 \\
+    sample-1000 & 3.36 & 2.09 & 1.94 \\
     \bottomrule
   \end{tabularx}\label{tab:eval-31-results}
 \end{table}
@@ -315,23 +313,54 @@ expected performance across different hardware configurations.
     \textbf{DB Collection} & \textbf{Document-level} &
     \textbf{Document-level with passage-level re-ranking} & \textbf{Passage-level} \\
     \midrule
-    sample-10   & 39.78 & 9.57 & 8.66 \\
-    sample-100  & 56.57 & 10.77 & 8.86 \\
-    % sample-1000 & None & None & None \\
+    sample-10   & 20.85 & 6.68 & 5.63 \\
+    sample-100  & 34.24 & 8.62 & 5.89 \\
+    sample-1000 & 26.21 & 10.46 & 6.27 \\
     \bottomrule
   \end{tabularx}\label{tab:eval-32-results}
 \end{table}
 
+\begin{table}[h]
+  \centering
+    \caption{Evaluation results on database build time for different DB approaches on ibm/granite-embedding:30m}
+  \scriptsize
+    \begin{tabularx}{\textwidth}{lYYY}
+    \toprule
+    \textbf{DB Collection} & \textbf{Document-level} &
+    \textbf{Document-level with passage-level re-ranking} & \textbf{Passage-level} \\
+    \midrule
+    sample-10   & 0.71 & 0.78 & 1.63 \\
+    sample-100  & 1.58 & 1.59 & 7.18 \\
+    sample-1000 & 13.10 & 12.74 & 109.03 \\
+    \bottomrule
+  \end{tabularx}\label{tab:eval-41-results}
+\end{table}
+
+\begin{table}[h]
+  \centering
+    \caption{Evaluation results on database build rime for different DB approaches on qwen3-embedding:0.6b}
+  \scriptsize
+    \begin{tabularx}{\textwidth}{lYYY}
+    \toprule
+    \textbf{DB Collection} & \textbf{Document-level} &
+    \textbf{Document-level with passage-level re-ranking} & \textbf{Passage-level} \\
+    \midrule
+    sample-10   & 9.94 & 10.12 & 5.95 \\
+    sample-100  & 145.65 & 174.72 & 40.59 \\
+    sample-1000 & 1606.91 & 1604.53 & 643.04 \\
+    \bottomrule
+  \end{tabularx}\label{tab:eval-42-results}
+\end{table}
+
 \paragraph{Key Findings}
-Document-level retrieval yields the lowest search latency (1.58--1.60s for
-Granite; 1.59--1.60s for Qwen3 embeddings), but produces the highest RAG latency
-due to large context sizes (12.39--17.21s for the light configuration and
-39.78--56.57s for the heavy configuration). Document-level retrieval with
-passage-level re-ranking increases search latency (2.03--2.22s for Granite;
-6.92--8.18s for Qwen3 embeddings) while reducing RAG latency to 5.69--7.47s
-(light) and 9.57--10.77s (heavy). Passage-level retrieval keeps search latency
-close to document-level values (1.47--1.61s and 1.58--1.60s) while providing the
-lowest RAG latency overall (5.34--6.47s light; 8.66--8.86s heavy).
+Document-level retrieval and document-level retrieval with passage reranking
+show the best performance when using small embedding models like
+ibm/granite-embedding:30m. The latency of runtime passage-level reranking is low
+enough to perform better, than passage-level approach, but keeping the output
+size small and accuracy the same. In contrast, when using bigger embedding
+models, like qwen3-embedding:0.6b, the passage-level approach outperforms the
+other approaches, as the computation time needed for vector creation for
+the whole document or runtime reranking becomes too expensive.
 
 \subsection{Regression tests}
 The software regression tests that were implemented to

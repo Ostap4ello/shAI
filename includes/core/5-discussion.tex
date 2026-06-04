@@ -14,9 +14,10 @@ on bigger models), or extensive hardcoding the rules for classification. This
 task is better handled by traditional methods and specialized models, rather
 than general-purpose \glspl{llm}.
 
-\paragraph{Agent-Based Approaches --- Unreliable In Current State} % TODO: add info in bachelor's
-Agentic systems that attempt multi-step reasoning, tool use, and state management consistently
-fail with small local \glspl{llm}. In current state, the approach is totaly
+\paragraph{Agent-Based Approaches --- Unreliable In Current State}
+Agentic systems that attempt multi-step reasoning, tool use, and state
+management  have shown to consistently fail with small local \glspl{llm} on
+stage of early development and testing. In current state, the approach is totaly
 relying on decision-making capabilities of the model, giving it full freedom to
 choose. The better approach, which could be explored in future work, is to give
 agent more narrow, guided and defined set of actions, or to use model
@@ -25,8 +26,8 @@ fine-tuning to do the task.
 \paragraph{RAG System --- Practical and Effective}
 The retrieval-augmented generation approach proved robust and practical. By
 constraining the \gls{llm} task to extracting and summarizing information from
-retrieved documents, the system achieves: reliable accuracy (ranging from 80\%
-to 94\% Top-5 accuracy depending on the approach), acceptable latency (under 3s
+retrieved documents, the system achieves: reliable accuracy (ranging from 75\%
+to 94\% Top-5 accuracy depending on the approach), acceptable retrieval latency (under 3s
 per query), and good user experience. Being the most accurate approach,
 document-level retrieval has introduced the highest output size, which would
 negatively affect other parts of the system, ranging around 60-100K characters
@@ -39,7 +40,8 @@ practical for summarization and overall user experience.
 End-to-end measurements on an NVIDIA RTX 4060 8GB GPU show that retrieval
 strategy strongly affects total latency. Document-level retrieval kept search
 latency around 1.58--1.60s but produced the highest RAG latency (12.39--17.21s
-for the light configuration and 39.78--56.57s for the heavy configuration).
+for the light configuration and 39.78--56.57s for the heavy configuration), due
+to huge generated output size.
 Re-ranking increased search latency (2.03--2.22s for Granite embeddings;
 6.92--8.18s for qwen3-embedding) while reducing RAG latency to 5.69--7.47s
 (light) and 9.57--10.77s (heavy). Passage-level retrieval kept search latency
