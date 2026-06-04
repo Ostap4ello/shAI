@@ -197,8 +197,8 @@ assistance, and dangerous command detection/prevention. However, numerous
 existing solutions % mention via references relevant tools
 already provided similar features, relying on remote LLMs,
 which were already tested in this space.
-\paragraph{Limitation:} existing numerous solutions.
-\paragraph{Gained Knowledge:} overall overview of the field and
+\paragraph{Limitation:} Existing numerous solutions.
+\paragraph{Gained Knowledge:} Overall overview of the field and
 existing solutions,
 OpenAI API.
 
@@ -245,7 +245,7 @@ dropping features like:
         reinforcement learning and multi-step reasoning techniques.
 \end{itemize}
 
-\paragraph{Limitation:} local \glspl{llm} have limited capabilities for complex
+\paragraph{Limitation:} Local \glspl{llm} have limited capabilities for complex
 reasoning and long context handling.
 
 \paragraph{Gained Knowledge:} Through extensive testing with small local models
@@ -259,19 +259,19 @@ the architecture. Local \glspl{llm} exhibited poor performance on:
   \item Complex chained reasoning requiring multiple logic steps
 \end{itemize}
 This led to discovering techniques for enhancing local \gls{llm} performance
-within these constraints: Retrieval-Augmented Generation (RAG) to reduce
-reliance on model knowledge, embedding models for efficient semantic search, and
-task decomposition to avoid complex reasoning chains.
+within these constraints: \gls{rag} to reduce reliance on model knowledge,
+embedding models for efficient semantic search, and task decomposition to avoid
+complex reasoning chains.
 
 \subsubsection{Iteration 3: Focused RAG System}
 
-Final design: concentrating on RAG (Retrieval-Augmented Generation) using
+Final design: concentrating on \gls{rag} using
 embeddings from local \glspl{llm}. Classification and agent modules were found
 to be too demanding for local models to execute reliably. RAG provides a clear,
 empirically testable approach: semantic search over structured knowledge sources
 (Linux man pages) coupled with \gls{llm}-assisted response generation. This
-architecture plays to the strengths of local models---embedding generation and
-content summarization---while avoiding their weaknesses in complex reasoning.
+architecture plays to the strengths of local models --- embedding generation and
+content summarization --- while avoiding their weaknesses in complex reasoning.
 The system decomposes the assistant task into two simpler operations: (1)
 retrieval of relevant documentation using semantic similarity, and (2)
 generation of a user-friendly response by re-ranking and summarizing retrieved

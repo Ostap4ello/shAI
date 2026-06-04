@@ -38,7 +38,7 @@ typically done through standard input and output streams, which use file
 descriptors as the underlying mechanism for data exchange. This restricts the
 interaction to text-based commands and responses. Terminal applications can vary
 from simple \gls{cli} utilities to complex \gls{tui}
-programs~\cite{man_man,linfo_terminal}.
+programs~\cite{linfo_terminal}.
 
 \paragraph{\gls{cli}}
 The definition of \gls{cli} extends previous definition to the specific case of
@@ -51,7 +51,7 @@ form.
 is special program (with \gls{cli}, \gls{tui}, as well as
 \gls{gui} interfaces) that provides relatively wide and direct access on system
 on which it runs.\ \gls{cli} shells are \gls{cli} programs that allow users to
-execute commands and other \gls{cli} utilities~\cite{man_man,linfo_terminal}.
+execute commands and other \gls{cli} utilities~\cite{linfo_terminal}.
 
 \paragraph{\gls{cli} utility}
 is program executed from within the \gls{cli} environments. Some popular
@@ -307,7 +307,7 @@ decision-making, and performing actions to achieve complex
 goals~\cite{naveed2023,zhao2023}.
 
 We can define the workflow of \gls{llm} Agents ~\cite{nvidia-llm-agent} as
-pseudocode in Listing~\ref{alg:agent}.
+pseudocode in Algorithm~\ref{alg:agent}.
 
 \begin{algorithm}[t]
 \caption{Pseudocode for \gls{llm} Agent workflow}
@@ -366,7 +366,7 @@ knowledge bases, significantly reducing hallucinations and increasing
 accuracy~\cite{zhao2023}. It reuses the semantic meaning extraction capabilities
 of \textbf{embedding \gls{llm}} and the text generation and summarization
 capabilities of \textbf{\gls{llm}} to retrieve information from external
-sources. We define the workflow of \gls{rag} in Listing~\ref{alg:rag}.
+sources. We define the workflow of \gls{rag} in Algorithm~\ref{alg:rag}.
 
 \begin{algorithm}[t]
 \caption{Pseudocode for \gls{rag} workflow}
@@ -379,11 +379,9 @@ sources. We define the workflow of \gls{rag} in Listing~\ref{alg:rag}.
     \STATE \quad \COMMENT{Step 2: Inject retrieved documents into the input prompt}
     \STATE \quad $\textit{augmented\_prompt} \gets \text{construct\_prompt}(\textit{user\_query}, \textit{relevant\_documents})$
 
-    \STATE \quad \COMMENT{Step 3: Pass the augmented prompt to the LLM}
-    \STATE \quad $\textit{llm\_response} \gets \textit{LLM}.\text{generate\_response}(\textit{augmented\_prompt})$
-
-    \STATE \quad \COMMENT{Step 4: Return the final response}
-    \STATE \quad \textbf{return} $\textit{llm\_response}$
+    \STATE \quad \COMMENT{Step 3: Pass the augmented prompt to the LLM and
+    return it as the final response}
+    \STATE \quad \textbf{return} $\gets \textit{LLM}.\text{generate\_response}(\textit{augmented\_prompt})$
 \STATE \textbf{end function}
 \end{algorithmic}
 \end{algorithm}
@@ -633,7 +631,6 @@ documents, which are much better for the machine to process. Currently, the
 semantic representation of documents is generally categorized into two primary
 groups~\cite{khan2026retrieval}:
 
-% TODO: citations
 \begin{itemize}
   \item \textbf{Sparse vector representations (sparse retrieval):} This method
       mostly relies on traditional keyword-based approaches, such as \gls{bow},
@@ -745,7 +742,7 @@ stored document vectors.
 
 In this thesis and implementation, we focus on processing \textbf{Linux man
 manual pages} (shortened \textbf{man pages} or \textbf{manual pages}) as data
-for testing and validation and by the term \textbf{document} we will mean a man
+for testing and validation and by the term \textbf{document} we reffer to a man
 page. In this part we provide the description of the main conventions for man
 pages, which are relevant for the solution.
 

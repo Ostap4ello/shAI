@@ -37,8 +37,6 @@ component's responsibility and enables thorough testing of individual modules.
 Figure~\ref{fig:use-cases} presents the system's use cases and user
 interactions.
 
-% TODO: as vector format
-% add puml code to AIS attachments, same for Fig.2, INCREASE FIG2 (READIBILITY)
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.9\textwidth]{img/usecases.puml.pdf}
@@ -80,7 +78,6 @@ Appendix~\ref{a-shai-architecture}.
 \end{figure}
 
 
-\newpage
 \subsection{Development Process}
 
 The section describes the development-related aspects of the project, including
@@ -89,7 +86,6 @@ important information.
 
 \subsubsection{Component 1. Natural Language vs. Shell Command Classifier}
 
-\paragraph{Status}{}
 This component was designed to distinguish between shell commands and natural language input,
 but is left as a \textbf{proof-of-concept} implementation. During development, two significant
 challenges emerged:
@@ -134,7 +130,6 @@ directly in the shell; if natural language, it engages the \gls{rag} pipeline fo
 %     bind -x '"\C-y": extract_input'
 % \end{lstlisting}
 
-\paragraph{Generic CLI Support}{}
 The main limiting factor is that each CLI requires separate hook registration and
 management. In this thesis, Bash is the primary implementation target for demonstration
 purposes only.
@@ -165,7 +160,7 @@ This component is responsible for managing document indexes and retrieving docum
 
 \paragraph{Man pages processing for embedding database.}{}
 For better context management and embedding generation, the pages will be
-compiled to text format (see groff -Tascii and grotty). This will allow us to
+compiled to text format (using \texttt{groff -Tascii and grotty}). This will allow us to
 extract the most relevant information without the noise of formatting and other
 non-essential elements.
 
@@ -232,25 +227,22 @@ learning, and devise integration. smong such libraries, we use:
 \begin{itemize}
   \item \texttt{openai}: Implementation of the OpenAI API client,
     used for interacting with \glspl{llm} services via HTTP requests.
-    This standartized way to interact is ideal for architectural
-    modularity and flexibility.
+    OpenAI API is supported by most popular \gls{llm} service providers,
+    making this standartized way to interact with \glspl{llm} a perfect choice
+    for architectural modularity and flexibility.
   \item \texttt{faiss-cpu}: A library for efficient similarity search
     and clustering of dense vectors, used for implementing the vector
     database for document retrieval. It provides fast indexing and
     querying capabilities, making it suitable for handling large
     collections of document embeddings.
-  \item \texttt{os, pathlib, subprocess, shutil}: Standard Python
-    libraries for managing operating system resources, like
-    filesystem operations, running subprocesses, and handling paths.
 \end{itemize}
-% TODO: cite
 
 \subsubsection{Ollama}
 
 Ollama~\cite{ollama-web} is a local LLM service that enables running large
 language models on consumer hardware without requiring cloud API calls. For this
-thesis, Ollama was chosen as the primary LLM runtime over in-code alternatives
-for several reasons:
+thesis, Ollama was chosen as the primary LLM runtime or several reasons: 
+% TODO: over in-code solutions - add comparison
 
 \begin{itemize}
   \item \textbf{Simplicity and Ease of Use} --- Ollama provides a
@@ -306,7 +298,6 @@ The thesis testing and development primarily utilized several small, publicly
 available \glspl{llm} and embedding models, summarized in
 Table~\ref{tab:llm-summary} and Table~\ref{tab:embedding-summary}.
 
-% TODO: fix column widths, do we really need last 2 cols? same for emb
 \begin{table}
   \centering
   \scriptsize
