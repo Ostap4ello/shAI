@@ -50,7 +50,7 @@ Architektúru \gls{llm} možno opísať vo vrstvách, pričom každá z~nich spr
     \item \textbf{Tokenizátor} rozkladá vstupný text na tokeny s~fixnou slovnou zásobou definovanou počas trénovania.
     \textsl{Nové alebo zriedkavé slová nemusia byť spracované presne v~závislosti od veľkosti tokenizátora.}
 
-    \item \textbf{Embeddingová vrstva} prevádza tokenizovaný vstup na husté vektorové reprezentácie (ako sú fixné vektory alebo vektory závislé od pozície).
+    \item \textbf{Embeddingová vrstva} prevádza tokenizovaný vstup na vektorové reprezentácie (ako sú fixné vektory alebo vektory závislé od pozície).
 
     \item \textbf{Transformerové vrstvy} pozostávajú z~viacerých hláv mechanizmu pozornosti (attention)~\cite{attention} a~dopredných (feedforward) sietí, ktoré modelu umožňujú zachytiť komplexné vzťahy medzi tokenmi.
 
@@ -116,14 +116,14 @@ Táto sekcia poskytuje teoretické zázemie v~oblasti reprezentácie, ukladania 
 
 \paragraph{Sémantická reprezentácia dokumentov} je proces konverzie dokumentov do formátu, ktorý zachytáva ich konceptuálny a~sémantický význam vo forme vhodnej pre strojové spracovanie. Sémantická reprezentácia dokumentov sa všeobecne delí do dvoch primárnych skupín~\cite{khan2026retrieval}:
 \begin{itemize}
-    \item \textbf{Riedke (sparse) vektorové reprezentácie} využívajú tradičné prístupy založené na kľúčových slovách, ako napríklad bag-of-words (\gls{bow}), one-hot kódovanie, latentné sémantické indexovanie (\gls{lsindexing}) alebo term frequency-inverse document frequency (\gls{tfidf}). Tieto prístupy sú výpočtovo efektívne a~vhodné pre jednoduché dopyty, avšak môžu mať problémy pri komplexných dopytoch, ktoré si vyžadujú porozumenie kontextu~\cite{khan2026retrieval}.
+    \item \textbf{Sparse vektorové reprezentácie} využívajú tradičné prístupy založené na kľúčových slovách, ako napríklad bag-of-words (\gls{bow}), one-hot kódovanie, latentné sémantické indexovanie (\gls{lsindexing}) alebo term frequency-inverse document frequency (\gls{tfidf}). Tieto prístupy sú výpočtovo efektívne a~vhodné pre jednoduché dopyty, avšak môžu mať problémy pri komplexných dopytoch, ktoré si vyžadujú porozumenie kontextu~\cite{khan2026retrieval}.
 
-    \item \textbf{Husté (dense) vektorové reprezentácie} využívajú embedding \gls{llm} na generovanie embedding vektorov, ktoré zachytávajú sémantický význam textu. Tento prístup je efektívnejší pre zložité dopyty, vyžaduje si však viac výpočtových zdrojov než riedke prístupy~\cite{khan2026retrieval}.
+    \item \textbf{Dense vektorové reprezentácie} využívajú embedding \gls{llm} na generovanie embedding vektorov, ktoré zachytávajú sémantický význam textu. Tento prístup je efektívnejší pre zložité dopyty, vyžaduje si však viac výpočtových zdrojov než riedke prístupy~\cite{khan2026retrieval}.
 
     \item Okrem toho sa \textbf{hybridné techniky vyhľadávania} pokúšajú kombinovať výhody oboch prístupov pomocou techník, ako je napríklad model SPLADE, ktorý obohacuje riedke reprezentácie o~sémanticky príbuzné výrazy~\cite{khan2026retrieval}.
 \end{itemize}
 
-Pre tento výskum sa ako primárny prístup zvolilo husté (dense) vyhľadávanie, keďže je vhodnejšie pre komplexné dopyty a~dokáže zachytiť sémantický význam dokumentov, čo je kľúčové pre úlohu výberu vhodných dokumentov na základe používateľských dopytov.
+Pre tento výskum sa ako primárny prístup zvolilo vyhľadávanie pomocou dense reprezentácií, keďže je vhodnejšie pre komplexné dopyty a~dokáže zachytiť sémantický význam dokumentov, čo je kľúčové pre úlohu výberu vhodných dokumentov na základe používateľských dopytov.
 
 \paragraph{Vektorové databázy} sú špecializované databázové systémy navrhnuté na ukladanie a~správu vysokorozmerných vektorových dát a~na vykonávanie efektívneho vyhľadávania podobnosti na základe rôznych metrík vzdialenosti vrátane kosínusovej podobnosti, L2 vzdialenosti a~euklidovskej vzdialenosti. Príkladmi široko používaných vektorových databáz sú FAISS (Facebook AI Similarity Search)~\cite{faiss2026}, Annoy~\cite{annoy2026} a~Milvus~\cite{milvus2026}. Bežne sa využívajú na ukladanie a~vyhľadávanie vektorových reprezentácií dokumentov.
 
