@@ -14,7 +14,7 @@ on bigger models), or extensive hardcoding the rules for classification. This
 task is better handled by traditional methods and specialized models, rather
 than general-purpose \glspl{llm}.
 
-\paragraph{Agent-Based Approaches --- Unreliable In Current State}
+\paragraph{Agent-Based Approaches --- Unreliable In Current State} % TODO: add info in bachelor's
 Agentic systems that attempt multi-step reasoning, tool use, and state management consistently
 fail with small local \glspl{llm}. In current state, the approach is totaly
 relying on decision-making capabilities of the model, giving it full freedom to
@@ -23,12 +23,12 @@ agent more narrow, guided and defined set of actions, or to use model
 fine-tuning to do the task.
 
 \paragraph{RAG System --- Practical and Effective}
-The Retrieval-Augmented Generation approach proved robust and practical. By
+The retrieval-augmented generation approach proved robust and practical. By
 constraining the \gls{llm} task to extracting and summarizing information from
 retrieved documents, the system achieves: reliable accuracy (ranging from 80\%
 to 94\% Top-5 accuracy depending on the approach), acceptable latency (under 3s
 per query), and good user experience. Being the most accurate approach,
-Document-level retrieval has introduced the highest output size, which would
+document-level retrieval has introduced the highest output size, which would
 negatively affect other parts of the system, ranging around 60-100K characters
 (about 50-80K tokens). To address this, passage-level retrieval and re-ranking
 approaches were explored, which reduced output size to about 6K characters
@@ -49,7 +49,7 @@ most practical for interactive use.
 
 \paragraph{Practical Value}
 ShAI provides practical offline assistance for \gls{cli} users, delivering fast,
-help on user document datatbase without network dependency, or privacy concerns.
+help on user document database without network dependency, or privacy concerns.
 The current implementation demonstrates that the \gls{rag} approach is viable
 and useful, despite being less ambitious than original goals of general-purpose
 command-line reasoning.
@@ -76,7 +76,7 @@ architectures} rather than general-purpose reasoning:
 \end{itemize}
 
 \paragraph{Future Directions}
-Future work arount this topic can explore various avenues to build on the
+Future work around this topic can explore various avenues to build on the
 findings of this thesis:
 \begin{itemize}
   \item \textbf{Broader Task Support:} Investigate additional constrained tasks
@@ -88,7 +88,9 @@ findings of this thesis:
     mobile \gls{gui} apps, etc.
   \item \textbf{User Interface Improvements:} Develop richer interfaces (e.g.,
     interactive query refinement, multi-turn conversations) while maintaining
-    low latency and simplicity.
+    low latency and simplicity. Also further exploration of different seamless
+    integration approaches, used in solutions like \texttt{llm-zsh-plugin}
+    or \texttt{AiTerm}, can be done.
   \item \textbf{Software Optimization/Refactoring:} Explore the possibilities of
     usage of LangChain, or other similar frameworks, adapt existing software
     for better performance (models caching), implement MCP-based architecture,
@@ -103,14 +105,14 @@ findings of this thesis:
 \end{itemize}
 Additionally, if we look at the future directions from the perspective not
 limited to the scope of the developed application, but more generally, we can
-define further research directionsin the field:
+define further research directions in the field:
 \begin{itemize}
   \item \textbf{Comparing Different Model Testing Approaches and Frameworks:}
     The thesis does not go deep into the comparison of different approaches for
     testing and evaluating \gls{llm}-based systems, but this is very
     important area for the research, as it provides necessary empirical
     evidence that proves the results of any research.
-  \item \textbf{Model Optimization and Architectures Exploration} Explore model
+  \item \textbf{Model Optimization and Architectures Exploration:} Explore model
     distillation, quantization, or fine-tuning to further improve performance
     and reduce latency on local hardware. With the rapid evolution of
     \gls{llm}, new architectures like \gls{rnn}-augmented \glspl{llm},
@@ -120,7 +122,7 @@ define further research directionsin the field:
     focused on the development of new architectures that are optimized for
     constrained environments and tasks.
   \item \textbf{Caching and Context Management:} A lot of tools nowadays support
-    as-called "context snapshots", which are basically a way to save the state
+    as-called ``context snapshots'', which are basically a way to save the state
     of the system at a given point in time. This is useful when working with
     repeating situations that need previous setup. Caching can potentially
     have huge impact on the performance of the system, saving time and
