@@ -1,35 +1,19 @@
-Táto práca skúma, či je možné vytvoriť praktického Linux \gls{cli} asistenta
-pomocou malých lokálnych \glspl{llm} pri offline a hardvérových obmedzeniach.
-Práca navrhuje shAI, modulárny prototyp založený na \gls{rag}, ktorý pozostáva z
-klasifikátora typu príkaz-vs.-otázka, vyhľadávača dokumentov indexujúceho man
-stránky Linuxu a sumarizátora, ktorý generuje stručné odpovede zo získaných
-pasáží. Implementácia využíva Ollama na lokálnu inferenciu a \gls{faiss} na
-vektorové indexovanie.
+Táto práca skúma, či je možné vytvoriť praktického, offline Linux \gls{cli}
+asistenta pomocou malých lokálnych \glspl{llm}. Práca navrhuje shAI, modulárny
+\gls{rag} prototyp pozostávajúci z klasifikátora dopytov, vyhľadávača
+manuálových stránok a sumarizátora odpovedí.
 
-Klasifikátor bol testovaný na vyváženej vzorke dát \texttt{classifier-100};
-presnosť sa pohybovala od 50 \% do 88 \%, pričom najlepší model vyžadoval 2,9
-sekundy na jeden dopyt. Presnosť vyhľadávača bola vyhodnocovaná na kolekciách s
-10 a 100 dokumentmi (\texttt{sample-10} a \texttt{sample-100}) s využitím
-rôznych prístupov k vyhľadávaniu. Prístup na úrovni dokumentov dosiahol
-úspešnosť v top-5 nájdených dokumentoch od 86,3 \% do 92,0 \% s hodnotou MRR od
-0,724 do 0,806 na kolekcii so 100 dokumentmi, pričom však
-generoval obrovské výstupné veľkosti (až do 120-tisíc tokenov). Na vyriešenie
-tohto problému boli implementované prístupy vyhľadávania na úrovni dokumentov s
-preusporiadaním na úrovni pasáží a samostatné vyhľadávanie na
-úrovni pasáží. Tieto prístupy vykazovali oveľa kompaktnejšie veľkosti
-vygenerovaného výstupu (~5-tisíc tokenov) a dosiahli potrebnú presnosť.
+Klasifikátor testovaný na datasete \texttt{classifier-100} dosiahol presnosť až
+88 \% s latenciou 2,9 s. Pri vyhľadávaní v kolekcii \texttt{sample-100}
+vykazoval základný prístup na úrovni dokumentov vysokú úspešnosť v top-5
+(86,3--92,0 \%) a MRR (0,724--0,806), no spôsoboval enormné zahltenie kontextu
+(až 120-tisíc tokenov). Implementáciou vyhľadávania na úrovni pasáží a
+hybridného preusporiadania (rerankingu) sa na datasetoch až po
+\texttt{sample-1000} podarilo zredukovat objem dát na ~5-tisíc tokenov. Tento
+optimalizovaný prístup zachoval vysokú presnosť s latenciou pod 2 s pre
+vyhľadávanie a pod 10 s pre celý \gls{rag} proces.
 
-Latencia aplikácie bola vyhodnocovaná na datasetoch \texttt{sample-10},
-\texttt{sample-100} a \texttt{sample-1000}. Ukázalo sa, že vyhľadávanie na
-úrovni pasáží a navrhované vyhľadávanie na úrovni dokumentov s preusporiadaním
-na úrovni pasáží dosiahli najlepší celkový výkon v závislosti od veľkosti
-zvoleného embedding modelu, s latenciou pod 2 sekundy pre vyhľadávanie a pod 10
-sekúnd pre celý proces RAG.
-
-Výsledky ukazujú, že architektúry postavené primárne na vyhľadávaní
-(retrieval-first) sú pre lokálnu pomoc v prostredí CLI praktické, zatiaľ čg
-otvorené agentové prístupy zostávajú pri malých modeloch
-nespoľahlivé. Najlepšou voľbou pre techniku vyhľadávania je vyhľadávanie
-na úrovni pasáží. Práca poskytuje open-source prototyp a empirické referenčné
-test , ktoré slúžia ako návod pre budúci výskum v oblasti dizajnu
-úloh s obmedzenými zdrojmi.
+Výsledky potvrdzujú, že pre lokálne \gls{cli} prostredia sú praktické
+architektúry orientované na vyhľadávanie pasáží, zatiaľ čo agentové prístupy na
+malých modeloch zlyhávajú. Práca poskytuje open-source prototyp a empirické
+benchmarky pre dizajn úloh s obmedzenými zdrojmi.

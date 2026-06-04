@@ -1,29 +1,21 @@
 This thesis examines whether a practical Linux \gls{cli} assistant can be built
 with small local \glspl{llm} under offline and hardware constraints.
 The thesis proposes shAI, a modular \gls{rag}-based prototype composed of a
-command-vs.-query classifier, a document retriever that indexes Linux man pages,
-and a summarizer that generates concise answers from retrieved passages.
+command-vs.-query classifier, a document retriever,
+and a summarizer that generates answers from retrieved passages.
 
-The classifier was tested on the balanced\\
-\texttt{classifier-100} dataset; accuracy ranged from 50\% to 88\%, with the
-best model requiring 2.9s per query.
-The retriever accuracy was evaluated on a collections of 10 and 100 documents 
-(\texttt{sample-10} and \texttt{sample-100} respectively)
-with different retrieval approaches. Document-level retrieval approach has reached
-top-5 document hits from 86.3\% to 92.0\% with MRR ranging from 0.724 to 0.806
-on the 100-document collection, generating huge output sizes (up to 120K
-tokens). To address that, document-level with passage-level reranking and
-passage-level retrieval approaches were implemented, showing much more compact
-genrated output sizes (~5K tokens) and achieving precision.
+Tested on the \texttt{classifier-100} dataset, the classifier achieved up to
+88\% accuracy with a 2.9s latency. For retrieval on the \texttt{sample-100}
+collection, a baseline document-level approach reached high top-5 hits
+(86.3\%–-92.0\%) and MRR (0.724–-0.806), but suffered from massive context bloat
+up to 120K tokens. To resolve this, passage-level retrieval and document-level
+retrieval with passage-level reranking were implemented. Evaluated on datasets
+up to \texttt{sample-1000}, these optimized approaches drastically compressed
+output sizes to ~5K tokens, maintaining high precision with latencies under 2s
+for search and under 10s for full \gls{rag} generation.
 
-The application latency was evaluated on \texttt{sample-10},
-\texttt{sample-100}, and\\ \texttt{sample-1000}, showing that passage-level
-retrieval and proposed document-level with passage-level reranking approaches
-achieved the best overall performance, based on the size of chosen embedding
-model, with latencies under 2s for search and under 10s for RAG.
-
-The results demonstrate that retrieval-first architectures are practical for
-local \gls{cli} assistance, whereas agentic open-ended approaches remain
-unreliable on small models, with the best choice for the retrieval technique
-being the passage-level retrieval. The thesis provides an open-source prototype and
-empirical benchmarks that guide future work on constrained task design.
+The results demonstrate that retrieval-first, passage-level architectures are
+highly practical for local \gls{cli} assistance, whereas agentic open-ended
+approaches remain unreliable on small models. The thesis provides an open-source
+prototype and empirical benchmarks to guide future work on constrained task
+design.
