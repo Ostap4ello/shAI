@@ -1,28 +1,35 @@
 Táto práca skúma, či je možné vytvoriť praktického Linux \gls{cli} asistenta
 pomocou malých lokálnych \glspl{llm} pri offline a hardvérových obmedzeniach.
-Prehľad existujúcich asistentov ukázal silnú závislosť od vzdialených API a
-nízku spoľahlivosť agentových workflowov na lokálnych modeloch. V reakcii na to
-práca navrhuje shAI, modulárny prototyp založený na \gls{rag}, ktorý pozostáva z
+Práca navrhuje shAI, modulárny prototyp založený na \gls{rag}, ktorý pozostáva z
 klasifikátora typu príkaz-vs.-otázka, vyhľadávača dokumentov indexujúceho man
 stránky Linuxu a sumarizátora, ktorý generuje stručné odpovede zo získaných
 pasáží. Implementácia využíva Ollama na lokálnu inferenciu a \gls{faiss} na
 vektorové indexovanie.
 
-Hodnotenie je zamerané na jednotlivé komponenty. Klasifikátor bol testovaný na
-vyváženom datasete \texttt{classifier-100}; presnosť sa pohybovala od 50\% do
-88\%, pričom najlepší model vyžadoval 2.9s na jeden dopyt. Vyhľadávač bol
-vyhodnotený na \texttt{sample-10} (14 dokumentov, 250 dopytov) a
-\texttt{sample-100} (101 dokumentov, 300 dopytov): vyhľadávanie na úrovni
-dokumentov dosiahlo Top-5 presnosť až do 100\% a 92\% s latenciou 0.04--0.10s na
-dopyt pre embeddingy Granite, zatiaľ čo preusporiadanie pasáží (passage
-re-ranking) zvýšilo latenciu na 0.6--3.8s bez zlepšenia Top-1 presnosti. Celková
-(end-to-end) latencia meraná na GPU RTX 4060 8GB ukazuje časy odozvy RAG v
-rozmedzí 5.34--6.47s (ľahká konfigurácia) a 8.66--10.77s (ťažká konfigurácia)
-pre vyhľadávanie na úrovni pasáží, zatiaľ čo RAG na úrovni dokumentov dosiahol
-12.39--17.21s, respektíve 39.78--56.57s.
+Klasifikátor bol testovaný na vyváženej vzorke dát \texttt{classifier-100};
+presnosť sa pohybovala od 50 \% do 88 \%, pričom najlepší model vyžadoval 2,9
+sekundy na jeden dopyt. Presnosť vyhľadávača bola vyhodnocovaná na kolekciách s
+10 a 100 dokumentmi (\texttt{sample-10} a \texttt{sample-100}) s využitím
+rôznych prístupov k vyhľadávaniu. Prístup na úrovni dokumentov dosiahol
+úspešnosť v top-5 nájdených dokumentoch od 86,3 \% do 92,0 \% s hodnotou MRR od
+0,724 do 0,806 na kolekcii so 100 dokumentmi, pričom však
+generoval obrovské výstupné veľkosti (až do 120-tisíc tokenov). Na vyriešenie
+tohto problému boli implementované prístupy vyhľadávania na úrovni dokumentov s
+preusporiadaním na úrovni pasáží a samostatné vyhľadávanie na
+úrovni pasáží. Tieto prístupy vykazovali oveľa kompaktnejšie veľkosti
+vygenerovaného výstupu (~5-tisíc tokenov) a dosiahli potrebnú presnosť.
 
-Výsledky ukazujú, že striktne definované prístupy (napríklad vyhľadávacie
-architektúry) sú praktické pre lokálnu \gls{cli} asistenciu, zatiaľ čo agentové
-prístupy s otvoreným koncom zostávajú na malých modeloch nespoľahlivé. Práca
-poskytuje open-source prototyp a empirické benchmarky, ktoré usmerňujú budúci
-výskum v oblasti optimalizácie modelov a návrhu úloh v obmedzených podmienkach.
+Latencia aplikácie bola vyhodnocovaná na datasetoch \texttt{sample-10},
+\texttt{sample-100} a \texttt{sample-1000}. Ukázalo sa, že vyhľadávanie na
+úrovni pasáží a navrhované vyhľadávanie na úrovni dokumentov s preusporiadaním
+na úrovni pasáží dosiahli najlepší celkový výkon v závislosti od veľkosti
+zvoleného embedding modelu, s latenciou pod 2 sekundy pre vyhľadávanie a pod 10
+sekúnd pre celý proces RAG.
+
+Výsledky ukazujú, že architektúry postavené primárne na vyhľadávaní
+(retrieval-first) sú pre lokálnu pomoc v prostredí CLI praktické, zatiaľ čg
+otvorené agentové prístupy zostávajú pri malých modeloch
+nespoľahlivé. Najlepšou voľbou pre techniku vyhľadávania je vyhľadávanie
+na úrovni pasáží. Práca poskytuje open-source prototyp a empirické referenčné
+test , ktoré slúžia ako návod pre budúci výskum v oblasti dizajnu
+úloh s obmedzenými zdrojmi.
