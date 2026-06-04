@@ -77,11 +77,6 @@ top-k results using Precision@k and MRR, with three automated test variants:
       \textit{(retrieving documents first, then re-ranking passages within them, evaluating by passage matches)}
   \item Passage-scope retrieval (test3)
 \end{enumerate}
-Test1 checks whether the correct document appears in the top-k results. Test2
-first retrieves top-k documents and then re-ranks passages within them
-(top\_k\_extended=10) to locate the expected section. Test3 indexes and retrieves
-passages directly (passage\_size=20 lines), evaluating whether the correct
-document is found via passage matches.
 
 \paragraph{Testing Collections}
 \begin{itemize}
