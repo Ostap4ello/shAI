@@ -4,11 +4,10 @@
 \paragraph{Evaluation Approach}{}
 The testing for this component focuses on evaluating the accuracy of input
 classification across different local \gls{llm} models. A fixed, balanced dataset
-is classified into natural language vs.\ shell command inputs (see\
-\ref{sec:classifier-approaches} for details on the approaches).
+is classified into natural language vs.\ shell command inputs.
 
 \paragraph{Testing Collections}{}
-For testing the classifier, the manually curated collection
+For testing the classifier, the manually curated collection\\
 \texttt{classifier-100} contains 100 inputs with a balanced mix of natural
 language queries and shell command inputs. It is split as follows:
 \begin{itemize}
@@ -25,7 +24,7 @@ and average per-query latency for each model:
   \centering
   \scriptsize
   \caption{Binary classification results on \texttt{classifier-100}.}
-    \begin{tabular}{lcc}
+    \begin{tabular}{lrr}
     \toprule
     \textbf{Model} & \textbf{Accuracy} & \textbf{Avg Latency (s)} \\
     \midrule
@@ -100,9 +99,9 @@ top\_k\_extended=10.
   \centering
   \scriptsize
   \caption{Document-level retrieval on \texttt{sample-10} (test1).}
-    \begin{tabularx}{\textwidth}{lXXXXXX}
+    \begin{tabularx}{\textwidth}{lYYYYYY}
     \toprule
-    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg\newline{}Latency (s)} & \textbf{Index\newline{}Build (s)} & \textbf{Avg Responce\newline{}Size (chars)} \\
+    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg\newline{}Latency (s)} & \textbf{Index\newline{}Build (s)} & \textbf{Avg Response\newline{}Size (chars)} \\
     \midrule
     ibm/granite-embedding:30m  & 83.6\% & 95.2\%  & 0.881 & 0.071 & 0.348  & 76791 \\
     ibm/granite-embedding:125m & 85.2\% & 92.4\%  & 0.880 & 0.075 & 16.603 & 79930 \\
@@ -116,9 +115,9 @@ top\_k\_extended=10.
   \centering
   \scriptsize
   \caption{Document retrieval with passage re-ranking on \texttt{sample-10} (test2).}
-    \begin{tabularx}{\textwidth}{lXXXXXX}
+    \begin{tabularx}{\textwidth}{lYYYYYY}
     \toprule
-    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg\newline{}Latency (s)} & \textbf{Index\newline{}Build (s)} & \textbf{Avg Responce\newline{}Size (chars)} \\
+    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg\newline{}Latency (s)} & \textbf{Index\newline{}Build (s)} & \textbf{Avg Response\newline{}Size (chars)} \\
     \midrule
     ibm/granite-embedding:30m  & 48.4\% & 87.2\% & 0.628 & 0.817 & 1.138  &  5304 \\
     ibm/granite-embedding:125m & 39.2\% & 87.6\% & 0.557 & 1.264 & 1.044  &  5092 \\
@@ -132,9 +131,9 @@ top\_k\_extended=10.
   \centering
   \scriptsize
   \caption{Passage-level retrieval on \texttt{sample-10} (test3).}
-    \begin{tabularx}{\textwidth}{lXXXXXX}
+    \begin{tabularx}{\textwidth}{lYYYYYY}
     \toprule
-    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg\newline{}Latency (s)} & \textbf{Index\newline{}Build (s)} & \textbf{Avg Responce\newline{}Size (chars)} \\
+    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg\newline{}Latency (s)} & \textbf{Index\newline{}Build (s)} & \textbf{Avg Response\newline{}Size (chars)} \\
     \midrule
     ibm/granite-embedding:30m &  76.0\% & 98.4\% & 0.863 & 0.045 & 1.7505  & 2589 \\
     ibm/granite-embedding:125m & 84.0\% & 97.2\% & 0.894 & 0.056 & 3.4254  & 2588 \\
@@ -148,9 +147,9 @@ top\_k\_extended=10.
   \centering
   \scriptsize
   \caption{Document-level retrieval on \texttt{sample-100} (test1).}
-    \begin{tabularx}{\textwidth}{lXXXXXX}
+    \begin{tabularx}{\textwidth}{lYYYYYY}
     \toprule
-    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg\newline{}Latency (s)} & \textbf{Index\newline{}Build (s)} & \textbf{Avg Responce\newline{}Size (chars)} \\
+    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg\newline{}Latency (s)} & \textbf{Index\newline{}Build (s)} & \textbf{Avg Response\newline{}Size (chars)} \\
     \midrule
     ibm/granite-embedding:30m &  62.7\% & 86.3\% & 0.724 & 0.043 & 2.270   & 70590  \\
     ibm/granite-embedding:125m & 69.7\% & 88.7\% & 0.768 & 0.036 & 1.706   & 62318  \\
@@ -164,9 +163,9 @@ top\_k\_extended=10.
   \centering
   \scriptsize
   \caption{Document retrieval with passage re-ranking on \texttt{sample-100} (test2).}
-    \begin{tabularx}{\textwidth}{lXXXXXX}
+    \begin{tabularx}{\textwidth}{lYYYYYY}
     \toprule
-    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg\newline{}Latency (s)} & \textbf{Index\newline{}Build (s)} & \textbf{Avg Responce\newline{}Size (chars)} \\
+    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg\newline{}Latency (s)} & \textbf{Index\newline{}Build (s)} & \textbf{Avg Response\newline{}Size (chars)} \\
     \midrule
     ibm/granite-embedding:30m &  42.7\% & 72.7\% & 0.530 & 0.595 & 2.132   & 6544 \\
     ibm/granite-embedding:125m & 43.0\% & 77.0\% & 0.539 & 0.802 & 2.451   & 6462 \\
@@ -180,9 +179,9 @@ top\_k\_extended=10.
   \centering
   \scriptsize
   \caption{Passage-level retrieval on \texttt{sample-100} (test3).}
-    \begin{tabularx}{\textwidth}{lXXXXXX}
+    \begin{tabularx}{\textwidth}{lYYYYYY}
     \toprule
-    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg\newline{}Latency (s)} & \textbf{Index\newline{}Build (s)} & \textbf{Avg Responce\newline{}Size (chars)} \\
+    \textbf{Embedding Model} & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg\newline{}Latency (s)} & \textbf{Index\newline{}Build (s)} & \textbf{Avg Response\newline{}Size (chars)} \\
     \midrule
     ibm/granite-embedding:30m &     67.3\% & 91.0\% & 0.771 & 0.045 & 10.879 & 3429 \\
     ibm/granite-embedding:125m &    68.7\% & 89.3\% & 0.765 & 0.040 & 17.602 & 3337 \\
@@ -216,7 +215,7 @@ corpus sizes. The evaluation focuses on practical usability for \gls{cli}
 assistance.
 
 \paragraph{Testing Collection}{}
-For end-to-end testing, we reuse the \texttt{tests/end-to-end/test\_cases.json}
+For end-to-end testing, we reuse the\\ \texttt{tests/end-to-end/test\_cases.json}
 query set (10 queries) and run it against the \texttt{sample-10} and \texttt{sample-100} corpora.
 % TODO: sample-1000
 
@@ -263,7 +262,7 @@ expected performance across different hardware configurations.
   \centering
   \caption{Evaluation results on search for different DB approaches on ibm/granite-embedding:30m}
   \scriptsize
-    \begin{tabularx}{\textwidth}{lXXX}
+    \begin{tabularx}{\textwidth}{lYYY}
     \toprule
     \textbf{DB Collection} & \textbf{Document-level} &
     \textbf{Document-level with passage-level re-ranking} & \textbf{Passage-level} \\
@@ -279,7 +278,7 @@ expected performance across different hardware configurations.
   \centering
   \caption{Evaluation results on search for different DB approaches on qwen3-embedding:0.6b}
   \scriptsize
-    \begin{tabularx}{\textwidth}{lXXX}
+    \begin{tabularx}{\textwidth}{lYYY}
     \toprule
     \textbf{DB Collection} & \textbf{Document-level} &
     \textbf{Document-level with passage-level re-ranking} & \textbf{Passage-level} \\
@@ -295,7 +294,7 @@ expected performance across different hardware configurations.
   \centering
     \caption{Evaluation results on RAG-search (retrieval + summarization) for different DB approaches on ibm/granite-embedding:30m}
   \scriptsize
-    \begin{tabularx}{\textwidth}{lXXX}
+    \begin{tabularx}{\textwidth}{lYYY}
     \toprule
     \textbf{DB Collection} & \textbf{Document-level} &
     \textbf{Document-level with passage-level re-ranking} & \textbf{Passage-level} \\
@@ -311,7 +310,7 @@ expected performance across different hardware configurations.
   \centering
     \caption{Evaluation results on RAG-search (retrieval + summarization) for different DB approaches on qwen3-embedding:0.6b and qwen3:1.7b}
   \scriptsize
-    \begin{tabularx}{\textwidth}{lXXX}
+    \begin{tabularx}{\textwidth}{lYYY}
     \toprule
     \textbf{DB Collection} & \textbf{Document-level} &
     \textbf{Document-level with passage-level re-ranking} & \textbf{Passage-level} \\
