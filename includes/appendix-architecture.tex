@@ -3,7 +3,7 @@ and Ollama container management. The architecture is organized by package and fi
 owning a small, explicit responsibility.
 \label{a-shai-architecture}
 
-\subsection{Package tree}
+\subsection*{Package tree}
 
 \begin{verbatim}
 shAI_ostap4ello/src/
@@ -34,14 +34,14 @@ shAI_ostap4ello/src/
     classifier_bash.py
 \end{verbatim}
 
-\subsection{Top-level entry point}
+\subsection*{Top-level entry point}
 
 \paragraph{\texttt{src/\_\_main\_\_.py}}
 Loads configuration, prepares the main CLI parser, and dispatches to the selected subcommand.
 It also exposes the \texttt{init} flow, which creates the database folder, starts Ollama if needed,
 pulls configured models, and removes the temporary container.
 
-\subsection{Configuration package}
+\subsection*{Configuration package}
 
 \paragraph{\texttt{src/config/config.py}}
 Implements centralized configuration loading and default propagation. It reads
@@ -52,7 +52,7 @@ runtime configuration.
 \paragraph{\texttt{src/config/\_\_init\_\_.py}}
 Re-exports the public configuration helpers for convenient imports from other packages.
 
-\subsection{LLM package}
+\subsection*{LLM package}
 
 \paragraph{\texttt{src/llm/llm.py}}
 Contains the core OpenAI-compatible Ollama client helpers. It provides client construction,
@@ -65,7 +65,7 @@ around \texttt{llm.py}.
 \paragraph{\texttt{src/llm/\_\_init\_\_.py}}
 Exports the reusable generation and embedding helpers for other modules.
 
-\subsection{Database package}
+\subsection*{Database package}
 
 \paragraph{\texttt{src/db/\_\_main\_\_.py}}
 Implements the CLI for document indexing and retrieval. It wires the build, search, and check
@@ -80,14 +80,14 @@ Defines the index metadata format and resolves on-disk index paths. It is respon
 index directory layout and the persisted database configuration file.
 
 \paragraph{\texttt{src/db/utils/documents.py}}
-Discovers readable source documents and loads them either as full files or as section-sized chunks.
+Discovers readable source documents and loads them either as full files or as section*-sized chunks.
 It also filters out hidden paths and unsupported extensions.
 
 \paragraph{\texttt{src/db/utils/faiss\_utils.py}}
 Handles the in-memory FAISS index creation and the persistence layer for the vector index and metadata.
 It stores the index file and loads it back for search.
 
-\subsection{Workflow package}
+\subsection*{Workflow package}
 
 \paragraph{\texttt{src/workflows/rag.py}}
 Builds the retrieval-augmented generation flow. It converts search results into readable context,
@@ -100,7 +100,7 @@ Implements the Bash-vs-natural-language classifier used by the interactive shell
 Re-exports workflow helpers so higher-level modules can compose retrieval and classification logic
 without importing internal files directly.
 
-\subsection{Utilities package}
+\subsection*{Utilities package}
 
 \paragraph{\texttt{src/utils/adapter.py}}
 Provides the system integration layer. It runs the Ollama Docker helper script, starts and stops the
@@ -120,13 +120,13 @@ Loads text prompts used by the workflow layer.
 \paragraph{\texttt{src/utils/\_\_init\_\_.py}}
 Re-exports the utility helpers for use across the application.
 
-\subsection{Interactive shell package}
+\subsection*{Interactive shell package}
 
 \paragraph{\texttt{src/interpreter/interpreter.py}}
 Implements the interactive loop. It ensures Ollama is available, optionally starts it, and uses the
 LLM classifier to route user input while the shell is running.
 
-\subsection{Runtime flow}
+\subsection*{Runtime flow}
 
 \begin{enumerate}
     \item The user invokes \texttt{shai} or a module-specific command.
@@ -137,7 +137,7 @@ LLM classifier to route user input while the shell is running.
     \item The shared configuration layer keeps the paths, models, and service endpoints aligned.
 \end{enumerate}
 
-\subsection{Design characteristics}
+\subsection*{Design characteristics}
 
 \begin{itemize}
     \item \textbf{Procedural style}: logic is organized as functions and modules rather than classes.
