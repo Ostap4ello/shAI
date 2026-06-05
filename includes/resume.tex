@@ -1,7 +1,7 @@
 \selectlanguage{slovak}
 
 \subsection*{Úvod}
-Táto diplomová práca skúma uskutočniteľnosť vybudovania praktického, offline asistenta pre príkazový riadok (\gls{cli}) systému Linux (shAI) s~využitím malých lokálnych modelov \gls{llm} na bežne dostupnom spotrebiteľskom hardvéri. Zameriava sa na súkromie, dostupnosť bez pripojenia k~sieti a~interaktívnu latenciu v~podmienkach obmedzených zdrojov.
+Táto diplomová práca skúma uskutočniteľnosť vybudovania praktického, offline asistenta pre príkazový riadok (\gls{cli}) systému Linux (shAI) s~využitím malých lokálnych modelov \gls{llm} na bežne dostupnom spotrebiteľskom hardvéri. Zameriava sa na~súkromie, dostupnosť bez pripojenia k~sieti a~interaktívnu latenciu v~podmienkach obmedzených zdrojov.
 Výsledný prototyp, shAI, je open-source a~slúži ako referenčný základ pre budúci výskum. Nižšie uvedený prehľad stručne zhŕňa použité metódy, implementáciu a~empirické výsledky.
 
 % Práca si stanovuje tri hlavné ciele:
@@ -26,21 +26,20 @@ Táto sekcia definuje rozhrania relevantné pre naše riešenie: \gls{cli} a~\gl
 
 \paragraph{Emulátor terminálu} (ďalej len \textbf{terminál}) replikuje funkčnosť hardvérového terminálu vo forme softvéru.
 
-\paragraph{Terminálová aplikácia} beží v~rámci emulátorov terminálu a~poskytuje textové používateľské rozhrania prostredníctvom \gls{cli} alebo \gls{tui}. Komunikácia prebieha cez štandardné vstupné a~výstupné prúdy, čo obmedzuje interakciu iba na text~\cite{man_man,linfo_terminal}.
+\paragraph{Terminálová aplikácia} beží v~rámci emulátorov terminálu a~poskytuje textové používateľské rozhrania prostredníctvom \gls{cli} alebo \gls{tui}. Komunikácia prebieha cez štandardné vstupné a~výstupné prúdy, čo obmedzuje interakciu iba na~text~\cite{man_man,linfo_terminal}.
 
 \paragraph{\gls{cli}} rozširuje definície rozhraní na rozhrania príkazového riadka –~ide o~textové rozhrania, kde používatelia zadávajú príkazy a~dostávajú textové odpovede.
 
 \paragraph{Shell} je program poskytujúci priamy prístup k~systému, ktorý implementuje \gls{cli}, \gls{tui} alebo \gls{gui}. \gls{cli} shelly umožňujú používateľom spúšťať príkazy a~\gls{cli} nástroje~\cite{linfo_terminal}.
 
-\paragraph{\gls{cli} nástroj} (utility) je program spúšťaný v~prostrediach \gls{cli}.
+\paragraph{\gls{cli} nástroj} (angl. \textsl{utility}) je program spúšťaný v~prostrediach \gls{cli}.
 
-\paragraph{\gls{tui}} rozširuje \gls{cli} tým, že poskytuje štruktúrované, intuitívne rozhrania s~využitím knižníc ako ncurses a~schopností terminálu~\cite{linfo_terminal}.
-
+\paragraph{\gls{tui}} rozširuje \gls{cli} tým, že poskytuje štruktúrované, intuitívne rozhrania s~využitím knižníc ako ncurses a~rozšírených funkcionalít terminálu (angl. \textsl{terminal capabilities}) ~\cite{linfo_terminal}.
 \subsection*{Koncepty \gls{llm}}
 
-\paragraph{Jazykové modely} predpovedajú a~generujú textové sekvencie, čo je kľúčové pre preklad, sumarizáciu a~tvorbu obsahu. Ich vývoj napreduje spolu s~pokrokmi v~oblasti neutrónových sietí~\cite{naveed2023}.
+\paragraph{Jazykové modely} predpovedajú a~generujú textové sekvencie, čo je kľúčové pre preklad, sumarizáciu a~tvorbu obsahu. Ich vývoj napreduje spolu s~pokrokmi v~oblasti neurónových sietí~\cite{naveed2023}.
 
-\paragraph{\gls{llm}} sú jazykové modely založené na architektúre transformer s~veľkým počtom parametrov, trénované na masívnych textových datasetoch (napr. \gls{gpt}~\cite{radford2018improving}, \gls{bert}~\cite{devlin2018bert}, \gls{lstm}~\cite{hochreiter1997lstm} alebo Mamba~\cite{gu2023mamba}). Vykazujú silné porozumenie prirodzenému jazyku a~schopnosť riešiť komplexné úlohy prostredníctvom generovania textu.
+\paragraph{\gls{llm}} sú jazykové modely založené na architektúre transformer s~veľkým počtom parametrov, trénované na veľkých textových datasetoch (napr. \gls{gpt}~\cite{radford2018improving}, \gls{bert}~\cite{devlin2018bert}, \gls{lstm}~\cite{hochreiter1997lstm} alebo Mamba~\cite{gu2023mamba}). Vykazujú dobré porozumenie prirodzenému jazyku a~schopnosť riešiť komplexné úlohy prostredníctvom generovania textu.
 
 \subsubsection*{Architektúra \gls{llm}}
 
@@ -52,28 +51,26 @@ Architektúru \gls{llm} možno opísať vo vrstvách, pričom každá z~nich spr
 
     \item \textbf{Embeddingová vrstva} prevádza tokenizovaný vstup na vektorové reprezentácie (ako sú fixné vektory alebo vektory závislé od pozície).
 
-    \item \textbf{Transformerové vrstvy} pozostávajú z~viacerých hláv mechanizmu pozornosti (attention)~\cite{attention} a~dopredných (feedforward) sietí, ktoré modelu umožňujú zachytiť komplexné vzťahy medzi tokenmi.
+    \item \textbf{Transformerové vrstvy} pozostávajú z~viacerých \textsl{attention heads}~\cite{attention} a~dopredných (feedforward) sietí, ktoré modelu umožňujú zachytiť komplexné vzťahy medzi tokenmi.
 
     \item \textbf{Výstupná vrstva} generuje finálny výstup (text, pravdepodobnosti) prostredníctvom lineárnej vrstvy s~aktiváciou softmax.
 \end{itemize}
 
 V~pôvodnom článku sú na báze mechanizmu pozornosti postavené dva mechanizmy~\cite{zhao2023}:
 \begin{itemize}
-  \item \textbf{Enkóder} mapuje vstupné sekvencie tokenov na spojité reprezentácie pomocou multi-head self-attention a~dopredných sietí.
-  \item \textbf{Dekóder} autoregresívne generuje výstupné sekvencie tokenov. Zahŕňa subvrstvy v~štýle enkódera a~navyše multi-head attention nad výstupom enkódera.
+    \item \textbf{Kodér} mapuje vstupné sekvencie tokenov na spojité reprezentácie pomocou \textsl{multi-head attention} a~dopredných sietí.
+  \item \textbf{Dekodér} autoregresívne generuje výstupné sekvencie tokenov. Zahŕňa subvrstvy v~štýle kodéra a~navyše \textsl{multi-head attention} nad výstupom kodéra.
 \end{itemize}
 
-Moderné modely \gls{llm} využívajú primárne \textbf{Decoder-only} architektúru, ktorá sa spravidla ľahšie škáluje, trénuje a~jemne ladí (fine-tune) než modely typu Encoder-Decoder, pričom dosahuje lepší výkon pri rovnakom počte tréningových tokenov~\cite{zhao2023,wei2023chainofthoughtpromptingelicitsreasoning}.
+Moderné modely \gls{llm} využívajú primárne architektúru typu len s dekodérom (angl. \textsl{decoder-only architecture}), ktorá sa spravidla ľahšie škáluje, trénuje a~dotrénuje (angl. \textsl{fine-tune}) než modely typu Kodér-Dekodér (angl. \textsl{encoder-decoder}), pričom dosahuje lepší výkon pri rovnakom počte trénovacích tokenov~\cite{zhao2023,wei2023chainofthoughtpromptingelicitsreasoning}.
 
 \paragraph{Kontextové okno} je maximálny počet tokenov, ktoré dokáže Transformer spracovať naraz. Kratšie prompty sa spracovávajú rýchlejšie; príliš dlhé prompty strácajú informácie, ak prekročia kapacitu okna.
 
 \paragraph{\gls{moe}}
 Architektúra rozdeľuje doprednú sieť do viacerých špecializovaných subneurónových sietí (expertov), pričom smerovač (router) vyberá na spracovanie iba ich časť (zvyčajne jedného alebo dvoch).
-Modely typu \gls{moe} sú výpočtovo efektívnejšie, ale dosahujú horší výkon ako rovnako veľké dense modely s~rovnakým celkovým počtom parametrov. Avšak v~prípadoch, keď nie je obmedzená pamäť VRAM, môže \gls{moe} prekonať výkon dense modelov pri zachovaní ekvivalentných výpočtových nákladov~\cite{dai2024deepseekmoe}.
+Modely typu \gls{moe} sú výpočtovo efektívnejšie, ale dosahujú horší výkon ako rovnako veľké husté modely s~rovnakým celkovým počtom parametrov. Avšak v~prípadoch, keď nie je obmedzená pamäť VRAM, môže \gls{moe} prekonať výkon hustých modelov pri zachovaní ekvivalentných výpočtových nákladov~\cite{dai2024deepseekmoe}.
 
-\subsubsection*{Embeddingové modely \gls{llm}}
-
-\paragraph{Embeddingové \gls{llm}} sú neurónové modely založené na architektúre transformer, ktoré slúžia na generovanie vektorových reprezentácií dokumentov.
+\paragraph{Embedding \gls{llm}} sú neurónové modely založené na architektúre transformer, ktoré slúžia na~generovanie vektorových reprezentácií dokumentov.
 Zachytávajú komplexnejšie vzťahy medzi tokenmi než tradičné modely, pričom využívajú mechanizmy pozornosti na váženie dôležitosti tokenov, vďaka čomu poskytujú presnejšie sémantické reprezentácie~\cite{zhang2024systematicsurveytextsummarization,khan2026retrieval}.
 
 \subsection*{Pokročilé koncepty \gls{llm}}
@@ -87,7 +84,7 @@ Táto sekcia spomína dôležité koncepty \gls{llm}, ktoré sa bežne využíva
 AI agenti prinášajú také vylepšenia pre \gls{llm}:
 \begin{itemize}
   \item \textbf{Hierarchické plánovanie:} Rozkladajú zložité úlohy na zvládnuteľné čiastkové úlohy.
-  \item \textbf{Používanie nástrojov:} Využívajú externé nástroje, RAG pipelines alebo API nad rámec samotného generovania textu.
+  \item \textbf{Používanie nástrojov:} Využívajú externé nástroje, RAG pipeline alebo API nad rámec samotného generovania textu.
   \item \textbf{Iteratívne generovanie:} Generujú viacero krokov uvažovania iteratívne, pričom zjemňujú výstupy a~prispôsobujú sa novým informáciám.
 \end{itemize}
 Pracovný postup typického \gls{llm} agenta popisuje Algoritmus~\ref{alg:agent}.
@@ -99,31 +96,28 @@ AI agenti dekomponujú komplexné ciele do zvládnuteľných krokov, pričom ite
 \textbf{\gls{rag}} (vyhľadávaním rozšírené generovanie) je technika, ktorá umožňuje modelom \gls{llm} využívať externé znalostné bázy, čím výrazne znižuje halucinácie a~zvyšuje presnosť~\cite{zhao2023}. Pracovný postup \gls{rag} popisuje Algoritmus~\ref{alg:rag}.
 
 \paragraph{Granularita vyhľadávania}
+Systémy \gls{rag} môžu vyhľadávať informácie na viacerých úrovniach granularity vrátane vyhľadávania \textbf{na úrovni dokumentov}, \textbf{na úrovni pasáží} a~\textbf{na úrovni viet}. Volba granularity ovplyvňuje výpočtovú záťaž pri vytváraní indexov a~vykonávaní vyhľadávacích operácií, presnosť vyhľadávania a~určuje veľkosť vygenerovaného výstupu.
 
-Systémy \gls{rag} môžu vyhľadávať informácie na viacerých úrovniach granularity vrátane vyhľadávania \textbf{na úrovni dokumentov, na úrovni pasáží a~na úrovni viet}. Volba granularity ovplyvňuje výpočtovú záťaž pri vytváraní indexov a~vykonávaní vyhľadávacích operácií, presnosť vyhľadávania a~určuje veľkosť vygenerovaného výstupu.
-
-Táto sekcia taktiež spomína rôzne metriky hodnotenia \gls{rag}, ako napríklad precision@k alebo MRR.
+Sekcia~\ref{sec:rag-eval} taktiež spomína rôzne metriky hodnotenia \gls{rag}, ako napríklad precision@k alebo MRR.
 
 \subsubsection*{Fine-tuning}
 
-Fine-tuning je proces, pri ktorom sa vezme predtrénovaný \gls{llm} a~prispôsobí sa konkrétnej úlohe dotrénovaním na menšom datasete špecifickom pre danú úlohu. Tento prístup umožňuje modelu naučiť sa špecifické vzorce a~zlepšiť svoj výkon na cieľovej úlohe pri zachovaní nízkeho úsilia a~nákladov na tréning~\cite{zhao2023}. Hoci sa v~tejto práci fine-tuning
+Fine-tuning je proces, pri ktorom sa vezme predtrénovaný \gls{llm} a~prispôsobí sa konkrétnej úlohe dotrénovaním na menšom datasete špecifickom pre danú úlohu. Tento prístup umožňuje modelu naučiť sa špecifické vzorce a~zlepšiť svoj výkon na cieľovej úlohe pri zachovaní nízkeho úsilia a~nákladov na tréning~\cite{zhao2023}.
 
 \subsection*{Reprezentácia a~vyhľadávanie dokumentov}
 
 Táto sekcia poskytuje teoretické zázemie v~oblasti reprezentácie, ukladania a~vyhľadávania dokumentov.
 
-\subsubsection*{Reprezentácia dokumentov}
-
 \paragraph{Sémantická reprezentácia dokumentov} je proces konverzie dokumentov do formátu, ktorý zachytáva ich konceptuálny a~sémantický význam vo forme vhodnej pre strojové spracovanie. Sémantická reprezentácia dokumentov sa všeobecne delí do dvoch primárnych skupín~\cite{khan2026retrieval}:
 \begin{itemize}
-    \item \textbf{Sparse vektorové reprezentácie} využívajú tradičné prístupy založené na kľúčových slovách, ako napríklad bag-of-words (\gls{bow}), one-hot kódovanie, latentné sémantické indexovanie (\gls{lsindexing}) alebo term frequency-inverse document frequency (\gls{tfidf}). Tieto prístupy sú výpočtovo efektívne a~vhodné pre jednoduché dopyty, avšak môžu mať problémy pri komplexných dopytoch, ktoré si vyžadujú porozumenie kontextu~\cite{khan2026retrieval}.
+    \item \textbf{Riedké vektorové reprezentácie} využívajú tradičné prístupy založené na kľúčových slovách, ako napríklad \emph{bag-of-words} (\gls{bow}), one-hot kódovanie, latentné sémantické indexovanie (\gls{lsindexing}) alebo \emph{term frequency-inverse document frequency} (\gls{tfidf}). Tieto prístupy sú výpočtovo efektívne a~vhodné pre jednoduché dopyty, avšak môžu mať problémy pri komplexných dopytoch, ktoré si vyžadujú porozumenie kontextu~\cite{khan2026retrieval}.
 
-    \item \textbf{Dense vektorové reprezentácie} využívajú embedding \gls{llm} na generovanie embedding vektorov, ktoré zachytávajú sémantický význam textu. Tento prístup je efektívnejší pre zložité dopyty, vyžaduje si však viac výpočtových zdrojov než riedke prístupy~\cite{khan2026retrieval}.
+    \item \textbf{Husté vektorové reprezentácie} využívajú embedding \gls{llm} na generovanie embedding vektorov, ktoré zachytávajú sémantický význam textu. Tento prístup je efektívnejší pre zložité dopyty, vyžaduje si však viac výpočtových zdrojov než riedke prístupy~\cite{khan2026retrieval}.
 
     \item Okrem toho sa \textbf{hybridné techniky vyhľadávania} pokúšajú kombinovať výhody oboch prístupov pomocou techník, ako je napríklad model SPLADE, ktorý obohacuje riedke reprezentácie o~sémanticky príbuzné výrazy~\cite{khan2026retrieval}.
 \end{itemize}
 
-Pre tento výskum sa ako primárny prístup zvolilo vyhľadávanie pomocou dense reprezentácií, keďže je vhodnejšie pre komplexné dopyty a~dokáže zachytiť sémantický význam dokumentov, čo je kľúčové pre úlohu výberu vhodných dokumentov na základe používateľských dopytov.
+Pre tento výskum sa ako primárny prístup zvolilo vyhľadávanie pomocou hustých reprezentácií, keďže je vhodnejšie pre komplexné dopyty a~dokáže zachytiť sémantický význam dokumentov, čo je kľúčové pre úlohu výberu vhodných dokumentov na základe používateľských dopytov.
 
 \paragraph{Vektorové databázy} sú špecializované databázové systémy navrhnuté na ukladanie a~správu vysokorozmerných vektorových dát a~na vykonávanie efektívneho vyhľadávania podobnosti na základe rôznych metrík vzdialenosti vrátane kosínusovej podobnosti, L2 vzdialenosti a~euklidovskej vzdialenosti. Príkladmi široko používaných vektorových databáz sú FAISS (Facebook AI Similarity Search)~\cite{faiss2026}, Annoy~\cite{annoy2026} a~Milvus~\cite{milvus2026}. Bežne sa využívajú na ukladanie a~vyhľadávanie vektorových reprezentácií dokumentov.
 
@@ -144,7 +138,7 @@ Systém shAI je implementovaný ako modulárna aplikácia s~tromi komponentmi:
 \end{enumerate}
 Rozhodnutia o~návrhu sú podporené diagramom architektúry a~diagramom prípadov použitia (pozri Obrázky~\ref{fig:use-cases} a~\ref{fig:component-arch}).
 
-Okrem core komponentov zahŕňa implementácia aj používateľské procesy pre inicializáciu systému, buildovanie indexu, vykonávanie dopytov a~zmeny konfigurácie.
+Okrem kľúčových komponentov zahŕňa implementácia aj používateľské procesy pre inicializáciu systému, zostavenie indexu, vykonávanie dopytov a~zmeny konfigurácie.
 
 Komponent klasifikátora je navrhnutý ako prototyp. Môže byť vyvolaný nad aktuálnym používateľským vstupným bufferom a~vrátiť binárne rozhodnutie, avšak integrácia tohto riešenia do všeobecného shellu sa ukázala ako nepraktická. Nie je však bez potenciálu, keďže niektoré z~existujúcich riešení (napríklad \texttt{llm-zsh-plugin}) ukázali, že existujú špecifické spôsoby aplikácie, ako to dosiahnuť.
 
@@ -154,7 +148,7 @@ Komponent vyhľadávača (retriever) zabezpečuje zber dokumentov, generovanie e
   \item Vyhľadávanie na úrovni dokumentov s~preusporiadaním (rerankingom) pasáží v~reálnom čase
   \item Vyhľadávanie na úrovni pasáží
 \end{enumerate}
-Umožňuje tiež explicitnú konfiguráciu rôznych parametrov vyhľadávania, ako sú top-k výsledky, veľkosť pasáže a~umiestnenie úložiska indexu, čo umožnilo vykonávanie riadených experimentov. Indexovanie sa vykonáva nad vopred spracovanými manuálovými stránkami uloženými ako textové súbory v~lokálnom databázovom adresári.
+Umožňuje tiež explicitnú konfiguráciu rôznych parametrov vyhľadávania, ako sú top-k výsledky, veľkosť pasáže a~umiestnenie úložiska indexu, čo umožnilo vykonávanie riadených experimentov. Indexovanie sa vykonáva nad~vopred spracovanými manuálovými stránkami uloženými ako textové súbory v~lokálnom databázovom adresári.
 
 Komponent sumarizátora poskytuje finálnu odpoveď používateľovi. Prijíma dopyt a~sadu vyhľadaných pasáží, naformátuje prompt s~explicitnou štruktúrou a~vygeneruje stručnú odpoveď zameranú na používateľskú otázku. Hoci bol pôvodne zamýšľaný ako plne funkčný agentový systém, počas počiatočných fáz manuálneho testovania sa ukázal ako nespoľahlivý a~nepresný, keďže modely \gls{llm} zvyčajne zlyhávali v~rozhodovacom procese, a~preto sa hlavný dôraz presunul na komponent vyhľadávača.
 
@@ -198,12 +192,12 @@ Testovanie prebehlo na testovacích kolekciách \texttt{sample-10} (14 dokumento
 Tabuľky~\ref{tab:eval-retriever-sample10-doc}~-- \ref{tab:eval-retriever-sample100-passage} zhŕňajú vyhľadávanie na úrovni dokumentov (test1), preusporiadanie na úrovni pasáží (test2) a~vyhľadávanie na úrovni pasáží (test3). Všetky testy používali parameter top\_k=5; test2 využíva top\_k\_extended=10.
 
 \paragraph{Hlavné zistenia}
-Komponent vyhľadávača dokumentov sa ukázal ako robustný a~prakticky použiteľný pri všetkých prístupoch z~hľadiska presnosti. Na kolekcii \texttt{sample-10} sa presnosť Top-1 pohybovala v~rozmedzí 83,6~-- 86,8~\%, pričom presnosť Top-5 dosahovala až 100~\%. Na kolekcii \texttt{sample-100} sa Top-1 pohybovala od 62,7~\% do 72,7~\% a~Top-5 dosahovala až 92,0~\%. Model qwen3-embedding:0.6b poskytol najlepšiu presnosť, avšak čas buildovania jeho indexu bol na väčšom korpuse podstatne vyšší (128~-- 134~s v~porovnaní s~1,6~-- 2,3~s pri embedding Granite). Je však dôležité poznamenať, že druhý a~tretí prístup vykazujú omnoho menšiu veľkosť výstupu (v priemere 5-tisíc znakov, čo je približne 4-tisíc tokenov, oproti priemerne 80-tisíc znakom pri prvom prístupe). To je kritické pre komponent sumarizátora, pretože to výrazne znižuje latenciu a~zvyšuje presnosť generovanej odpovede.
+Komponent vyhľadávača dokumentov sa ukázal ako robustný a~prakticky použiteľný pri všetkých prístupoch z~hľadiska presnosti. Na kolekcii \texttt{sample-10} sa presnosť Top-1 pohybovala v~rozmedzí 83,6~-- 86,8~\%, pričom presnosť Top-5 dosahovala až 100~\%. Na kolekcii \texttt{sample-100} sa Top-1 pohybovala od 62,7~\% do 72,7~\% a~Top-5 dosahovala až 92,0~\%. Model qwen3-embedding:0.6b poskytol najlepšiu presnosť, avšak čas zostavenia jeho indexu bol na väčšom korpuse podstatne vyšší (128~-- 134~s v~porovnaní s~1,6~-- 2,3~s pri embedding Granite). Je však dôležité poznamenať, že druhý a~tretí prístup vykazujú omnoho menšiu veľkosť výstupu (v priemere 5-tisíc znakov, čo je približne 4-tisíc tokenov, oproti priemerne 80-tisíc znakom pri prvom prístupe). To je kritické pre komponent sumarizátora, pretože to výrazne znižuje latenciu a~zvyšuje presnosť generovanej odpovede.
 
 \subsubsection*{End-to-end testovanie}
 
 \paragraph{Prístup k~vyhodnoteniu}
-Kompletný systém \gls{rag} (vyhľadávanie dokumentov +~sumarizácia informácií) je vyhodnocovaný end-to-end s~cieľom posúdiť reálny výkon vrátane času indexovania dokumentov, spracovania dopytov a~latencie odpovede používateľovi pri rôznych hardvérových konfiguráciách a~veľkostiach korpusu dokumentov. Hodnotenie sa zameriava na praktickú použiteľnosť pre pomoc v~\gls{cli}.
+Kompletný systém \gls{rag} (vyhľadávanie dokumentov +~sumarizácia informácií) je vyhodnocovaný end-to-end s~cieľom posúdiť reálny výkon vrátane času indexovania dokumentov, spracovania dopytov a~latencie odpovede používateľovi pri rôznych hardvérových konfiguráciách a~veľkostiach korpusu dokumentov. Hodnotenie sa zameriava na~praktickú použiteľnosť pre pomoc v~\gls{cli}.
 
 \paragraph{Testovacia kolekcia}{}
 Pre end-to-end testovanie používame sadu dopytov (10 dopytov) a~spúšťame ju proti kolekciám \texttt{sample-10}, \texttt{sample-100} a~\texttt{sample-1000}.
@@ -212,10 +206,10 @@ Pre end-to-end testovanie používame sadu dopytov (10 dopytov) a~spúšťame ju
 Tabuľky~\ref{tab:eval-21-results}~-- \ref{tab:eval-32-results} predstavujú ukážkové výsledky z~vyhodnotenia pre každú kolekciu. Hodnoty reprezentujú priemerné latencie na dopyt v~sekundách. Vyhodnotenie sa uskutočnilo na systéme s~grafickou kartou NVIDIA RTX 4060 8GB. Testovanie bolo vykonané pre najľahšie (qwen2.5:0.5b pre generovanie a~ibm/granite-embedding:30m pre vyhľadávanie) a~najťažšie (qwen3:1.7b pre generovanie a~qwen3-embedding:0.6b pre vyhľadávanie) modely, aby sa poskytol rozsah očakávaného výkonu naprieč rôznymi hardvérovými konfiguráciami.
 
 \paragraph{Hlavné zistenia}
-Vyhľadávanie na úrovni dokumentov a~vyhľadávanie na úrovni dokumentov s~preusporiadaním pasáží vykazujú najlepší výkon pri použití malých embedding modelov, ako je ibm/granite-embedding:30m. Latencia preusporiadania pasáží v~reálnom čase je dostatočne nízka na to, aby fungovala lepšie než prístup na úrovni pasáží, pričom zachováva malú veľkosť výstupu a~rovnakú presnosť. Naopak, pri použití väčších embedding modelov, ako je qwen3-embedding:0.6b, prístup na úrovni pasáží prekonáva ostatné prístupy, keďže výpočtový čas potrebný na tvorbu vektorov pre celý dokument alebo preusporiadanie v~reálnom čase sa stáva príliš nákladným.
+Vyhľadávanie na úrovni dokumentov a~vyhľadávanie na úrovni dokumentov s~preusporiadaním pasáží vykazujú najlepší výkon pri použití malých embedding modelov, ako je ibm/granite-embedding:30m. Latencia preusporiadania pasáží v~reálnom čase je dostatočne nízka na~to, aby fungovala lepšie než prístup na úrovni pasáží, pričom zachováva malú veľkosť výstupu a~rovnakú presnosť. Naopak, pri použití väčších embedding modelov, ako je qwen3-embedding:0.6b, prístup na úrovni pasáží prekonáva ostatné prístupy, keďže výpočtový čas potrebný na tvorbu vektorov pre celý dokument alebo preusporiadanie v~reálnom čase sa stáva príliš nákladným.
 
 \subsubsection*{Regresné testy}
-Implementované softvérové regresné testy slúžia na zaistenie stability a~spoľahlivosti systému shAI počas vývoja a~budúcej údržby. Testy pokrývajú kľúčové vetvy aplikácie vrátane vyhľadávania dokumentov, sumarizácie a~end-to-end spracovania dopytov. Spolu so softvérovými regresnými testami sme implementovali aj sadu regresných testov prostredia, ktorá zabezpečuje, že pri akejkoľvek zmene systému nedôjde k~narušeniu žiadneho z~testov (najmä štatistických testov, ktorých spustenie zvyčajne vyžaduje veľa času). To nám umožňuje s~ľahkosťou udržiavať stabilitu systému a~rýchlo identifikovať akékoľvek problémy, ktoré by mohli nastať počas vývoja.
+Implementované softvérové regresné testy slúžia na~zaistenie stability a~spoľahlivosti systému shAI počas vývoja a~budúcej údržby. Testy pokrývajú kľúčové vetvy aplikácie vrátane vyhľadávania dokumentov, sumarizácie a~end-to-end spracovania dopytov. Spolu so softvérovými regresnými testami sme implementovali aj sadu regresných testov prostredia, ktorá zabezpečuje, že pri akejkoľvek zmene systému nedôjde k~narušeniu žiadneho z~testov (najmä štatistických testov, ktorých spustenie zvyčajne vyžaduje veľa času). To nám umožňuje s~ľahkosťou udržiavať stabilitu systému a~rýchlo identifikovať akékoľvek problémy, ktoré by mohli nastať počas vývoja.
 
 \subsubsection*{Diskusia o~budúcich smeroch vývoja}
 
@@ -223,7 +217,7 @@ Budúca práca v~rámci samotnej aplikácie navrhuje tieto vylepšenia:
 \begin{itemize}
     \item \textbf{Širšia podpora úloh:} Testovať iné ohraničené úlohy, ako napríklad vysvetľovanie chýb alebo generovanie na základe šablón.
     \item \textbf{Vylepšenia používateľského rozhrania:} Pridať bohatšiu interakciu pri zachovaní nízkej latencie.
-    \item \textbf{Optimalizácia softvéru:} Zlepšiť cacheovanie, načítavanie modelov a~optimalovai vyhľadávania.
+    \item \textbf{Optimalizácia softvéru:} Zlepšiť využitie cache, načítavanie modelov a~optimalizovanie vyhľadávania.
     \item \textbf{Metodológia:} Porovnať metódy vyhodnocovania a~preskúmať destiláciu, kvantizáciu alebo novšie lokálne architektúry.
 \end{itemize}
 Budúci výskum nad rámec vyvinutej aplikácie môže pokračovať v~týchto smeroch:
@@ -235,7 +229,7 @@ Budúci výskum nad rámec vyvinutej aplikácie môže pokračovať v~týchto sm
 
 \subsubsection*{Prínosy}
 
-Táto práca poskytuje empirické dôkazy o~tom, ktoré prístupy k~lokálnym \gls{llm} sú prakticky použiteľné v~prostrediach terminálu, identifikuje chybové režimy klasifikácie príkazov a~agentového riadenia a~ponúka funkčného open-source asistenta založeného na \gls{rag} ako základ pre ďalší výskum. Výsledný systém je užitočný ako offline asistent pre používateľov \gls{cli}, pretože dokáže odpovedať na otázky o~lokálnych dokumentoch bez závislosti od siete. Hlavným poznatkom je, že lokálne systémy \gls{llm} sa stávajú efektívnymi vtedy, keď sú vhodne kombinované s~optimalizovanými stratégiami vyhľadávania na úrovni pasáží.
+Táto práca poskytuje empirické dôkazy o~tom, ktoré prístupy k~lokálnym \gls{llm} sú prakticky použiteľné v~prostrediach terminálu, identifikuje chybové režimy klasifikácie príkazov a~agentového riadenia a~ponúka funkčného open-source asistenta založeného na \gls{rag} ako základ pre ďalší výskum. Výsledný systém je užitočný ako offline asistent pre používateľov \gls{cli}, pretože dokáže odpovedať na otázky o~lokálnych dokumentoch bez závislosti od siete. Hlavným poznatkom je, že lokálne systémy \gls{llm} sa stávajú efektívnymi vtedy, keď sú vhodne kombinované s~optimalizovanými stratégiami vyhľadávania na~úrovni pasáží.
 
 % This thesis investigates building a~practical, offline Linux \gls{cli} assistant
 % (shAI) using small local \glspl{llm} on consumer-grade hardware. It focuses on
