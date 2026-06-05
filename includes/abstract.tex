@@ -1,6 +1,6 @@
-Táto práca skúma, či je možné vytvoriť praktického, offline Linux \gls{cli}
-asistenta pomocou malých lokálnych \glspl{llm}. Práca navrhuje shAI, modulárny
-\gls{rag} prototyp pozostávajúci z klasifikátora dopytov, vyhľadávača
+Táto práca skúma, či je možné vytvoriť praktického, offline Linux CLI
+asistenta pomocou malých lokálnych LLM. Práca navrhuje shAI, modulárny
+RAG prototyp pozostávajúci z klasifikátora dopytov, vyhľadávača
 manuálových stránok a sumarizátora odpovedí.
 
 Klasifikátor testovaný na datasete \texttt{classifier-100} dosiahol presnosť až
@@ -11,9 +11,9 @@ vykazoval základný prístup na úrovni dokumentov vysokú úspešnosť v top-5
 hybridného preusporiadania (rerankingu) sa na datasetoch až po
 \texttt{sample-1000} podarilo zredukovat objem dát na ~5-tisíc tokenov. Tento
 optimalizovaný prístup zachoval vysokú presnosť s latenciou pod 2 s pre
-vyhľadávanie a pod 10 s pre celý \gls{rag} proces.
+vyhľadávanie a pod 10 s pre celý RAG proces.
 
-Výsledky potvrdzujú, že pre lokálne \gls{cli} prostredia sú praktické
+Výsledky potvrdzujú, že pre lokálne CLI prostredia sú praktické
 architektúry orientované na vyhľadávanie pasáží, zatiaľ čo agentové prístupy na
 malých modeloch zlyhávajú. Práca poskytuje open-source prototyp a empirické
 benchmarky pre dizajn úloh s obmedzenými zdrojmi.

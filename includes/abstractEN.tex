@@ -1,6 +1,6 @@
-This thesis examines whether a practical Linux \gls{cli} assistant can be built
-with small local \glspl{llm} under offline and hardware constraints.
-The thesis proposes shAI, a modular \gls{rag}-based prototype composed of a
+This thesis examines whether a practical Linux CLI assistant can be built
+with small local LLMs under offline and hardware constraints.
+The thesis proposes shAI, a modular RAG-based prototype composed of a
 command-vs.-query classifier, a document retriever,
 and a summarizer that generates answers from retrieved passages.
 
@@ -12,10 +12,10 @@ up to 120K tokens. To resolve this, passage-level retrieval and document-level
 retrieval with passage-level reranking were implemented. Evaluated on datasets
 up to \texttt{sample-1000}, these optimized approaches drastically compressed
 output sizes to ~5K tokens, maintaining high precision with latencies under 2s
-for search and under 10s for full \gls{rag} generation.
+for search and under 10s for full RAG generation.
 
 The results demonstrate that retrieval-first, passage-level architectures are
-highly practical for local \gls{cli} assistance, whereas agentic open-ended
+highly practical for local CLI assistance, whereas agentic open-ended
 approaches remain unreliable on small models. The thesis provides an open-source
 prototype and empirical benchmarks to guide future work on constrained task
 design.
