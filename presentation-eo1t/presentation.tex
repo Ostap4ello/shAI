@@ -1,26 +1,21 @@
 \documentclass[10pt]{beamer}
 
-% --- Theme Selection ---
-\usetheme{default}
-\usecolortheme{seagull}
-
 % --- Packages ---
-\usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{booktabs} % For better looking tables
+\usepackage{fontspec} % Tectonic-specific fix for font
 
-\usepackage[slovak]{babel}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern} % or use \usepackage{libertine}
+% --- Presentation Settings ---
+\usetheme{default}
+\usecolortheme{seagull}
+\usefonttheme{professionalfonts} 
 
-% --- Presentation Info ---
 \title[1st Term Progress]{Lokálny terminálový asistent založený na LLM}
 \subtitle{Bakalárska práca 1}
 \author[Ostap Pelekh]{Autor: Ostap Pelekh\\Vedúci: Ing. Roderik Ploszek, PhD.}
 \institute[Slovak University of Technology in Bratislava]{Faculty of electrical engineering and information technology (FEI)}
 \date[]{}
 
-\usefonttheme{professionalfonts} 
 
 \begin{document}
 
@@ -92,7 +87,6 @@
         \item \textit{ ohodnotenie a výlešenie Komponentu 1 pre zvolené modely}
         \item \textit{ študium techník vyhľadávanie údajov a vývoj Komponentu 2.}
     \end{itemize}
-
 \end{frame}
 
 % --- Slide 5. Návrh a Komponent 1 ---
@@ -125,15 +119,16 @@
 
     \vspace{0.3cm}
     \textbf{Plán na ďalšie mesiace:}
-    \begin{table}[]
+    \begin{table}
         \begin{tabular}{ll}
             \toprule
-            \textbf{Month} & \textbf{Activity} \\ \midrule
-            Februar        & Retrieval Mechanism + Komponent 2,3 \\
-            Marec          & Testovanie Komponentov, Výlepšenia, Statistická Analýza \\
-            April          & Dokumentácia, Finalizácia \\
-
-            Po obhajobe    & Personalné vylepšenia, Finetuning, Výužitie nadobudnutých znalostí pri adaptácii modelov do rozličných prostredí. \\
+            \textbf{Month} & \textbf{Activity} \\
+            \midrule
+%             Februar        & Retrieval Mechanism + Komponent 2,3 \\
+%             Marec          & Testovanie Komponentov, Výlepšenia, Statistická Analýza \\
+%             April          & Dokumentácia, Finalizácia \\
+%
+%             Po obhajobe    & Personalné vylepšenia, Finetuning, Výužitie nadobudnutých znalostí pri adaptácii modelov do rozličných prostredí. \\
         \end{tabular}
     \end{table}
 \end{frame}
