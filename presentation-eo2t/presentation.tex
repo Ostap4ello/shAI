@@ -8,7 +8,7 @@
 % --- Presentation Settings ---
 \usetheme{default}
 \usecolortheme{seagull}
-\usefonttheme{professionalfonts} 
+\usefonttheme{professionalfonts}
 
 \title[Bachelor’s thesis Presentation]{Local LLM-based Terminal Assistant}
 \subtitle{Bachelor’s thesis}
@@ -18,13 +18,213 @@
 
 \begin{document}
 
-% Slide 1: Title Page
+% Xs Slide 1: Title Page
 \begin{frame}
     \titlepage
 \end{frame}
+
+% Xs Slide 2: ToC
+\begin{frame}
+    \frametitle{Presentation outline}
+    \begin{itemize}
+        \item Introduction
+            \begin{itemize}
+                \item Thesis topic and racionale
+                \item Theory
+            \end{itemize}
+        \item Thesis work
+             \begin{itemize}
+                 \item Approaches outline
+                 \item Architecture outline
+                 \item Classifier
+                 \item Agentic
+                 \item RAG
+                 \item Latency tests
+             \end{itemize}
+        \item Conclusion
+        \item Future work
+        % \item \textbf{End}         % 18
+    \end{itemize}
+\end{frame}
+
+% Xs Slide 3: Introduction + Racionale + What will be done pt.1 (just topic)
+\begin{frame}
+    \frametitle{Introduction: Thesis topic and racionale}
+    \begin{itemize}
+        \item \textbf{Objective}: test the use of local LLMs in the context of a terminal assistant
+    \vspace{0.5cm} \small
+        \item \textbf{Racionale}: offline execution, independence from remote
+            servers, network access, privacy
+        \item \textbf{Work overview}: this work has tested and evaluated different approaches
+            for usage of local LLMs in the context of a terminal assistant. It
+            also provides a reference implementation of such an assistant,
+            avalable on GitHub and university archive along
+            % TODO: add link GH
+            with the testing data and results.
+    \end{itemize}
+\end{frame}
+
+% Xs Slide 4: Theory (main things)
+\begin{frame}
+    \frametitle{Introduction: Theory}
+    \begin{itemize}
+        \item terminal, shell, CLI, terminal applications, Bash
+        \item language models, LLMs, embedding LLMs
+        \item RAG, embeddings, vector databases, documents, man pages
+        \item AI/LLM agents
+    \end{itemize}
+\end{frame}
+
+% Xs Slide 5: What will be done pt.2 (approaches desc)
+\begin{frame}
+    \frametitle{Approaches tested and evaluated}
+    \begin{itemize}
+        \item \textbf{Bash Integration \& Classifier}: Bash vs Natural Language Query, LLM-based
+        \item \textbf{Agentic}: LLM agent naive approach, LLM-based
+        \item \textbf{RAG}: Document database with vector embeddings with LLM
+            summarization, LLM-based and embedding-LLM-based
+    \end{itemize}
+    \vspace{0.5cm}
+    Additionally, \textbf{latency tests} of the approaches and the whole system were
+    conducted.
+\end{frame}
+
+% Xs Slide 6: What will be done pt.3 (app architecture)
+\begin{frame}
+    \frametitle{Architecture outline}
+    \begin{itemize}
+        \item \textbf{Core}: a two layered structure: % add image?
+            \begin{itemize}
+                \item Tools(low-level): DB, LLM and embedding LLM, utils, config
+                \item Workflows(high-level): Classifier, RAG
+            \end{itemize}
+        \item \textbf{Interfaces}: application implements a CLI and programmatic API
+            The CLI interface accesses both the workflows and the tools directly.
+    \end{itemize}
+\end{frame}
+
+% Xs Slide 7: Classifier (idea+testing+results)
+\begin{frame}
+    \frametitle{Bash Integration \& Classifier}
+    \begin{itemize}
+        \item \textbf{Idea}: build a shell wrapper, which will behave either as
+            chat or as a normal shell, depending on the user query, using a
+            LLM-based classifier. This would blend the two modes of interaction
+            and provide a unique seamless interface.
+        \item \textbf{Testing}: % TODO:
+    \end{itemize}
+\end{frame}
+
+% Xs Slide 8: Classifier pt.2 (idea+testing+results)
+\begin{frame}
+    \frametitle{Bash Integration \& Classifier}
+    % TODO: table
+    \begin{itemize}
+        \item \textbf{Outcomes}: % TODO:
+    \end{itemize}
+\end{frame}
+
+% Xs Slide 9: Agentic (idea+testing+results) -- short
+\begin{frame}
+    \frametitle{Agentic approach}
+    \begin{itemize}
+        \item \textbf{Idea}: implement and test a classic agentic approach
+        \item \textbf{Testing}: left in state of manual testing
+        \item \textbf{Outcomes}: proved unreliable within the chosen constraints
+            \textit{(but will be further mentioned in the future work)}
+    \end{itemize}
+\end{frame}
+
+% Xs Slide 10: RAG pt.1 (idea+testing+results)
+\begin{frame}
+    \frametitle{RAG approach}
+    \begin{itemize}
+        \item \textbf{Idea}: implement a RAG-based workflow (DB module and
+            LLM-based summarization) and test it within the set constraints
+            % TODO: mention three approaches
+        \item \textbf{Testing}: % TODO:
+    \end{itemize}
+\end{frame}
+
+% Xs Slide 11: RAG pt.2 (results+conclusion)
+\begin{frame}
+    \frametitle{RAG approach}
+    % TODO: table
+    \begin{itemize}
+        \item \textbf{Outcomes}: % TODO:
+    \end{itemize}
+\end{frame}
+
+% Xs Slide 12: Latency tests pt.1 (testing+results)
+\begin{frame}
+    \frametitle{Latency tests}
+    \begin{itemize}
+        \item \textbf{Idea}: test the latency of the application with different
+            setups and approaches
+        \item \textbf{Testing}: a set of scenarios for the whole system
+    \end{itemize}
+\end{frame}
+
+% Xs Slide 13: Latency tests pt.2 (results+conclusion)
+\begin{frame}
+    \frametitle{Latency tests}
+    % TODO: table
+    \begin{itemize}
+        \item \textbf{Outcomes}: % TODO:
+    \end{itemize}
+\end{frame}
+
+% Xs Slide 14: Conclusion (recap)
+\begin{frame}
+    \frametitle{Approaches tested and evaluated}
+    \begin{itemize}
+        \item \textbf{Bash Integration \& Classifier}:
+        \item \textbf{Agentic}:
+        \item \textbf{RAG}:
+            \vspace{0.5cm}
+        \item \textbf{Architectural advice}:
+    \end{itemize}
+\end{frame}
+
+% Xs Slide 15: Future Work pt.1
+\begin{frame}
+    \frametitle{Future work (1/3)}
+\end{frame}
+
+% Xs Slide 16: Future Work pt.2
+\begin{frame}
+    \frametitle{Future work (2/3)}
+\end{frame}
+
+% Xs Slide 17: Future Work pt.2
+\begin{frame}
+    \frametitle{Future work (3/3)}
+\end{frame}
+
+% Xs Slide 18: Questions?
+\begin{frame}
+\end{frame}
+
 
 \end{document}
 
 Plan: X?min talk, Y?m questions
 
 % Xs Slide 1: Title Page
+% Xs Slide 2: ToC
+% Xs Slide 3: Introduction + Racionale + What will be done pt.1 (just topic)
+% Xs Slide 4: Theory (main things)
+% Xs Slide 5: What will be done pt.2 (approaches desc)
+% Xs Slide 6: What will be done pt.3 (app architecture)
+% Xs Slide 7: Classifier (idea+testing+results)
+% Xs Slide 8: Classifier pt.2 (idea+testing+results)
+% Xs Slide 9: Agentic (idea+testing+results) -- short
+% Xs Slide 10: RAG pt.1 (idea+testing+results)
+% Xs Slide 11: RAG pt.2 (results+conclusion)
+% Xs Slide 12: Latency tests pt.1 (testing+results)
+% Xs Slide 13: Latency tests pt.2 (results+conclusion)
+% Xs Slide 16: Conclusion (recap)
+% Xs Slide 14: Future Work pt.1
+% Xs Slide 15: Future Work pt.2
+% Xs Slide 16: Future Work pt.2
+% Xs Slide 17: Questions?
