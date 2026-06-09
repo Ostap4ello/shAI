@@ -1,0 +1,164 @@
+\documentclass[10pt]{beamer}
+
+% --- Theme Selection ---
+\usetheme{default}
+\usecolortheme{seagull}
+
+% --- Packages ---
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{booktabs} % For better looking tables
+
+\usepackage[slovak]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern} % or use \usepackage{libertine}
+
+% --- Presentation Info ---
+\title[1st Term Progress]{Lokálny terminálový asistent založený na LLM}
+\subtitle{Bakalárska práca 1}
+\author[Ostap Pelekh]{Autor: Ostap Pelekh\\Vedúci: Ing. Roderik Ploszek, PhD.}
+\institute[Slovak University of Technology in Bratislava]{Faculty of electrical engineering and information technology (FEI)}
+\date[]{}
+
+\usefonttheme{professionalfonts} 
+
+\begin{document}
+
+% --- Slide 1: Title Page ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Slide 2: Research Question & Objectives ---
+\begin{frame}{Cieľe práce}
+    \begin{block}{Hlavný cieľ}
+        Navrhnúť, implementovať a vyhodnotiť CLI/TUI asistenta, ktorý využíva lokálne LLM
+        na interakciu s používateľom (z jednej strany) a so systémom (z druhej
+        strany) s dôrazom na kontextovú citlivosť, a vyhľadávanie údajov z lokálneho
+        i externého prostredia.
+    \end{block}
+
+\end{frame}
+
+% --- Slide 3: Motivation ---
+\begin{frame}{Motivácia: Prečo lokálne LLM?}
+    \begin{itemize}
+        \item \textbf{Bariéra syntaxe:} GenAI asistenti, využívajúc
+        svoju schopnosť porozumieť prirodzenému jazyku a generovať odpovede i
+        kódy, môžu zjednodušiť interakciu s terminálom a prebrať úlohy za
+        používateľa.
+        \item \textbf{Limity cloudových LLM:}
+            \begin{itemize}
+                \item \textbf{Súkromie:} Posielanie obsahu terminálu a histórie na servery tretích strán je bezpečnostné riziko.
+                \item \textbf{Latencia a dosostupnosť:} Závislosť na internetovom pripojení spomaľuje workflow. API volania sú spoplatnené.
+                \item \textbf{Kontrola nad modelom:} Obmedzené možnosti prispôsobenia a integrácie s lokálnymi nástrojmi.
+            \end{itemize}
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{center}
+        \textbf{Riešenie:} Lokálny asistent bežiaci priamo na stroji používateľa.
+    \end{center}
+
+    % \vspace{0.3cm}
+    % \scriptsize{ \textbf{Persónalná motivácia:} Takýto vyskumný projekt umožní
+    % získať skúsenosti s prácou s LLM, pre ľahkú integráciou a optimalizáciou
+    % pre špecifické úlohy neskôr.}
+\end{frame}
+
+% --- Slide 4: Research Question & Objectives ---
+\begin{frame}{Cieľe práce}
+    \textbf{Hlavné úlohy:}
+    \begin{enumerate}
+        \item Analýza existujúcich riešení, možností lokálnych modelov a možností integrácie s terminálom a externými nástrojmi.
+        \item Návrh architektúry a modulov.
+        \item Implementácia samostatných modulov.
+        \item Vyhodnotenie úspešnosti a výkonu rôznych modelov pre rôzne prípady použitia a pri rôzných obmedzeniach zdrojov.
+    \end{enumerate}
+\end{frame}
+
+% --- Slide 5. Progress to Date ---
+\begin{frame}{Dosiahnuté výsledky k 1. semestru}
+    \begin{itemize}
+        \item[\checkmark] \textbf{Teoretická časť:} Spracovaná analýza teorie LLM, ich architektúry, organizácie a prepojenia s externými nástrojmi.
+        \item[\checkmark] \textbf{Analytická časť:} Skušanie existujúcich CLI asistentov, skúmanie ich architektúr a riešení.
+        \item[\checkmark] \textbf{Implementácia:} Naštudovanie technologií pre prácu s lokálnymi LLM.
+        Komponent 1 (Klasifikátor) integrovaný do základného CLI.
+    \end{itemize}
+    \vspace{0.4cm}
+    \begin{center}
+        \textit{Aktualne prebieha:}
+    \end{center}
+    \begin{itemize}
+        \item \textit{ ohodnotenie a výlešenie Komponentu 1 pre zvolené modely}
+        \item \textit{ študium techník vyhľadávanie údajov a vývoj Komponentu 2.}
+    \end{itemize}
+
+\end{frame}
+
+% --- Slide 5. Návrh a Komponent 1 ---
+\begin{frame}{Architektúra a Komponent 1}
+    % \textbf{Design Considerations:} Modularita medzi TUI a LLM backendom.
+    \vspace{0.3cm}
+    \begin{block}{Komponent 1: NL vs. Shell Command Classifier}
+        \begin{itemize}
+            \item Klasifikátor určený na rozlíšenie medzi \textbf{prirodzeným jazykom} (otázka) a \textbf{shell príkazom}.
+            \item Skušanie prvého kroku k inteligentnému dopĺňaniu bez nutnosti manuálneho prepínania režimov.
+            \item Adaptacia promptu pre zlepšenie presnosti klasifikácie.
+        \end{itemize}
+    \end{block}
+    \begin{itemize}
+        \item Integrácia cez \textbf{Ollama}.
+        \item Skúšanie na \textbf{Qwen2.5(0.5b,1.5b), Gemma3(1b,4b)}
+    \end{itemize}
+\end{frame}
+
+
+% --- Slide 6: Challenges \& Future Timeline ---
+\begin{frame}{Úlohy a problémy do budúcnosti}
+    \textbf{Výzvy:}
+    \begin{itemize}
+        \item Optimalizácia promptov pre rôzne modely a prípady použitia.
+        \item Balansovanie výkonu modelu, využitia pamäte a latencie.
+        \item Zvolenie architektúry pre efektívne retrieval z lokálnych a externých zdrojov.
+        \item Technická krivka učenia pre MCP, LangChain, Finetuning techniques.
+    \end{itemize}
+
+    \vspace{0.3cm}
+    \textbf{Plán na ďalšie mesiace:}
+    \begin{table}[]
+        \begin{tabular}{ll}
+            \toprule
+            \textbf{Month} & \textbf{Activity} \\ \midrule
+            Februar        & Retrieval Mechanism + Komponent 2,3 \\
+            Marec          & Testovanie Komponentov, Výlepšenia, Statistická Analýza \\
+            April          & Dokumentácia, Finalizácia \\
+
+            Po obhajobe    & Personalné vylepšenia, Finetuning, Výužitie nadobudnutých znalostí pri adaptácii modelov do rozličných prostredí. \\
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+% --- Slide 7: Conclusion ---
+\begin{frame}[fragile]{Záver}
+    \begin{center}
+        \begin{exampleblock}{\textit{"Let's make complicated things simple!"}}
+            \texttt{\$ exit}
+            \vspace{0.2cm}
+        \end{exampleblock}
+        \vspace{0.8cm}
+        \textbf{Kontakt:} xpelekh@stuba.sk / xpelekh@is.stuba.sk
+        % \textbf{GitHub:} ...?
+    \end{center}
+\end{frame}
+
+\end{document}
+
+Plan: 5min talk, 1m questions
+
+% 30s Slide 1: Title Page ---
+% 40s Slide 2: Main goal, tasks ---
+% 40s Slide 3: Motivation ---
+% 30s Slide 4. Progress to Date ---
+% 30s Slide 5. Návrh a Komponent 1 ---
+% 60s Slide 6: Challenges \& Future Timeline ---
+% 60s Slide 7: Conclusion ---

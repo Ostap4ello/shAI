@@ -1,0 +1,10 @@
+# Ignore these files within the included directories
+*.bak
+
+.build/
+build/
+
+# Agent file
+AGENTS.md
+agents.md
+.github/
