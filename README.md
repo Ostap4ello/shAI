@@ -7,6 +7,7 @@ ShAI.
 - `./document/` -- contains the thesis itself
 - `./presentation-eo1t/` -- contains the final presentation for B-BP1
 - `./presentation-eo2t/` -- contains the final presentation for B-BP2/BZP
+- `./user-notes.md` -- contains some useful notes for future work, to be reused
 
 ### Usage
 Use standard `make` (`make pdf`) inside the `./<folder>/` to create .pdf in
