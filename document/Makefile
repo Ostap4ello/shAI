@@ -1,5 +1,5 @@
-.PHONY: all pdf clean-pdf clean pdf.thesis pdf.usernotes pdf.thesis-clean diagrams clean-diagrams
-.SILENT: all pdf clean-pdf pdf.thesis pdf.usernotes pdf.thesis-clean diagrams clean-diagrams
+.PHONY: all pdf clean-pdf clean pdf.thesis pdf.thesis-clean diagrams clean-diagrams
+.SILENT: all pdf clean-pdf pdf.thesis pdf.thesis-clean diagrams clean-diagrams
 
 BUILDER_GITHUB_REPO = "https://github.com/Kyslik/FEIStyle"
 BUILDER_FOLDER_NAME = FEIStyle
@@ -31,12 +31,9 @@ clean-diagrams:
 	rm -rf diagrams/out
 	mkdir -p diagrams/out
 
-pdf: pdf.thesis pdf.usernotes
+pdf: pdf.thesis
 
-clean-pdf: pdf.thesis-clean pdf.thesis pdf.usernotes
-
-pdf.usernotes:
-	pandoc ./user-notes.md -o .build/user-notes.pdf --pdf-engine=xelatex
+clean-pdf: pdf.thesis-clean pdf.thesis
 
 # TODO: push fixes to builder repository
 #
