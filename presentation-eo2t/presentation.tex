@@ -12,6 +12,8 @@
 \usetheme{default}
 \usecolortheme{seagull}
 \usefonttheme{professionalfonts}
+\setbeamertemplate{footline}[frame number] % Show slide number
+\setbeamertemplate{navigation symbols}{} % Remove navigation symbols
 
 \title[Bachelor’s thesis Presentation]{Local LLM-based Terminal Assistant}
 \subtitle{Bachelor’s thesis}
@@ -54,19 +56,18 @@
 \begin{frame}
     \frametitle{Introduction: Thesis topic and racionale}
     \begin{itemize}
-        \item \textbf{Objective}: test the use of local LLMs in the context of a terminal assistant
+        \item \textbf{Objective}: test the use of local LLMs in the context of a
+            terminal assistant
+        \item \textbf{Limitations}: usage of local LLMs under 2B parameters
+            (suitable for devices with 8GB RAM)
     \vspace{0.5cm} \small
         \item \textbf{Racionale}: offline execution, independence from remote
             servers, network access, privacy
-        \item \textbf{Work overview}: this work has tested and evaluated different approaches
-            for usage of local LLMs in the context of a terminal assistant. It
-            also provides a reference implementation of such an assistant,
-            avalable on GitHub (\texttt{Ostap4ello/shAI-l}) and university archive along
-            % TODO: add link GH
-            with the testing data and results.
-    \vspace{0.5cm} \normalsize
-    \item \textbf{Limitations}: usage of local LLMs under 2B parameters (suitable
-        for devices with 8GB RAM)
+        \item \textbf{Work overview}: this work has tested and evaluated
+            different approaches for usage of local LLMs in the context of a
+            terminal assistant. It also provides a reference implementation of
+            such an assistant, avalable on GitHub (\texttt{Ostap4ello/shAI-l})
+            and university archive along with the testing data and results.
     \end{itemize}
 \end{frame}
 
@@ -74,6 +75,7 @@
 \begin{frame}
     \frametitle{Introduction: Theory}
     \begin{itemize}
+        \large
         \item terminal, shell, CLI, terminal applications, Bash
         \item language models, LLMs, embedding LLMs
         \item RAG, MRR, precision@k
@@ -94,11 +96,15 @@
         \item \textbf{Application latency}: to provide a reference for user-experience
             and usability evaluation
     \end{itemize}
+    % NOTE: instead of focusing on NLQ to command generation, which is binded to
+    % the LLM model (defined by its training data), we have decided to focus
+    % more on more dynamic knowledge sources, which are represented by RAG,
+    % while LLM does decision and summarization work
 \end{frame}
 
 % Xs Slide 6: What will be done pt.3 (app architecture)
 \begin{frame}
-    \frametitle{Architecture outline}
+    \frametitle{Application architecture outline}
     \begin{itemize}
         \small
         \item \textbf{Core}: a two layered structure: % add image?
@@ -151,7 +157,7 @@
         qwen2.5:0.5b & 50.0\% & 0.180 \\
         qwen2.5:1.5b & 78.0\% & 0.150 \\
         gemma3:1b & 65.0\% & 0.233 \\
-        \bottomrule % TODO: lat?!
+        \bottomrule
       \end{tabular}\label{tab:eval-classifier-results}
     \end{table}
 
@@ -160,7 +166,7 @@
             following limitations:
             \begin{itemize}
                 \item Low accuracy
-                \item Unacceptable Latency for interactive use
+                \item Unacceptable latency for interactive use
                 \item Complicated shell integration and maintenance
             \end{itemize}
             This component remains a \textbf{proof-of-concept} and was not
@@ -234,7 +240,7 @@
 \begin{table}[h]
   \centering
   \scriptsize
-  \caption{Overview of Min/Max performance ranges across retrieval approaches on \texttt{sample-100}.}
+  \caption{Overview of performances across retrieval approaches on \texttt{sample-100}.}
   \begin{tabularx}{\textwidth}{llllYYY}
     \toprule
     \textbf{Approach}    & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg Latency (s)} & \textbf{Index Build (s)} & \textbf{Response Size (chars)} \\
@@ -276,7 +282,6 @@
 % Xs Slide 13: Latency tests pt.2 (results+conclusion)
 \begin{frame}
     \frametitle{Latency tests}
-    % TODO: table
     \begin{itemize}
         \item \textbf{Outcomes}: While latencies change across different
             hardware setups, mesurements show that document-level retrieval and
