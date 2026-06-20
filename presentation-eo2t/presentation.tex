@@ -8,6 +8,7 @@
 \usepackage{array}
 \usepackage{multicol}
 \newcolumntype{Y}{>{\raggedleft\arraybackslash}X}
+\usepackage{appendixnumberbeamer}
 
 % --- Presentation Settings ---
 \usetheme{default}
@@ -26,14 +27,6 @@
 
 % NOTE: 12min for presenting (solely -> answering opponent's questions and discussion is
 % not included in these 12 mins)
-
-% NOTE: for RP:
-% - Som sa rozhodol nechat spojeny navrh a evaluaciu pre komponenty, pretoze tak
-%   sa mi to bude lahsie vysvetlovat
-% - Nechal som Contributions a Conclusion rozdelene kvoli estetickym pricinam
-
-% TODO: 
-% - add opponent's questions + answers/data for answers
 
 % Xs Slide 1: Title Page
 \begin{frame}
@@ -247,10 +240,10 @@
 
     \columnbreak
 
-        \begin{figure}[ht]
+    \begin{figure}[ht]
         \centering
-            \includegraphics[width=0.4\textwidth]{res/rag.puml.pdf}
-            \caption{RAG Workflow}
+        \includegraphics[width=0.4\textwidth]{res/rag.puml.pdf}
+        \caption{RAG Workflow}
     \end{figure}
 
     \end{multicols}
@@ -307,7 +300,7 @@
                     allowed to reduce and control output sizes
                 \item Latency: The first and third approaches had lower
                     retrieval latency (avg. 0.5--1.5s) than the second approach
-                    (avg. 2--3.5s), due to in-runtime reranking. Document-level
+                    (avg. 2--3.5s), due to in-runtime re-ranking. Document-level
                     indexing cause high latencies when embedding big files.
             \end{itemize}
     \end{itemize}
@@ -339,13 +332,13 @@
             \item \textbf{Smaller Embedding Models} (e.g., \texttt{granite-embedding:30m}):
                 \begin{itemize}
                     \item \textbf{Document-level retrieval} delivers the best latency.
-                    \item \textbf{Runtime passage reranking} allows to make generated
+                    \item \textbf{Runtime passage re-ranking} allows making generated
                 context much smaller with similar precision.
                 \end{itemize}
             \item \textbf{Larger Embedding Models} (e.g., \texttt{qwen3-embedding:0.6b}):
                 \begin{itemize}
                     \item \textbf{Passage-level retrieval} heavily outperforms other methods.
-                    \item Full-document vectorization and runtime reranking become too computationally expensive.
+                    \item Full-document vectorization and runtime re-ranking become too computationally expensive.
                 \end{itemize}
         \end{itemize}
     \end{itemize}
@@ -419,8 +412,52 @@
         \end{exampleblock}
         \vspace{0.8cm}
         \textbf{Contact:} xpelekh@stuba.sk/xpelekh@is.stuba.sk
-        % \textbf{GitHub:} ...?
     \end{center}
+\end{frame}
+
+\appendix
+\begin{frame}
+    \frametitle{Responses to Opponent's Comments (1/2)}
+    \small
+    \begin{enumerate}
+        \item How would you evaluate quality of answer in End-to-End testing?\\
+            \textsl{\textbf{For such case, it is commonly used such tests like
+            Groundedness/Correctness/Relevance test, often employing LLM-as-a-Judge
+            technique or (more expensive) user tests}}
+        \item Author says: ``The models struggle with edge cases and ambiguous
+            inputs, requiring either hardcoded heuristics (reducing
+            generalizability) or multiple LLM calls (increasing latency
+            significantly).''
+            \begin{itemize}
+                \item a) How can multiple LLM calls help with model struggling
+                    to distinguish between natural language query and shell
+                    commands? Was it mean to use multiple models, or to call
+                    same model multiple times?\\
+                    \textsl{\textbf{By this statement, initially stayed 2 ideas:
+                    (1) inaccurate classification will naturally make user
+                    interrupt the execution and prompt the question again until
+                    it is classified correctly, or (2) using various techniques
+                    to try to recognize such ambiguous inputs and pass them to
+                    bigger model or prompt user.}}
+                \item b) How can we use hardcoded heuristics to improve agent’s
+                    performance?\\
+                    \textsl{\textbf{Higher accuracy is to be achieved by
+                    conducting extended syntax and PATH
+                    checks and pass this as additional information to
+                    classifier or execute this directly.}}
+            \end{itemize}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Responses to Opponent's Comments (2/2)}
+    \begin{enumerate}
+        \setcounter{enumi}{2}
+        \item Provide demo-video or live demo of applications.
+        \vspace{0.8cm}
+        \item Addressing the contradiction about acceptable precision-latency
+            profile.
+    \end{enumerate}
 \end{frame}
 
 \end{document}
