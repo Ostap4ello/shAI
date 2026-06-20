@@ -6,6 +6,7 @@
 \usepackage{fontspec} % Tectonic-specific fix for font
 \usepackage{tabularx}
 \usepackage{array}
+\usepackage{multicol}
 \newcolumntype{Y}{>{\raggedleft\arraybackslash}X}
 
 % --- Presentation Settings ---
@@ -26,9 +27,12 @@
 % NOTE: 12min for presenting (solely -> answering opponent's questions and discussion is
 % not included in these 12 mins)
 
+% NOTE: for RP:
+% - Som sa rozhodol nechat spojeny navrh a evaluaciu pre komponenty, pretoze tak
+%   sa mi to bude lahsie vysvetlovat
+% - Nechal som Contributions a Conclusion rozdelene kvoli estetickym pricinam
+
 % TODO: 
-% - split design and evaluation
-% - more detail and concreteness to BT tasks/rationale
 % - add opponent's questions + answers/data for answers
 
 % Xs Slide 1: Title Page
@@ -42,44 +46,45 @@
     \begin{itemize}
         \item Introduction
             \begin{itemize}
-                \item Thesis topic and rationale
+                \item Thesis objectives and rationale
                 \item Theory
             \end{itemize}
         \item Thesis work
              \begin{itemize}
-                 \item Approaches outline
-                 \item Architecture outline
+                 \item Design
                  \item Classifier
                  \item Agentic
                  \item RAG
-                 \item Latency tests
+                 \item End-to-end latency tests
              \end{itemize}
-        \item Conclusion
+        \item Conclusion \& Contributions
         \item Future work
-        % \item \textbf{End}         % 18
     \end{itemize}
 \end{frame}
 
 % Xs Slide 3: Introduction + Rationale + What will be done pt.1 (just topic)
 \begin{frame}
-    \frametitle{Introduction: Thesis topic and rationale}
+    \frametitle{Introduction: Thesis objectives and rationale}
     \begin{itemize}
-        \item \textbf{Objective}: test the use of local LLMs in the context of a
-            terminal assistant
-        \item \textbf{Limitations}: usage of local LLMs under 2B parameters
-            (suitable for devices with 8GB RAM)
+        \item \textbf{Objective}:
+            \begin{itemize}
+                \item research and analyze existing terminal assistant solutions
+                    using LLM.
+                \item \textbf{design and implement} a CLI/TUI terminal assistant
+                    based on local LLM.
+                \item \textbf{evaluate} the effectiveness of the proposed
+                    solution.
+            \end{itemize}
+        \item \textbf{Limitations for local execution}: usage of local LLMs
+            under 2B parameters (suitable for devices with 8GB RAM)
     \vspace{0.5cm} \small
         \item \textbf{Rationale}: offline execution, independence from remote
             servers, network access, privacy
-        \item \textbf{Work overview}: this work has tested and evaluated
-            different approaches for usage of local LLMs in the context of a
-            terminal assistant. It also provides a reference implementation of
-            such an assistant, available on GitHub (\texttt{Ostap4ello/shAI-l})
-            and university archive along with the testing data and results.
     \end{itemize}
 \end{frame}
 
-% Xs Slide 4: Theory (main things)
+% % Xs Slide 4: Theory (main things) % TODO: separate and explain theory
+                                     % alongside the presentation
 \begin{frame}
     \frametitle{Introduction: Theory}
     \begin{itemize}
@@ -94,15 +99,15 @@
 
 % Xs Slide 5: What will be done pt.2 (approaches desc)
 \begin{frame}
-    \frametitle{Approaches tested and evaluated}
+    \frametitle{Initial design}
+    The application is designed to be an interactive CLI shell, able to execute shell
+    commands directly and answer natural language queries. It will consist of
+    following components:
     \begin{itemize}
-        \item \textbf{Bash Integration \& Classifier}: Bash vs Natural Language Query, LLM-based
+        \item \textbf{Shell Integration \& Classifier}: Bash vs Natural Language Query, LLM-based
         \item \textbf{Agentic}: LLM agent naive approach, LLM-based
         \item \textbf{RAG}: Document database with vector embeddings with LLM
             summarization, LLM-based and embedding-LLM-based
-    \vspace{0.5cm}
-        \item \textbf{Application latency}: to provide a reference for user-experience
-            and usability evaluation
     \end{itemize}
     % NOTE: instead of focusing on NLQ to command generation, which is binded to
     % the LLM model (defined by its training data), we have decided to focus
@@ -110,44 +115,54 @@
     % while LLM does decision and summarization work
 \end{frame}
 
-% Xs Slide 6: What will be done pt.3 (app architecture)
-\begin{frame}
-    \frametitle{Application architecture outline}
-    \begin{itemize}
-        \small
-        \item \textbf{Core}: a two-layered structure: % add image?
-            \begin{itemize}
-                \item Tools (low-level): DB, LLM and embedding LLM, utils, config
-                \item Workflows (high-level): Classifier, RAG
-            \end{itemize}
-        \item \textbf{Interfaces}: application implements a CLI and programmatic API
-            The CLI interface accesses both the workflows and the tools directly.
-    \end{itemize}
-    \begin{figure}[ht]
-        \centering
-        \includegraphics[width=0.8\textwidth]{res/component.puml.pdf}
-        \caption{Component architecture of ShAI}\label{fig:component-arch}
-    \end{figure}
-\end{frame}
+% Xs Slide 6: What will be done pt.3 (app architecture) % TODO: do we need this?
+% \begin{frame}
+%     \frametitle{Application architecture outline}
+%     \begin{itemize}
+%         \small
+%         \item \textbf{Core}: a two-layered structure: % add image?
+%             \begin{itemize}
+%                 \item Tools (low-level): DB, LLM and embedding LLM, utils, config
+%                 \item Workflows (high-level): Classifier, RAG
+%             \end{itemize}
+%         \item \textbf{Interfaces}: application implements a CLI and programmatic API
+%             The CLI interface accesses both the workflows and the tools directly.
+%     \end{itemize}
+%     \begin{figure}[ht]
+%         \centering
+%         \includegraphics[width=0.8\textwidth]{res/component.puml.pdf}
+%         \caption{Component architecture of ShAI}\label{fig:component-arch}
+%     \end{figure}
+% \end{frame}
 
-% Xs Slide 7: Classifier (idea+testing+results)
+% Xs Slide 6: Classifier (idea+testing+results)
 \begin{frame}
-    \frametitle{Bash Integration \& Classifier}
+    \frametitle{Shell Integration \& Classifier}
+    \begin{multicols}{2}
+
     \begin{itemize}
         \item \textbf{Idea}: build a shell wrapper, which will behave either as a
             chat or as a normal shell, depending on the user query, using an
-            LLM-based classifier. This would blend the two modes of interaction
-            and provide a unique seamless interface.
+            LLM-based classifier.
         \item \textbf{Testing}: \texttt{classifier-100} contains 100 inputs with
             a balanced mix of natural language queries and shell command inputs
-            (e.g. ``How do I list files in a directory?'', ``ls -la
-            /home/user'')
+            (e.g. ``How do I list files in a directory?'', ``ls -la /home/user'')
     \end{itemize}
+
+    \columnbreak
+
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[width=0.4\textwidth]{res/classifier.puml.pdf}
+        \caption{Shell Wrapper workflow}
+    \end{figure}
+
+    \end{multicols}
 \end{frame}
 
-% Xs Slide 8: Classifier pt.2 (idea+testing+results)
+% Xs Slide 7: Classifier pt.2 (idea+testing+results)
 \begin{frame}
-    \frametitle{Bash Integration \& Classifier}
+    \frametitle{Shell Integration \& Classifier}
 
     \begin{table}[h]
       \centering
@@ -174,7 +189,8 @@
             following limitations:
             \begin{itemize}
                 \item Low accuracy
-                \item Unacceptable latency-accuracy profile for interactive use
+                \item Unacceptable latency-accuracy profile for interactive
+                    use.\\
                     (<200ms with >80\% accuracy would be satisfactory for the
                     purpose)
                 \item Complicated shell integration and maintenance
@@ -184,9 +200,11 @@
     \end{itemize}
 \end{frame}
 
-% Xs Slide 9: Agentic (idea+testing+results) -- short
+% Xs Slide 8: Agentic (idea+testing+results) -- short
 \begin{frame}
     \frametitle{Agentic approach}
+    \begin{multicols}{2}
+
     \begin{itemize}
         \item \textbf{Idea}: implement and test a classic agentic approach
         \item \textbf{Testing}: left in state of manual testing due to
@@ -194,20 +212,28 @@
         \item \textbf{Outcomes}: proved unreliable within the chosen constraints
             \textit{(but will be further mentioned in the future work)}
     \end{itemize}
+
+    \columnbreak
+
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[width=0.28\textwidth]{res/agent.puml.pdf}
+        \caption{Agentic workflow}
+    \end{figure}
+
+    \end{multicols}
 \end{frame}
 
-% Xs Slide 10: RAG pt.1 (idea+testing+results)
+% Xs Slide 9: RAG pt.1 (idea+testing+results)
 \begin{frame}
     \frametitle{RAG approach}
+    \begin{multicols}{2}
+
     \begin{itemize}
-        \item \textbf{Idea}: implement a RAG-based workflow (DB module and
-            LLM-based summarization) and test it within the constraints set.
-            Three approaches were tested:
+        \item \textbf{Idea}: implement a RAG-based workflow and test it with three approaches:
             \begin{itemize}
                 \item Document-level retrieval
                 \item Document retrieval with passage-level re-ranking
-                  \textit{(retrieving documents first, then re-ranking passages
-                    within them, evaluating by passage matches)}
                 \item Passage-scope retrieval
             \end{itemize}
         \item \textbf{Testing}: tested DB retrieval MRR and precision@k on a
@@ -218,14 +244,24 @@
               \item \texttt{sample-100}: 101 documents, 300 queries
             \end{itemize}
     \end{itemize}
+
+    \columnbreak
+
+        \begin{figure}[ht]
+        \centering
+            \includegraphics[width=0.4\textwidth]{res/rag.puml.pdf}
+            \caption{RAG Workflow}
+    \end{figure}
+
+    \end{multicols}
 \end{frame}
 
-% Xs Slide 11: RAG pt.2 (results+conclusion)
+% Xs Slide 10: RAG pt.2 (results+conclusion)
 \begin{frame}
   \frametitle{RAG approach}
 
   \begin{table}
-    \small
+    \scriptsize
     \centering
     \caption{Summary of embedding models used in experiments
     (dimension and context).}\label{tab:embedding-summary}
@@ -234,33 +270,35 @@
       \textbf{Model} & \textbf{Params} & \textbf{Context} &
       \textbf{Vector dim} \\
       \midrule
-      Qwen3-Embedding-0.6B & 0.6B & 32K & up to 1024 \\
-      EmbeddingGemma-300M (Google) & 300M & 2048 & 768 \\
       granite-embedding-30m-english & 30M & 512 & 384 \\
       granite-embedding-278m-multilingual & 278M & 512 & 768 \\
+      EmbeddingGemma-300M (Google) & 300M & 2048 & 768 \\
+      Qwen3-Embedding-0.6B & 0.6B & 32K & up to 1024 \\
       \bottomrule
     \end{tabularx}
   \end{table}
 
+    \begin{table}[h]
+      \centering
+      \scriptsize
+      \caption{Overview of performances across retrieval approaches using different models on \texttt{sample-100}.}
+      % NOTE: note on Index Build latency great range
+      \begin{tabularx}{\textwidth}{llllYYY}
+        \toprule
+        \textbf{Approach}    & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg Latency (s)} & \textbf{Index Build (s)} & \textbf{Response Size (chars)} \\
+        \midrule
+        \textbf{Doc.}     & 62.7--72.7\% & 84.0--92.0\%  & 0.724--0.806 & 0.036--0.098 & 1.6--128.2  & 62--127K \\
+        \textbf{Re-rank.} & 42.7--45.7\% & 72.7--79.7\%  & 0.530--0.571 & 0.595--3.745 & 2.1--128.5  & 6K        \\
+        \textbf{Sec.}     & 67.3--69.0\% & 87.0--91.0\%  & 0.746--0.771 & 0.040--0.109 & 10.8--44.7  & 3K        \\
+        \bottomrule
+      \end{tabularx}\label{tab:overview-by-approach-scale}
+    \end{table}
+
 \end{frame}
 
-% Xs Slide 11: RAG pt.2 (results+conclusion)
+% Xs Slide 10: RAG pt.2 (results+conclusion)
 \begin{frame}
     \frametitle{RAG approach}
-\begin{table}[h]
-  \centering
-  \scriptsize
-  \caption{Overview of performances across retrieval approaches on \texttt{sample-100}.}
-  \begin{tabularx}{\textwidth}{llllYYY}
-    \toprule
-    \textbf{Approach}    & \textbf{Top-1} & \textbf{Top-5} & \textbf{MRR} & \textbf{Avg Latency (s)} & \textbf{Index Build (s)} & \textbf{Response Size (chars)} \\
-    \midrule
-    \textbf{Doc.}     & 62.7--72.7\% & 84.0--92.0\%  & 0.724--0.806 & 0.036--0.098 & 1.6--128.2  & 62--127K \\
-    \textbf{Re-rank.} & 42.7--45.7\% & 72.7--79.7\%  & 0.530--0.571 & 0.595--3.745 & 2.1--128.5  & 6K        \\
-    \textbf{Sec.}     & 67.3--69.0\% & 87.0--91.0\%  & 0.746--0.771 & 0.040--0.109 & 10.8--44.7  & 3K        \\
-    \bottomrule
-  \end{tabularx}\label{tab:overview-by-approach-scale}
-\end{table}
     \begin{itemize}
         \item \textbf{Outcomes}:
             \begin{itemize}
@@ -272,49 +310,52 @@
                     (avg. 2--3.5s), due to in-runtime reranking. Document-level
                     indexing cause high latencies when embedding big files.
             \end{itemize}
-            % TODO: note on Index Build latency great range
     \end{itemize}
 \end{frame}
 
-% Xs Slide 12: Latency tests pt.1 (testing+results)
+% Xs Slide 11: Latency tests pt.1 (testing+results)
 \begin{frame}
     \frametitle{End-to-end latency tests}
     \begin{itemize}
         \item \textbf{Idea}: test the latency of the application with different
             setups and approaches to provide a reference for user-experience and
             usability evaluation
-        \item \textbf{Testing}: a set of scenarios for the whole system
-            was created and tested with different setups, including: RAG and DB
-            retrieval, index build times for different DB sizes and approaches
-            and model configurations.
+        \item \textbf{Testing}: a set of scenarios with different models, DB
+            sizes and retrieval approaches:
+            \begin{itemize}
+                \item RAG retrieval
+                \item DB retrieval
+                \item index build times
+            \end{itemize}
     \end{itemize}
 \end{frame}
 
-% Xs Slide 13: Latency tests pt.2 (results+conclusion)
+% Xs Slide 12: Latency tests pt.2 (results+conclusion)
 \begin{frame}
     \frametitle{End-to-end latency tests}
     \begin{itemize}
-            % TODO: shorter
-            % TODO: latency tables?
-        \item \textbf{Outcomes}: While latencies change across different
-            hardware setups, mesurements show that document-level retrieval and
-            document-level retrieval with passage reranking show the best
-            performance when using small embedding models like
-            ibm/granite-embedding:30m. The latency of runtime passage-level
-            reranking is low enough to perform better, than passage-level
-            approach, but keeping the output size small and accuracy the same.
-            In contrast, when using bigger embedding models, like
-            qwen3-embedding:0.6b, the passage-level approach outperforms the
-            other approaches, as the computation time needed for vector creation
-            for the whole document or runtime rerank- ing becomes too expensive.
+        \item \textbf{Key Outcomes \& Latency Trade-offs}:
+        \begin{itemize}
+            \item \textbf{Smaller Embedding Models} (e.g., \texttt{granite-embedding:30m}):
+                \begin{itemize}
+                    \item \textbf{Document-level retrieval} delivers the best latency.
+                    \item \textbf{Runtime passage reranking} allows to make generated
+                context much smaller with similar precision.
+                \end{itemize}
+            \item \textbf{Larger Embedding Models} (e.g., \texttt{qwen3-embedding:0.6b}):
+                \begin{itemize}
+                    \item \textbf{Passage-level retrieval} heavily outperforms other methods.
+                    \item Full-document vectorization and runtime reranking become too computationally expensive.
+                \end{itemize}
+        \end{itemize}
     \end{itemize}
 \end{frame}
 
-% Xs Slide 14: Conclusion (recap)
+% Xs Slide 13: Conclusion (recap)
 \begin{frame}
-    \frametitle{Conclusion on conducted experiments}
+    \frametitle{Conclusion}
     \begin{itemize}
-        \item \textbf{Bash Integration \& Classifier}: not viable with chosen
+        \item \textbf{Shell Integration \& Classifier}: not viable with chosen
             approach (LLM-based), difficult to implement as a generic wrapper
         \item \textbf{Agentic}: unreliable, causing frequent model mistakes and
             hallucinations. Reduced the role of the LLM to summarizer in RAG
@@ -328,13 +369,28 @@
     \end{itemize}
 \end{frame}
 
-% TODO: merge slides 14,17
-% TODO: merge slides 15,16
+% Xs Slide 14: Contributions
+\begin{frame}
+    \frametitle{Contributions}
+    \begin{itemize}
+        \item Empirical evidence of evaluated approaches
+        \item An open-source reference implementation
+        \item Evaluation software, testing data and results
+        \item Identification of key failures in applying local LLMs in CLI
+            assistance
+        \item Guidance for future research
+    \end{itemize}
+    \vspace{0.5cm}
+    \small
+    Implementation and test data are available on GitHub
+    (\texttt{Ostap4ello/shAI-l}) and university archive.
+\end{frame}
 
-% Xs Slide 15: Future Work pt.1
+% Xs Slide 15: Future Work
 \begin{frame}
     \frametitle{Future work: around the application}
     \begin{itemize}
+        \footnotesize
         \item Experimenting with LLM-as-a-judge evaluation methods, for
             evaluating summarizer precision (which was not conducted in this
             thesis, with main focus on retrieval)
@@ -343,13 +399,9 @@
         \item User Interface Improvements
         \item Experimenting with top\_k and section size for passage-level retrieval
         \item Software Optimization/Refactoring
-    \end{itemize}
-\end{frame}
 
-% Xs Slide 16: Future Work pt.2
-\begin{frame}
-    \frametitle{Future work: research opportunities}
-    \begin{itemize}
+        \vspace{0.5cm}
+
         \item Comparing Different Model Testing Approaches and Frameworks
         \item Model Optimization and Architectures Exploration
         \item Caching and Context Management
@@ -358,19 +410,7 @@
     \end{itemize}
 \end{frame}
 
-% Xs Slide 17: Future Work pt.2
-\begin{frame}
-    \frametitle{Contributions}
-    \begin{itemize}
-        \item Empirical evidence architectural and modeling approaches
-        \item Evaluation software and approaches for the described approaches
-        \item Identification of key failure modes in applying local models to structured tasks
-        \item An open-source reference implementation
-        \item Guidance for future research
-    \end{itemize}
-\end{frame}
-
-% Xs Slide 18: Questions?
+% Xs Slide 16: Questions?
 \begin{frame}
     \begin{center}
         \begin{exampleblock}{\textit{"Whoa how did we get here?"}}
@@ -382,7 +422,6 @@
         % \textbf{GitHub:} ...?
     \end{center}
 \end{frame}
-
 
 \end{document}
 
