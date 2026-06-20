@@ -1,0 +1,25 @@
+@startuml
+skinparam DefaultFontSize 14
+skinparam Activity {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+start
+:User Query; <<input>>
+fork
+    :Vector DB Search and retrieval;
+    note right: DB module
+    :Retrieved Context; <<task>>
+fork again
+    :Pass;
+end fork
+
+:Prompt Construction;
+note right: Combines [Query] +\n[Retrieved Chunks]
+:Augmented Prompt; <<task>>
+:LLM Summarization;
+:Response; <<output>>
+stop
+@endum

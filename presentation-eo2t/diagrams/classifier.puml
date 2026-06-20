@@ -1,0 +1,22 @@
+@startuml
+skinparam Archimate {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+start
+
+repeat
+    :Read user Query;
+    :Classify Query using LLM;
+    if (Is the query Natural Language?) then (yes)
+        :Route query to LLM Application;
+    else (no - it's a Shell command)
+        :Route query to Shell\n(Redirect IO back to User);
+    endif
+repeat while (exitCondition?) is (no) not (yes)
+
+stop
+@endfont
+@enduml

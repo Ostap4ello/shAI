@@ -1,0 +1,32 @@
+@startuml
+skinparam DefaultFontSize 20
+skinparam Activity {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+skinparam ActivityStereotype {
+    RectangleCornerRadius 0
+    BackgroundColor White
+    BorderColor Black
+}
+
+start
+
+:User query; <<input>>
+:LLM decomposes query into subtasks;
+:List of **subtasks**; <<task>>
+
+while (For each **subtask** in **subtasks**) is (has more subtasks)
+    :Execute subtask;
+    note left: tool call,\ngeneration,\nRAG, etc.
+    :Result; <<output>>
+    :Append result to **results** list;
+endwhile (loop complete)
+
+:LLM summarizes compiled results;
+:Response; <<output>>
+
+stop
+@endum
