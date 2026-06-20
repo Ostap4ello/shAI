@@ -1,4 +1,4 @@
-\documentclass[10pt]{beamer}
+\documentclass[10pt,aspectratio=169]{beamer}
 
 % --- Packages ---
 \usepackage{graphicx}
@@ -17,11 +17,19 @@
 
 \title[Bachelor’s thesis Presentation]{Local LLM-based Terminal Assistant}
 \subtitle{Bachelor’s thesis}
-\author[Ostap Pelekh]{Author: Ostap Pelekh\\Supervizor: Ing. Roderik Ploszek, PhD.}
-\institute[Slovak University of Technology in Bratislava]{Faculty of electrical engineering and information technology (FEI)}
+\author[Ostap Pelekh]{Author: Ostap Pelekh\\Supervisor: Ing. Roderik Ploszek, PhD.}
+\institute[Slovak University of Technology in Bratislava]{Faculty of Electrical Engineering and Information Technology (FEI)}
 \date[]{}
 
 \begin{document}
+
+% NOTE: 12min for presenting (solely -> answering opponent's questions and discussion is
+% not included in these 12 mins)
+
+% TODO: 
+% - split design and evaluation
+% - more detail and concreteness to BT tasks/rationale
+% - add opponent's questions + answers/data for answers
 
 % Xs Slide 1: Title Page
 \begin{frame}
@@ -34,7 +42,7 @@
     \begin{itemize}
         \item Introduction
             \begin{itemize}
-                \item Thesis topic and racionale
+                \item Thesis topic and rationale
                 \item Theory
             \end{itemize}
         \item Thesis work
@@ -52,21 +60,21 @@
     \end{itemize}
 \end{frame}
 
-% Xs Slide 3: Introduction + Racionale + What will be done pt.1 (just topic)
+% Xs Slide 3: Introduction + Rationale + What will be done pt.1 (just topic)
 \begin{frame}
-    \frametitle{Introduction: Thesis topic and racionale}
+    \frametitle{Introduction: Thesis topic and rationale}
     \begin{itemize}
         \item \textbf{Objective}: test the use of local LLMs in the context of a
             terminal assistant
         \item \textbf{Limitations}: usage of local LLMs under 2B parameters
             (suitable for devices with 8GB RAM)
     \vspace{0.5cm} \small
-        \item \textbf{Racionale}: offline execution, independence from remote
+        \item \textbf{Rationale}: offline execution, independence from remote
             servers, network access, privacy
         \item \textbf{Work overview}: this work has tested and evaluated
             different approaches for usage of local LLMs in the context of a
             terminal assistant. It also provides a reference implementation of
-            such an assistant, avalable on GitHub (\texttt{Ostap4ello/shAI-l})
+            such an assistant, available on GitHub (\texttt{Ostap4ello/shAI-l})
             and university archive along with the testing data and results.
     \end{itemize}
 \end{frame}
@@ -107,10 +115,10 @@
     \frametitle{Application architecture outline}
     \begin{itemize}
         \small
-        \item \textbf{Core}: a two layered structure: % add image?
+        \item \textbf{Core}: a two-layered structure: % add image?
             \begin{itemize}
-                \item Tools(low-level): DB, LLM and embedding LLM, utils, config
-                \item Workflows(high-level): Classifier, RAG
+                \item Tools (low-level): DB, LLM and embedding LLM, utils, config
+                \item Workflows (high-level): Classifier, RAG
             \end{itemize}
         \item \textbf{Interfaces}: application implements a CLI and programmatic API
             The CLI interface accesses both the workflows and the tools directly.
@@ -126,8 +134,8 @@
 \begin{frame}
     \frametitle{Bash Integration \& Classifier}
     \begin{itemize}
-        \item \textbf{Idea}: build a shell wrapper, which will behave either as
-            chat or as a normal shell, depending on the user query, using a
+        \item \textbf{Idea}: build a shell wrapper, which will behave either as a
+            chat or as a normal shell, depending on the user query, using an
             LLM-based classifier. This would blend the two modes of interaction
             and provide a unique seamless interface.
         \item \textbf{Testing}: \texttt{classifier-100} contains 100 inputs with
@@ -166,7 +174,9 @@
             following limitations:
             \begin{itemize}
                 \item Low accuracy
-                \item Unacceptable latency for interactive use
+                \item Unacceptable latency-accuracy profile for interactive use
+                    (<200ms with >80\% accuracy would be satisfactory for the
+                    purpose)
                 \item Complicated shell integration and maintenance
             \end{itemize}
             This component remains a \textbf{proof-of-concept} and was not
@@ -254,20 +264,21 @@
     \begin{itemize}
         \item \textbf{Outcomes}:
             \begin{itemize}
-                \item Robust accuracy with for all approaches
-                \item Generated output size: secound and third approaches
+                \item Robust precision and MRR with for all approaches
+                \item Generated output size: second and third approaches
                     allowed to reduce and control output sizes
                 \item Latency: The first and third approaches had lower
                     retrieval latency (avg. 0.5--1.5s) than the second approach
                     (avg. 2--3.5s), due to in-runtime reranking. Document-level
                     indexing cause high latencies when embedding big files.
             \end{itemize}
+            % TODO: note on Index Build latency great range
     \end{itemize}
 \end{frame}
 
 % Xs Slide 12: Latency tests pt.1 (testing+results)
 \begin{frame}
-    \frametitle{Latency tests}
+    \frametitle{End-to-end latency tests}
     \begin{itemize}
         \item \textbf{Idea}: test the latency of the application with different
             setups and approaches to provide a reference for user-experience and
@@ -281,8 +292,10 @@
 
 % Xs Slide 13: Latency tests pt.2 (results+conclusion)
 \begin{frame}
-    \frametitle{Latency tests}
+    \frametitle{End-to-end latency tests}
     \begin{itemize}
+            % TODO: shorter
+            % TODO: latency tables?
         \item \textbf{Outcomes}: While latencies change across different
             hardware setups, mesurements show that document-level retrieval and
             document-level retrieval with passage reranking show the best
@@ -302,9 +315,9 @@
     \frametitle{Conclusion on conducted experiments}
     \begin{itemize}
         \item \textbf{Bash Integration \& Classifier}: not viable with chosen
-            approach (LLM-based), difficult to implement as generic wrapper
+            approach (LLM-based), difficult to implement as a generic wrapper
         \item \textbf{Agentic}: unreliable, causing frequent model mistakes and
-            halucinations. Reduced the role of the LLM to summarizer in RAG
+            hallucinations. Reduced the role of the LLM to summarizer in RAG
             component.
         \item \textbf{RAG}: robust and reliable within chosen constraints
             \vspace{0.5cm}
@@ -314,6 +327,9 @@
             or reasoning.
     \end{itemize}
 \end{frame}
+
+% TODO: merge slides 14,17
+% TODO: merge slides 15,16
 
 % Xs Slide 15: Future Work pt.1
 \begin{frame}
@@ -362,7 +378,7 @@
             \texttt{\$ exit}
         \end{exampleblock}
         \vspace{0.8cm}
-        \textbf{Kontakt:} xpelekh@stuba.sk / xpelekh@is.stuba.sk
+        \textbf{Contact:} xpelekh@stuba.sk/xpelekh@is.stuba.sk
         % \textbf{GitHub:} ...?
     \end{center}
 \end{frame}
@@ -374,7 +390,7 @@ Plan: X?min talk, Y?m questions
 
 % Xs Slide 1: Title Page
 % Xs Slide 2: ToC
-% Xs Slide 3: Introduction + Racionale + What will be done pt.1 (just topic)
+% Xs Slide 3: Introduction + Rationale + What will be done pt.1 (just topic)
 % Xs Slide 4: Theory (main things)
 % Xs Slide 5: What will be done pt.2 (approaches desc)
 % Xs Slide 6: What will be done pt.3 (app architecture)
