@@ -9,6 +9,7 @@
 \usepackage{multicol}
 \newcolumntype{Y}{>{\raggedleft\arraybackslash}X}
 \usepackage{appendixnumberbeamer}
+\usepackage{hyperref}
 
 % --- Presentation Settings ---
 \usetheme{default}
@@ -454,6 +455,9 @@
     \begin{enumerate}
         \setcounter{enumi}{2}
         \item Provide demo-video or live demo of applications.
+            \begin{center}
+                \href{run:demo.mp4}{\includegraphics[width=0.6\textwidth]{res/demo.png}}
+            \end{center}
         \vspace{0.8cm}
         \item Addressing the contradiction about acceptable precision-latency
             profile.

@@ -10,6 +10,7 @@ all: diagrams pdf
 pdf:
 	mkdir -p .build/
 	
+	cp res/demo.mp4 .build/.
 	if [ ! -f "presentation.tex" ]; then \
 		exit 1; \
 	fi
