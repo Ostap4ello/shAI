@@ -95,7 +95,7 @@
 \begin{frame}
     \frametitle{Initial design}
     The application is designed to be an interactive CLI shell, able to execute shell
-    commands directly and answer natural language queries. It will consist of
+    commands directly and answer natural language queries. It consists of
     following components:
     \begin{itemize}
         \item \textbf{Shell Integration \& Classifier}: Bash vs Natural Language Query, LLM-based
@@ -135,7 +135,7 @@
     \begin{multicols}{2}
 
     \begin{itemize}
-        \item \textbf{Idea}: build a shell wrapper, which will behave either as a
+        \item \textbf{Idea}: build a shell wrapper, which behaves either as a
             chat or as a normal shell, depending on the user query, using an
             LLM-based classifier.
         \item \textbf{Testing}: \texttt{classifier-100} contains 100 inputs with
@@ -302,7 +302,7 @@
                 \item Latency: The first and third approaches had lower
                     retrieval latency (avg. 0.5--1.5s) than the second approach
                     (avg. 2--3.5s), due to in-runtime re-ranking. Document-level
-                    indexing cause high latencies when embedding big files.
+                    indexing causes high latencies when embedding big files.
             \end{itemize}
     \end{itemize}
 \end{frame}
@@ -419,11 +419,12 @@
 \appendix
 \begin{frame}
     \frametitle{Responses to Opponent's Comments (1/2)}
-    \small
+    \footnotesize
     \begin{enumerate}
         \item How would you evaluate quality of answer in End-to-End testing?\\
-            \textsl{\textbf{For such case, it is commonly used such tests like
-            Groundedness/Correctness/Relevance test, often employing LLM-as-a-Judge
+            \textsl{\textbf{For such case, tests like
+            Groundedness/Correctness/Relevance are commonly used, often
+            employing LLM-as-a-Judge
             technique or (more expensive) user tests}}
         \item Author says: ``The models struggle with edge cases and ambiguous
             inputs, requiring either hardcoded heuristics (reducing
@@ -434,18 +435,20 @@
                     to distinguish between natural language query and shell
                     commands? Was it mean to use multiple models, or to call
                     same model multiple times?\\
-                    \textsl{\textbf{By this statement, initially stayed 2 ideas:
-                    (1) inaccurate classification will naturally make user
+                    \textsl{\textbf{The original intent behind this statement
+                    was to highlight two scenarios:
+                    (1) inaccurate classification will force the user to
                     interrupt the execution and prompt the question again until
                     it is classified correctly, or (2) using various techniques
-                    to try to recognize such ambiguous inputs and pass them to
-                    bigger model or prompt user.}}
+                    in an attempt to recognize such ambiguous inputs and pass
+                    them to a larger model or prompt the user for
+                    confirmation.}}
                 \item b) How can we use hardcoded heuristics to improve agent’s
                     performance?\\
-                    \textsl{\textbf{Higher accuracy is to be achieved by
-                    conducting extended syntax and PATH
-                    checks and pass this as additional information to
-                    classifier or execute this directly.}}
+                    \textsl{\textbf{Higher accuracy can be achieved by
+                    conducting extended syntax and PATH checks and then passing
+                    this as additional information to the classifier or
+                    executing the query directly as a shell command.}}
             \end{itemize}
     \end{enumerate}
 \end{frame}
